@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SeniorCareManager.WebAPI.Data;
+using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
+using SeniorCareManager.WebAPI.Services.Entities;
+using SeniorCareManager.WebAPI.Services.Interfaces;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace SeniorCareManager.WebAPI;
@@ -79,7 +83,7 @@ public class Startup
         //adiciona controllers e trata a serialização Json
         services.AddControllers().AddJsonOptions(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.WriteIndented = true; // Opcional, apenas para melhor legibilidade
         });
         
@@ -94,11 +98,11 @@ public class Startup
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         //Scoped services and interfaces services
-        //services.AddScoped<IAlunoService, AlunoService>();
+        services.AddScoped<IProductGroupService, ProductGroupService>();
         
         
         //Scoped Repositories and Interfaces repo
-        //services.AddScoped<IAlunoRepository, AlunoRepository>();
+        services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
