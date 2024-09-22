@@ -8,36 +8,36 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # User-specific files
-SeniorCareManager.WebAPI/*.rsuser
-SeniorCareManager.WebAPI/*.suo
-SeniorCareManager.WebAPI/*.user
-SeniorCareManager.WebAPI/*.userosscache
-SeniorCareManager.WebAPI/*.sln.docstates
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
-SeniorCareManager.WebAPI/*.userprefs
+*.userprefs
 
 # Mono auto generated files
-SeniorCareManager.WebAPI/mono_crash.*
+mono_crash.*
 
 # Build results
-SeniorCareManager.WebAPI/[Dd]ebug/
-SeniorCareManager.WebAPI/[Dd]ebugPublic/
-SeniorCareManager.WebAPI/[Rr]elease/
-SeniorCareManager.WebAPI/[Rr]eleases/
-SeniorCareManager.WebAPI/x64/
-SeniorCareManager.WebAPI/x86/
-SeniorCareManager.WebAPI/[Ww][Ii][Nn]32/
-SeniorCareManager.WebAPI/[Aa][Rr][Mm]/
-SeniorCareManager.WebAPI/[Aa][Rr][Mm]64/
-SeniorCareManager.WebAPI/bld/
-SeniorCareManager.WebAPI/[Bb]in/
-SeniorCareManager.WebAPI/[Oo]bj/
-SeniorCareManager.WebAPI/[Ll]og/
-SeniorCareManager.WebAPI/[Ll]ogs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
-SeniorCareManager.WebAPI/.vs/
+.vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -45,161 +45,161 @@ SeniorCareManager.WebAPI/.vs/
 Generated\ Files/
 
 # MSTest test Results
-SeniorCareManager.WebAPI/[Tt]est[Rr]esult*/
-SeniorCareManager.WebAPI/[Bb]uild[Ll]og.*
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
 
 # NUnit
-SeniorCareManager.WebAPI/*.VisualState.xml
-SeniorCareManager.WebAPI/TestResult.xml
-SeniorCareManager.WebAPI/nunit-*.xml
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
 
 # Build Results of an ATL Project
-SeniorCareManager.WebAPI/[Dd]ebugPS/
-SeniorCareManager.WebAPI/[Rr]eleasePS/
-SeniorCareManager.WebAPI/dlldata.c
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
 
 # Benchmark Results
-SeniorCareManager.WebAPI/BenchmarkDotNet.Artifacts/
+BenchmarkDotNet.Artifacts/
 
 # .NET Core
-SeniorCareManager.WebAPI/project.lock.json
-SeniorCareManager.WebAPI/project.fragment.lock.json
-SeniorCareManager.WebAPI/artifacts/
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
 # ASP.NET Scaffolding
-SeniorCareManager.WebAPI/ScaffoldingReadMe.txt
+ScaffoldingReadMe.txt
 
 # StyleCop
-SeniorCareManager.WebAPI/StyleCopReport.xml
+StyleCopReport.xml
 
 # Files built by Visual Studio
-SeniorCareManager.WebAPI/*_i.c
-SeniorCareManager.WebAPI/*_p.c
-SeniorCareManager.WebAPI/*_h.h
-SeniorCareManager.WebAPI/*.ilk
-SeniorCareManager.WebAPI/*.meta
-SeniorCareManager.WebAPI/*.obj
-SeniorCareManager.WebAPI/*.iobj
-SeniorCareManager.WebAPI/*.pch
-SeniorCareManager.WebAPI/*.pdb
-SeniorCareManager.WebAPI/*.ipdb
-SeniorCareManager.WebAPI/*.pgc
-SeniorCareManager.WebAPI/*.pgd
-SeniorCareManager.WebAPI/*.rsp
-SeniorCareManager.WebAPI/*.sbr
-SeniorCareManager.WebAPI/*.tlb
-SeniorCareManager.WebAPI/*.tli
-SeniorCareManager.WebAPI/*.tlh
-SeniorCareManager.WebAPI/*.tmp
-SeniorCareManager.WebAPI/*.tmp_proj
-SeniorCareManager.WebAPI/*_wpftmp.csproj
-SeniorCareManager.WebAPI/*.log
-SeniorCareManager.WebAPI/*.tlog
-SeniorCareManager.WebAPI/*.vspscc
-SeniorCareManager.WebAPI/*.vssscc
-SeniorCareManager.WebAPI/.builds
-SeniorCareManager.WebAPI/*.pidb
-SeniorCareManager.WebAPI/*.svclog
-SeniorCareManager.WebAPI/*.scc
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
 
 # Chutzpah Test files
-SeniorCareManager.WebAPI/_Chutzpah*
+_Chutzpah*
 
 # Visual C++ cache files
-SeniorCareManager.WebAPI/ipch/
-SeniorCareManager.WebAPI/*.aps
-SeniorCareManager.WebAPI/*.ncb
-SeniorCareManager.WebAPI/*.opendb
-SeniorCareManager.WebAPI/*.opensdf
-SeniorCareManager.WebAPI/*.sdf
-SeniorCareManager.WebAPI/*.cachefile
-SeniorCareManager.WebAPI/*.VC.db
-SeniorCareManager.WebAPI/*.VC.VC.opendb
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
 
 # Visual Studio profiler
-SeniorCareManager.WebAPI/*.psess
-SeniorCareManager.WebAPI/*.vsp
-SeniorCareManager.WebAPI/*.vspx
-SeniorCareManager.WebAPI/*.sap
+*.psess
+*.vsp
+*.vspx
+*.sap
 
 # Visual Studio Trace Files
-SeniorCareManager.WebAPI/*.e2e
+*.e2e
 
 # TFS 2012 Local Workspace
-SeniorCareManager.WebAPI/$tf/
+$tf/
 
 # Guidance Automation Toolkit
-SeniorCareManager.WebAPI/*.gpState
+*.gpState
 
 # ReSharper is a .NET coding add-in
-SeniorCareManager.WebAPI/_ReSharper*/
-SeniorCareManager.WebAPI/*.[Rr]e[Ss]harper
-SeniorCareManager.WebAPI/*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
 # TeamCity is a build add-in
-SeniorCareManager.WebAPI/_TeamCity*
+_TeamCity*
 
 # DotCover is a Code Coverage Tool
-SeniorCareManager.WebAPI/*.dotCover
+*.dotCover
 
 # AxoCover is a Code Coverage Tool
-SeniorCareManager.WebAPI/.axoCover/*
-SeniorCareManager.WebAPI/!.axoCover/settings.json
+.axoCover/*
+!.axoCover/settings.json
 
 # Coverlet is a free, cross platform Code Coverage Tool
-SeniorCareManager.WebAPI/coverage*.json
-SeniorCareManager.WebAPI/coverage*.xml
-SeniorCareManager.WebAPI/coverage*.info
+coverage*.json
+coverage*.xml
+coverage*.info
 
 # Visual Studio code coverage results
-SeniorCareManager.WebAPI/*.coverage
-SeniorCareManager.WebAPI/*.coveragexml
+*.coverage
+*.coveragexml
 
 # NCrunch
-SeniorCareManager.WebAPI/_NCrunch_*
-SeniorCareManager.WebAPI/.*crunch*.local.xml
-SeniorCareManager.WebAPI/nCrunchTemp_*
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
 
 # MightyMoose
-SeniorCareManager.WebAPI/*.mm.*
-SeniorCareManager.WebAPI/AutoTest.Net/
+*.mm.*
+AutoTest.Net/
 
 # Web workbench (sass)
-SeniorCareManager.WebAPI/.sass-cache/
+.sass-cache/
 
 # Installshield output folder
-SeniorCareManager.WebAPI/[Ee]xpress/
+[Ee]xpress/
 
 # DocProject is a documentation generator add-in
-SeniorCareManager.WebAPI/DocProject/buildhelp/
-SeniorCareManager.WebAPI/DocProject/Help/*.HxT
-SeniorCareManager.WebAPI/DocProject/Help/*.HxC
-SeniorCareManager.WebAPI/DocProject/Help/*.hhc
-SeniorCareManager.WebAPI/DocProject/Help/*.hhk
-SeniorCareManager.WebAPI/DocProject/Help/*.hhp
-SeniorCareManager.WebAPI/DocProject/Help/Html2
-SeniorCareManager.WebAPI/DocProject/Help/html
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
 
 # Click-Once directory
-SeniorCareManager.WebAPI/publish/
+publish/
 
 # Publish Web Output
-SeniorCareManager.WebAPI/*.[Pp]ublish.xml
-SeniorCareManager.WebAPI/*.azurePubxml
+*.[Pp]ublish.xml
+*.azurePubxml
 # Note: Comment the next line if you want to checkin your web deploy settings,
 # but database connection strings (with potential passwords) will be unencrypted
-SeniorCareManager.WebAPI/*.pubxml
-SeniorCareManager.WebAPI/*.publishproj
+*.pubxml
+*.publishproj
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to
 # checkin your Azure Web App publish settings, but sensitive information contained
 # in these scripts will be unencrypted
-SeniorCareManager.WebAPI/PublishScripts/
+PublishScripts/
 
 # NuGet Packages
-SeniorCareManager.WebAPI/*.nupkg
+*.nupkg
 # NuGet Symbol Packages
-SeniorCareManager.WebAPI/*.snupkg
+*.snupkg
 # The packages folder can be ignored because of Package Restore
 **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
@@ -207,42 +207,42 @@ SeniorCareManager.WebAPI/*.snupkg
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
-SeniorCareManager.WebAPI/*.nuget.props
-SeniorCareManager.WebAPI/*.nuget.targets
+*.nuget.props
+*.nuget.targets
 
 # Microsoft Azure Build Output
-SeniorCareManager.WebAPI/csx/
-SeniorCareManager.WebAPI/*.build.csdef
+csx/
+*.build.csdef
 
 # Microsoft Azure Emulator
-SeniorCareManager.WebAPI/ecf/
-SeniorCareManager.WebAPI/rcf/
+ecf/
+rcf/
 
 # Windows Store app package directories and files
-SeniorCareManager.WebAPI/AppPackages/
-SeniorCareManager.WebAPI/BundleArtifacts/
-SeniorCareManager.WebAPI/Package.StoreAssociation.xml
-SeniorCareManager.WebAPI/_pkginfo.txt
-SeniorCareManager.WebAPI/*.appx
-SeniorCareManager.WebAPI/*.appxbundle
-SeniorCareManager.WebAPI/*.appxupload
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
-SeniorCareManager.WebAPI/*.[Cc]ache
+*.[Cc]ache
 # but keep track of directories ending in .cache
-SeniorCareManager.WebAPI/!?*.[Cc]ache/
+!?*.[Cc]ache/
 
 # Others
-SeniorCareManager.WebAPI/ClientBin/
-SeniorCareManager.WebAPI/~$*
-SeniorCareManager.WebAPI/*~
-SeniorCareManager.WebAPI/*.dbmdl
-SeniorCareManager.WebAPI/*.dbproj.schemaview
-SeniorCareManager.WebAPI/*.jfm
-SeniorCareManager.WebAPI/*.pfx
-SeniorCareManager.WebAPI/*.publishsettings
-SeniorCareManager.WebAPI/orleans.codegen.cs
+ClientBin/
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
 
 # Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
@@ -253,57 +253,57 @@ SeniorCareManager.WebAPI/orleans.codegen.cs
 #bower_components/
 
 # RIA/Silverlight projects
-SeniorCareManager.WebAPI/Generated_Code/
+Generated_Code/
 
 # Backup & report files from converting an old project file
 # to a newer Visual Studio version. Backup files are not needed,
 # because we have git ;-)
-SeniorCareManager.WebAPI/_UpgradeReport_Files/
-SeniorCareManager.WebAPI/Backup*/
-SeniorCareManager.WebAPI/UpgradeLog*.XML
-SeniorCareManager.WebAPI/UpgradeLog*.htm
-SeniorCareManager.WebAPI/ServiceFabricBackup/
-SeniorCareManager.WebAPI/*.rptproj.bak
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+*.rptproj.bak
 
 # SQL Server files
-SeniorCareManager.WebAPI/*.mdf
-SeniorCareManager.WebAPI/*.ldf
-SeniorCareManager.WebAPI/*.ndf
+*.mdf
+*.ldf
+*.ndf
 
 # Business Intelligence projects
-SeniorCareManager.WebAPI/*.rdl.data
-SeniorCareManager.WebAPI/*.bim.layout
-SeniorCareManager.WebAPI/*.bim_*.settings
-SeniorCareManager.WebAPI/*.rptproj.rsuser
-SeniorCareManager.WebAPI/*- [Bb]ackup.rdl
-SeniorCareManager.WebAPI/*- [Bb]ackup ([0-9]).rdl
-SeniorCareManager.WebAPI/*- [Bb]ackup ([0-9][0-9]).rdl
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+*.rptproj.rsuser
+*- [Bb]ackup.rdl
+*- [Bb]ackup ([0-9]).rdl
+*- [Bb]ackup ([0-9][0-9]).rdl
 
 # Microsoft Fakes
-SeniorCareManager.WebAPI/FakesAssemblies/
+FakesAssemblies/
 
 # GhostDoc plugin setting file
-SeniorCareManager.WebAPI/*.GhostDoc.xml
+*.GhostDoc.xml
 
 # Node.js Tools for Visual Studio
-SeniorCareManager.WebAPI/.ntvs_analysis.dat
-SeniorCareManager.WebAPI/node_modules/
+.ntvs_analysis.dat
+node_modules/
 
 # Visual Studio 6 build log
-SeniorCareManager.WebAPI/*.plg
+*.plg
 
 # Visual Studio 6 workspace options file
-SeniorCareManager.WebAPI/*.opt
+*.opt
 
 # Visual Studio 6 auto-generated workspace file (contains which files were open etc.)
-SeniorCareManager.WebAPI/*.vbw
+*.vbw
 
 # Visual Studio 6 auto-generated project file (contains which files were open etc.)
-SeniorCareManager.WebAPI/*.vbp
+*.vbp
 
 # Visual Studio 6 workspace and project file (working project files containing files to include in project)
-SeniorCareManager.WebAPI/*.dsw
-SeniorCareManager.WebAPI/*.dsp
+*.dsw
+*.dsp
 
 # Visual Studio 6 technical files
 
@@ -313,132 +313,130 @@ SeniorCareManager.WebAPI/*.dsp
 **/*.DesktopClient/ModelManifest.xml
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
-SeniorCareManager.WebAPI/_Pvt_Extensions
+_Pvt_Extensions
 
 # Paket dependency manager
-SeniorCareManager.WebAPI/.paket/paket.exe
-SeniorCareManager.WebAPI/paket-files/
+.paket/paket.exe
+paket-files/
 
 # FAKE - F# Make
-SeniorCareManager.WebAPI/.fake/
+.fake/
 
 # CodeRush personal settings
-SeniorCareManager.WebAPI/.cr/personal
+.cr/personal
 
 # Python Tools for Visual Studio (PTVS)
-SeniorCareManager.WebAPI/__pycache__/
-SeniorCareManager.WebAPI/*.pyc
+__pycache__/
+*.pyc
 
 # Cake - Uncomment if you are using it
 # tools/**
 # !tools/packages.config
 
 # Tabs Studio
-SeniorCareManager.WebAPI/*.tss
+*.tss
 
 # Telerik's JustMock configuration file
-SeniorCareManager.WebAPI/*.jmconfig
+*.jmconfig
 
 # BizTalk build output
-SeniorCareManager.WebAPI/*.btp.cs
-SeniorCareManager.WebAPI/*.btm.cs
-SeniorCareManager.WebAPI/*.odx.cs
-SeniorCareManager.WebAPI/*.xsd.cs
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs
 
 # OpenCover UI analysis results
-SeniorCareManager.WebAPI/OpenCover/
+OpenCover/
 
 # Azure Stream Analytics local run output
-SeniorCareManager.WebAPI/ASALocalRun/
+ASALocalRun/
 
 # MSBuild Binary and Structured Log
-SeniorCareManager.WebAPI/*.binlog
+*.binlog
 
 # NVidia Nsight GPU debugger configuration file
-SeniorCareManager.WebAPI/*.nvuser
+*.nvuser
 
 # MFractors (Xamarin productivity tool) working folder
-SeniorCareManager.WebAPI/.mfractor/
+.mfractor/
 
 # Local History for Visual Studio
-SeniorCareManager.WebAPI/.localhistory/
+.localhistory/
 
 # Visual Studio History (VSHistory) files
-SeniorCareManager.WebAPI/.vshistory/
+.vshistory/
 
 # BeatPulse healthcheck temp database
-SeniorCareManager.WebAPI/healthchecksdb
+healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
-SeniorCareManager.WebAPI/MigrationBackup/
+MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
-SeniorCareManager.WebAPI/.ionide/
+.ionide/
 
 # Fody - auto-generated XML schema
-SeniorCareManager.WebAPI/FodyWeavers.xsd
+FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
-
-!/SeniorCareManager.WebAPI/.vscode/settings.json
-!/SeniorCareManager.WebAPI/.vscode/tasks.json
-!/SeniorCareManager.WebAPI/.vscode/launch.json
-!/SeniorCareManager.WebAPI/.vscode/extensions.json
-SeniorCareManager.WebAPI/.vscode/*
-SeniorCareManager.WebAPI/*.code-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
 
 # Local History for Visual Studio Code
-SeniorCareManager.WebAPI/.history/
+.history/
 
 # Windows Installer files from build outputs
-SeniorCareManager.WebAPI/*.cab
-SeniorCareManager.WebAPI/*.msi
-SeniorCareManager.WebAPI/*.msix
-SeniorCareManager.WebAPI/*.msm
-SeniorCareManager.WebAPI/*.msp
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
 
 # JetBrains Rider
-SeniorCareManager.WebAPI/*.sln.iml
+*.sln.iml
 
 ### DotnetCore ###
 # .NET Core build folders
-SeniorCareManager.WebAPI/bin/
-SeniorCareManager.WebAPI/obj/
+bin/
+obj/
 
 # Common node modules locations
-SeniorCareManager.WebAPI/node_modules
-SeniorCareManager.WebAPI/wwwroot/node_modules
+/node_modules
+/wwwroot/node_modules
 
 ### Rider ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-SeniorCareManager.WebAPI/.idea/.idea.SeniorCareManager.WebAPI/
-SeniorCareManager.WebAPI/.idea/**/workspace.xml
-SeniorCareManager.WebAPI/.idea/**/tasks.xml
-SeniorCareManager.WebAPI/.idea/**/usage.statistics.xml
-SeniorCareManager.WebAPI/.idea/**/dictionaries
-SeniorCareManager.WebAPI/.idea/**/shelf
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
 
 # AWS User-specific
-SeniorCareManager.WebAPI/.idea/**/aws.xml
+.idea/**/aws.xml
 
 # Generated files
-SeniorCareManager.WebAPI/.idea/**/contentModel.xml
+.idea/**/contentModel.xml
 
 # Sensitive or high-churn files
-SeniorCareManager.WebAPI/.idea/**/dataSources/
-SeniorCareManager.WebAPI/.idea/**/dataSources.ids
-SeniorCareManager.WebAPI/.idea/**/dataSources.local.xml
-SeniorCareManager.WebAPI/.idea/**/sqlDataSources.xml
-SeniorCareManager.WebAPI/.idea/**/dynamic.xml
-SeniorCareManager.WebAPI/.idea/**/uiDesigner.xml
-SeniorCareManager.WebAPI/.idea/**/dbnavigator.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
 
 # Gradle
-SeniorCareManager.WebAPI/.idea/**/gradle.xml
-SeniorCareManager.WebAPI/.idea/**/libraries
+.idea/**/gradle.xml
+.idea/**/libraries
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -454,68 +452,68 @@ SeniorCareManager.WebAPI/.idea/**/libraries
 # *.ipr
 
 # CMake
-SeniorCareManager.WebAPI/cmake-build-*/
+cmake-build-*/
 
 # Mongo Explorer plugin
-SeniorCareManager.WebAPI/.idea/**/mongoSettings.xml
+.idea/**/mongoSettings.xml
 
 # File-based project format
-SeniorCareManager.WebAPI/*.iws
+*.iws
 
 # IntelliJ
-SeniorCareManager.WebAPI/out/
+out/
 
 # mpeltonen/sbt-idea plugin
-SeniorCareManager.WebAPI/.idea_modules/
+.idea_modules/
 
 # JIRA plugin
-SeniorCareManager.WebAPI/atlassian-ide-plugin.xml
+atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-SeniorCareManager.WebAPI/.idea/replstate.xml
+.idea/replstate.xml
 
 # SonarLint plugin
-SeniorCareManager.WebAPI/.idea/sonarlint/
+.idea/sonarlint/
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
-SeniorCareManager.WebAPI/com_crashlytics_export_strings.xml
-SeniorCareManager.WebAPI/crashlytics.properties
-SeniorCareManager.WebAPI/crashlytics-build.properties
-SeniorCareManager.WebAPI/fabric.properties
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
 
 # Editor-based Rest Client
-SeniorCareManager.WebAPI/.idea/httpRequests
+.idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
-SeniorCareManager.WebAPI/.idea/caches/build_file_checksums.ser
+.idea/caches/build_file_checksums.ser
 
 ### VisualStudioCode ###
-!/SeniorCareManager.WebAPI/.vscode/*.code-snippets
+!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 
 # Built Visual Studio Code Extensions
-SeniorCareManager.WebAPI/*.vsix
+*.vsix
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
-SeniorCareManager.WebAPI/.history
-SeniorCareManager.WebAPI/.ionide
+.history
+.ionide
 
 ### Web ###
-SeniorCareManager.WebAPI/*.asp
-SeniorCareManager.WebAPI/*.cer
-SeniorCareManager.WebAPI/*.csr
-SeniorCareManager.WebAPI/*.css
-SeniorCareManager.WebAPI/*.htm
-SeniorCareManager.WebAPI/*.html
-SeniorCareManager.WebAPI/*.js
-SeniorCareManager.WebAPI/*.jsp
-SeniorCareManager.WebAPI/*.php
-SeniorCareManager.WebAPI/*.rss
-SeniorCareManager.WebAPI/*.wasm
-SeniorCareManager.WebAPI/*.wat
-SeniorCareManager.WebAPI/*.xhtml
+*.asp
+*.cer
+*.csr
+*.css
+*.htm
+*.html
+*.js
+*.jsp
+*.php
+*.rss
+*.wasm
+*.wat
+*.xhtml
 
 ### VisualStudio ###
 
