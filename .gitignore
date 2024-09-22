@@ -402,8 +402,8 @@ SeniorCareManager.WebAPI/*.sln.iml
 
 ### DotnetCore ###
 # .NET Core build folders
-SeniorCareManager.WebAPI/bin/
-SeniorCareManager.WebAPI/obj/
+**/bin/
+**/obj/
 
 # Common node modules locations
 SeniorCareManager.WebAPI/node_modules
