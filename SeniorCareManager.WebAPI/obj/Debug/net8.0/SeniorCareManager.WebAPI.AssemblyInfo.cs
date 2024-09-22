@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SeniorCareManager.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52888cc9f322d7dd6d98e2effd7403786de2cbf9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a30e86a6d3ce69753c3dc4e5afb27daa299fe41")]
 [assembly: System.Reflection.AssemblyProductAttribute("SeniorCareManager.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SeniorCareManager.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
