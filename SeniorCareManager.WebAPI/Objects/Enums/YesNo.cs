@@ -1,8 +1,8 @@
 ﻿namespace SeniorCareManager.WebAPI.Objects.Enums
 {
-    public enum EnumYesNO
+    public enum YesNo
     {
-        Yes= 1,
-        No=2
+        YES= 1,
+        NO=2
     }
 }
