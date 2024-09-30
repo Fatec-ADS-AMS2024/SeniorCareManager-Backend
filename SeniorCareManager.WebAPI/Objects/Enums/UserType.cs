@@ -2,14 +2,14 @@
 {
     public enum UserType
     {
-        Admin = 1,
-        Manager = 2,
-        Operator =3,
-        Nurse = 4,
-        Physiotherapist = 5,
-        Nutritionist = 6,
-        Phychologist = 7,
-        Doctor = 8,
-        Nursingtechnician = 9,
+        ADMIN = 1,
+        MANAGER = 2,
+        OPERATOR = 3,
+        NURSE = 4,
+        PHYSIOTHERAPIST = 5,
+        NUTRITIONIST = 6,
+        PSYCHOLOGIST = 7,
+        DOCTOR = 8,
+        NURSINGTECHNICIAN = 9,
     }
 }
