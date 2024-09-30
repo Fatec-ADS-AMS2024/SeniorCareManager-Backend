@@ -2,9 +2,9 @@
 {
     public enum UserStatus
     {
-        active = 1, 
-        inactive = 2,
-        blocked = 3
+        ACTIVE = 1, 
+        INACTIVE = 2,
+        BLOCKED = 3
         
 
     }
