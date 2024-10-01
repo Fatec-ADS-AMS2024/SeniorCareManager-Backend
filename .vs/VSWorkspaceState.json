@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SeniorCareManager.WebAPI",
+    "\\SeniorCareManager.WebAPI\\Objects",
+    "\\SeniorCareManager.WebAPI\\Objects\\Enums"
   ],
+  "SelectedNode": "\\SeniorCareManager.WebAPI\\Objects\\Enums",
   "PreviewInSolutionExplorer": true
 }
