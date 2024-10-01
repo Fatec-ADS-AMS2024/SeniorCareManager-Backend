@@ -17,5 +17,18 @@ public class HealthInsurancePlan
 
     [Column("abbreviation")]
     public string Abbreviation { get; set; }
+
+    public HealthInsurancePlan()
+    {
+
+    }
+
+    public HealthInsurancePlan(int id, string name, HealthPlanType type, string abbreviation)
+    {
+        Id = id;
+        Name = name;
+        Type = type;
+        Abbreviation = abbreviation;
+    }
 }
 
