@@ -1,6 +1,8 @@
-﻿namespace SeniorCareManager.WebAPI.Services.Interfaces
+﻿using SeniorCareManager.WebAPI.Objects.Models;
+
+namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
-    public class ICarrierService
+    public interface ICarrierService : IGenericService<Carrier>
     {
     }
 }

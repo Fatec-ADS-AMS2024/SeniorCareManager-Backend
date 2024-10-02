@@ -26,8 +26,8 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("district")]
         public string District { get; set; }
 
-        [Column("adresscomplement")]
-        public string AdressComplement { get; set; }
+        [Column("addresscomplement")]
+        public string AddressComplement { get; set; }
 
         [Column("city")]
         public string City { get; set; }
@@ -55,7 +55,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
             Street = street;
             Number = number;
             District = district;
-            AdressComplement = adressComplement;
+            AddressComplement = adressComplement;
             City = city;
             State = state;
             PostalCode = postalCode;
