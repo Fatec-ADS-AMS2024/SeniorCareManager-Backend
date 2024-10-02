@@ -12,9 +12,9 @@ namespace SeniorCareManager.WebAPI.Controllers
     {
         private readonly ICarrierService _carrierService;
 
-        public CarrierController (ICarrierService carrierService)
+        public CarrierController(ICarrierService carrierService)
         {
-           this._carrierService = carrierService;
+            this._carrierService = carrierService;
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var carriers = await _carrierService.GetById(id);
-            if(carriers == null) 
+            if (carriers == null)
                 return NotFound("Transportadora não encontrada");
             return Ok(carriers);
         }
@@ -41,24 +41,38 @@ namespace SeniorCareManager.WebAPI.Controllers
                 await _carrierService.Create(carrier);
             }
             catch (Exception ex)
-            {   
+            {
                 return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova transportadora");
             }
             return Ok(carrier);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put(int id,  Carrier carrier)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Carrier carrier)
         {
             try
             {
-                await _carrierService.Update(carrier);
+                await _carrierService.Update(carrier, id);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar uma nova transportadora" + ex.Message);
+                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da transportadora" + ex.Message);
             }
             return Ok(carrier);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _carrierService.Remove(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar remover uma transportadora.");
+            }
+            return Ok("Transportadora removida com suceso");
         }
     }
 }
