@@ -6,14 +6,14 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class UnitOfMeasureService : GenericService<UnitOfMeasure>
+    public class UnitOfMeasureService : GenericService<UnitOfMeasure>, IUnitOfMeasureService
     {
-        private readonly IProductGroupRepository _productGroupRepository;
+        private readonly IUnitOfMeasureRepository _unitOfMeasureRepository;
         private readonly IMapper _mapper;
 
-        public UnitOfMeasureService(IProductGroupRepository repository, IMapper mapper) : base(repository, mapper)
+        public UnitOfMeasureService(IUnitOfMeasureRepository repository, IMapper mapper) : base(repository, mapper)
         {
-            _productGroupRepository = repository;
+            _unitOfMeasureRepository = repository;
             _mapper = mapper;
         }
     }
