@@ -17,7 +17,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("cpfcnpj")]
         public string CpfCnpj { get; set; }
 
-        [Column("Street")]
+        [Column("street")]
         public string Street { get; set; }
 
         [Column("number")]

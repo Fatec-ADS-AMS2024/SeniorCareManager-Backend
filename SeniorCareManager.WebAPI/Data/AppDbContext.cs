@@ -10,6 +10,7 @@ public class AppDbContext: DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
     
     public DbSet<ProductGroup> ProductGroups { get; set; }
+    public DbSet<Carrier> Carriers { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
