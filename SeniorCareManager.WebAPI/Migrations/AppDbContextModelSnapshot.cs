@@ -21,6 +21,60 @@ namespace SeniorCareManager.WebAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("SeniorCareManager.WebAPI.Objects.Models.HealthInsurancePlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Abbreviation")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
+                        .HasColumnName("abbreviation");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Type")
+                        .HasMaxLength(1)
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("healthinsuranceplan");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Abbreviation = "UNI",
+                            Name = "Unimed",
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Abbreviation = "HAP",
+                            Name = "Hapvida",
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Abbreviation = "SUS",
+                            Name = "Sistema Único de Saúde",
+                            Type = 1
+                        });
+                });
+
             modelBuilder.Entity("SeniorCareManager.WebAPI.Objects.Models.ProductGroup", b =>
                 {
                     b.Property<int>("Id")
