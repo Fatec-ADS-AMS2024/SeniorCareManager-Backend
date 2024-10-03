@@ -10,6 +10,9 @@ public class AppDbContext: DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
     
     public DbSet<ProductGroup> ProductGroups { get; set; }
+
+    //Setando classe ProductType
+    public DbSet<ProductType> ProductTypes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,6 +20,7 @@ public class AppDbContext: DbContext
 
         // Chamando Builder para configurar as entidades
         ProductGroupBuilder.Build(modelBuilder);
+        ProductTypeBuilder.Build(modelBuilder);
 
     }
 }
