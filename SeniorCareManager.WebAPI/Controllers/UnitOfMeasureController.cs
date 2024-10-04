@@ -27,7 +27,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var unitOfMeasure = await _unitOfMeasureService.GetById(id);
-            if (unitOfMeasure == null) return NotFound("Grupo Produto não encontrado!");
+            if (unitOfMeasure == null) return NotFound("Unidade de medida não encontrado!");
             return Ok(unitOfMeasure);
         }
 
@@ -40,7 +40,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo grupo de produto.");
+                return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova unidade de medida.");
             }
             return Ok(unitOfMeasure);
         }
@@ -54,7 +54,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: " + ex.Message);
+                return StatusCode(500, "Ocorreu um erro ao tentar atualizar a unidade de medida: " + ex.Message);
             }
 
             return Ok(unitOfMeasure);
@@ -69,10 +69,10 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
+                return StatusCode(500, "Ocorreu um erro ao tentar remover a unidade de medida.");
             }
 
-            return Ok("Grupo de produto apagado com sucesso");
+            return Ok("Unidade de medida apagada com sucesso");
         }
     }
 }
