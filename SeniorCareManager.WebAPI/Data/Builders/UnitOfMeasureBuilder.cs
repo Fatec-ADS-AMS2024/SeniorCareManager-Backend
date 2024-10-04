@@ -10,8 +10,8 @@ namespace SeniorCareManager.WebAPI.Data.Builders
             {
                 // Configura a chave primária
                 modelBuilder.Entity<UnitOfMeasure>().HasKey(pg => pg.Id);
-            modelBuilder.Entity<UnitOfMeasure>().Property(pg => pg.Abbreviation).IsRequired().HasMaxLength(30);
-            modelBuilder.Entity<UnitOfMeasure>().Property(pg => pg.Description).IsRequired().HasMaxLength(3);
+            modelBuilder.Entity<UnitOfMeasure>().Property(pg => pg.Abbreviation).IsRequired().HasMaxLength(3);
+            modelBuilder.Entity<UnitOfMeasure>().Property(pg => pg.Description).IsRequired().HasMaxLength(30);
 
 
             // Inserção de dados iniciais (opcional)
