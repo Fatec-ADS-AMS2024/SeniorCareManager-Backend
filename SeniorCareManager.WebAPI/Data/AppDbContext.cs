@@ -18,6 +18,7 @@ public class AppDbContext: DbContext
 
         // Chamando Builder para configurar as entidades
         ProductGroupBuilder.Build(modelBuilder);
+        CarrierBuilder.Build(modelBuilder);
 
     }
 }

@@ -11,8 +11,8 @@ using SeniorCareManager.WebAPI.Data;
 namespace SeniorCareManager.WebAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241002113740_CarrierClass")]
-    partial class CarrierClass
+    [Migration("20241004182059_Inital")]
+    partial class Inital
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,67 +35,129 @@ namespace SeniorCareManager.WebAPI.Migrations
 
                     b.Property<string>("AddressComplement")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("addresscomplement");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("city");
 
                     b.Property<string>("CorporateName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("corporatename");
 
                     b.Property<string>("CpfCnpj")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)")
                         .HasColumnName("cpfcnpj");
 
                     b.Property<string>("District")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("district");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("email");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
                         .HasColumnName("number");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)")
                         .HasColumnName("phone");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)")
                         .HasColumnName("postalcode");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)")
                         .HasColumnName("state");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("Street");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("street");
 
                     b.Property<string>("TradeName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("tradename");
 
                     b.HasKey("Id");
 
                     b.ToTable("carrier");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressComplement = "Próximo ao banco",
+                            City = "São Paulo",
+                            CorporateName = "Transportes ABC LTDA",
+                            CpfCnpj = "12345678000190",
+                            District = "Centro",
+                            Email = "contato@abctransportes.com",
+                            Number = "123",
+                            Phone = "11987654321",
+                            PostalCode = "01001000",
+                            State = "SP",
+                            Street = "Rua das Flores",
+                            TradeName = "ABC Transportes"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressComplement = "Esquina com a Rua Augusta",
+                            City = "São Paulo",
+                            CorporateName = "Expresso XYZ S/A",
+                            CpfCnpj = "98765432000180",
+                            District = "Bela Vista",
+                            Email = "expresso@xyz.com.br",
+                            Number = "456",
+                            Phone = "11976543210",
+                            PostalCode = "01311000",
+                            State = "SP",
+                            Street = "Avenida Paulista",
+                            TradeName = "Expresso XYZ"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressComplement = "Próximo ao metrô",
+                            City = "Rio de Janeiro",
+                            CorporateName = "Translogística EFG ME",
+                            CpfCnpj = "22334455000122",
+                            District = "Centro",
+                            Email = "contato@efgtrans.com.br",
+                            Number = "789",
+                            Phone = "21987654321",
+                            PostalCode = "20040001",
+                            State = "RJ",
+                            Street = "Avenida Rio Branco",
+                            TradeName = "EFG Transportes"
+                        });
                 });
 
             modelBuilder.Entity("SeniorCareManager.WebAPI.Objects.Models.ProductGroup", b =>
