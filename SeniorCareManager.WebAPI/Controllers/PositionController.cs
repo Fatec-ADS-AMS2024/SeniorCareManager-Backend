@@ -75,19 +75,5 @@ public class PositionController: Controller
         return Ok("cargo apagado com sucesso");
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, Position position)
-    {
-        try
-        {
-            await _positionService.Update(position, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o cargo.");
-        }
-
-        return Ok(position);
-    }
 
 }

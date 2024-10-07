@@ -99,10 +99,11 @@ public class Startup
         
         //Scoped services and interfaces services
         services.AddScoped<IProductGroupService, ProductGroupService>();
-        
+        services.AddScoped<IPositionService, PositionService>();
         
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+        services.AddScoped<IPositionRepository, PositionRepository>();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

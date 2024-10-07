@@ -10,13 +10,14 @@ public class AppDbContext: DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
     
     public DbSet<ProductGroup> ProductGroups { get; set; }
-    
+    public DbSet<Position> Positions { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         // Chamando Builder para configurar as entidades
         ProductGroupBuilder.Build(modelBuilder);
+        PositionBuilder.Build(modelBuilder);
 
     }
 }
