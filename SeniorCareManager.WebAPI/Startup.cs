@@ -99,9 +99,9 @@ public class Startup
         
         //Scoped services and interfaces services
         services.AddScoped<IProductGroupService, ProductGroupService>();
-        services.AddScoped<IProductTypeSevice, ProductTypeService>();
-
-
+        services.AddScoped<IProductTypeService, ProductTypeService>();
+        
+        
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
         services.AddScoped<IProductTypeRepository, ProductTypeRepository>();

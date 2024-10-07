@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
@@ -10,18 +11,16 @@ public class ProductType
     public int Id { get; set; }
     [Column("name")]
     public string Name { get; set; }
-    [Column("producttypeid")]
+    [Column("productgroupid")][ForeignKey("productgroup")]
     public int ProductGroupId { get; set; }
 
-    [JsonIgnore][ForeignKey("productgroupid")]
-    public ProductGroup ProductGroup { get; set; }
-    public ProductType(){ 
-    
-    }
-    public ProductType(int id, string name, int producttypeid)
-    {
+    [JsonIgnore]
+    public ProductGroup? ProductGroup { get; set; }
+    public ProductType(){ }
+
+    public ProductType(int id, string name, int productGroupId){
         Id = id;
         Name = name;
-        ProductGroupId = producttypeid;
+        ProductGroupId = productGroupId;
     }
 }
