@@ -15,12 +15,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 public class Startup
 {
@@ -34,20 +31,11 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        
-        if (env == "Production")
-        {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-        }
-        else
-        {
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-        }
-        
-        //configuração do swagger
+        // Adicione o DbContext
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+        // Configuração do Swagger
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "SeniorCareManager", Version = "v1" });
@@ -79,34 +67,26 @@ public class Startup
                 }
             });
         });
-        
-        //adiciona controllers e trata a serialização Json
+
+        // Adiciona controllers e trata a serialização Json
         services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.WriteIndented = true; // Opcional, apenas para melhor legibilidade
         });
-        
-        /*
-         //exemplo de correção da serialização Json com NewtonSoft.
-        services.AddControllers()
-            .AddNewtonsoftJson(opt =>
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-        */
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        
-        //Scoped services and interfaces services
+
+        // Scoped services and interfaces
         services.AddScoped<IProductGroupService, ProductGroupService>();
-        
-        
-        //Scoped Repositories and Interfaces repo
+        services.AddScoped<ISupplierService, SupplierService>();
+
+        // Scoped Repositories and Interfaces
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
-        
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddScoped<ISupplierRepository, SupplierRepository>(); // Correção aqui
+
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(); // Remova a duplicata
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,7 +99,6 @@ public class Startup
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "SeniorCareManager Web API V1");
-                // Adicione essas linhas para habilitar o botão "Authorize"
                 c.DocExpansion(DocExpansion.None);
                 c.DisplayRequestDuration();
                 c.EnableDeepLinking();
@@ -137,10 +116,10 @@ public class Startup
             app.UseHsts();
         }
 
-        // app.UseHttpsRedirection();
         app.UseRouting();
 
-        // app.UseAuthorization();
+        // Habilitar a autorização
+        app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
         {
