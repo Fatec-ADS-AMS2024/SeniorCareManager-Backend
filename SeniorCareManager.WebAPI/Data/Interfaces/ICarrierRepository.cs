@@ -1,6 +1,8 @@
-﻿namespace SeniorCareManager.WebAPI.Data.Interfaces
+﻿using SeniorCareManager.WebAPI.Objects.Models;
+
+namespace SeniorCareManager.WebAPI.Data.Interfaces
 {
-    public interface ICarrierRepository
+    public interface ICarrierRepository : IGenericRepository<Carrier>
     {
 
     }
