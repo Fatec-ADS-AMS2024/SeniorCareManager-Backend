@@ -4,7 +4,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 namespace SeniorCareManager.WebAPI.Data.Builders;
 
 public class ProductGroupBuilder
-{
+{   
     public static void Build(ModelBuilder modelBuilder)
     {
         // Configura a chave primária

@@ -12,5 +12,11 @@ public class MappingProfile : Profile
         CreateMap<ProductGroup, ProductGroupDTO>();
         CreateMap<UnitOfMeasure, UnitOfMeasureDTO>().ReverseMap();
         CreateMap<UnitOfMeasureDTO, UnitOfMeasure>();
+        CreateMap<HealthInsurancePlanDTO, HealthInsurancePlan>().ReverseMap();
+        CreateMap<HealthInsurancePlan, HealthInsurancePlanDTO>();
+        CreateMap<ManufacturerDTO, Manufacturer>().ReverseMap();
+        CreateMap<Manufacturer, ManufacturerDTO>();
+        CreateMap<CarrierDTO, Carrier>().ReverseMap();
+        CreateMap<Carrier, CarrierDTO>();
     }
 }
