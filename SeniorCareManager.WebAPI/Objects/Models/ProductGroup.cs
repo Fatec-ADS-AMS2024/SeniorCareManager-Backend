@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
@@ -9,6 +10,9 @@ public class ProductGroup
     public int Id { get; set; }
     [Column("name")]
     public string Name { get; set; }
+
+    [JsonIgnore]
+    public ICollection<ProductType>? ProductType { get; set; }
 
     public ProductGroup()
     {
