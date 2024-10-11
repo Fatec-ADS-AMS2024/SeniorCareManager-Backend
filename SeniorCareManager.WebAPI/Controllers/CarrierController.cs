@@ -10,6 +10,7 @@ namespace SeniorCareManager.WebAPI.Controllers
     [Route("api/v1/[controller]")]
     public class CarrierController : Controller
     {
+
         private readonly ICarrierService _carrierService;
 
         public CarrierController(ICarrierService carrierService)
