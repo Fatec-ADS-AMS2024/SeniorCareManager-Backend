@@ -4,16 +4,25 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class GenericService<T> : IGenericService<T> where T: class
+public class GenericService<T> : IGenericService<T> where T : class
 {
     private readonly IGenericRepository<T> _repository;
     private readonly IMapper _mapper;
+    private IProductGroupRepository repository;
+    private IMapper mapper;
 
     public GenericService(IGenericRepository<T> repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
+
+    public GenericService(IProductGroupRepository repository, IMapper mapper)
+    {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
     public async Task<IEnumerable<T>> GetAll()
     {
         var entities = await _repository.Get();
@@ -39,7 +48,7 @@ public class GenericService<T> : IGenericService<T> where T: class
         {
             throw new KeyNotFoundException($"Entity with id {id} not found.");
         }
-        
+
         await _repository.Update(entity);
     }
 
@@ -50,7 +59,7 @@ public class GenericService<T> : IGenericService<T> where T: class
         {
             throw new KeyNotFoundException($"Entidade com id: {id} não encontrado");
         }
-        
+
         await _repository.Remove(entity);
     }
 }
