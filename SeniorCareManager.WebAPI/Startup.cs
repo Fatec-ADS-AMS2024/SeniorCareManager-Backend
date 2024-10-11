@@ -21,6 +21,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SeniorCareManager.WebAPI.Objects.Models;
+
 
 public class Startup
 {
@@ -96,15 +98,17 @@ public class Startup
         */
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        
-        //Scoped services and interfaces services
+
         services.AddScoped<IProductGroupService, ProductGroupService>();
         services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
-
+        services.AddScoped<IManufacturerService, ManufacturerService>(); 
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
         services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
+        services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+
+
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

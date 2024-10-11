@@ -21,7 +21,7 @@ namespace SeniorCareManager.WebAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SeniorCareManager.WebAPI.Objects.Models.HealthInsurancePlan", b =>
+            modelBuilder.Entity("SeniorCareManager.WebAPI.Objects.Models.Manufacturer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,48 +30,67 @@ namespace SeniorCareManager.WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Abbreviation")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("character varying(5)")
-                        .HasColumnName("abbreviation");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("CorporateName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
+                        .HasColumnName("corporate_name");
 
-                    b.Property<int>("Type")
-                        .HasMaxLength(1)
-                        .HasColumnType("integer")
-                        .HasColumnName("type");
+                    b.Property<string>("CpfCnpj")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)")
+                        .HasColumnName("cpf_cnpj");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("character varying(11)")
+                        .HasColumnName("phone");
+
+                    b.Property<string>("TradeName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("tradename");
 
                     b.HasKey("Id");
 
-                    b.ToTable("healthinsuranceplan");
+                    b.ToTable("manufacturer");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Abbreviation = "UNI",
-                            Name = "Unimed",
-                            Type = 2
+                            CorporateName = "Empresa A",
+                            CpfCnpj = "12345678000195",
+                            Email = "contato@empresaa.com",
+                            Phone = "12345678901",
+                            TradeName = "Trade A"
                         },
                         new
                         {
                             Id = 2,
-                            Abbreviation = "HAP",
-                            Name = "Hapvida",
-                            Type = 2
+                            CorporateName = "Empresa B",
+                            CpfCnpj = "12345678000196",
+                            Email = "contato@empresab.com",
+                            Phone = "23456789012",
+                            TradeName = "Trade B"
                         },
                         new
                         {
                             Id = 3,
-                            Abbreviation = "SUS",
-                            Name = "Sistema Único de Saúde",
-                            Type = 1
+                            CorporateName = "Empresa C",
+                            CpfCnpj = "12345678000197",
+                            Email = "contato@empresac.com",
+                            Phone = "34567890123",
+                            TradeName = "Trade C"
                         });
                 });
 
