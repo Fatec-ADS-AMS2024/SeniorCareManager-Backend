@@ -28,7 +28,7 @@ public class ProductTypeController : Controller
     public async Task<IActionResult> GetById(int id)
     {
         var productType = await _productTypeService.GetById(id);
-        if (productType == null) return NotFound("Grupo Produto não encontrado!");
+        if (productType == null) return NotFound("Tipo Produto não encontrado!");
         return Ok(productType);
     }
     
@@ -40,7 +40,7 @@ public class ProductTypeController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo grupo de produto.");
+            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo tipo de produto.");
         }
         return Ok(productType);
     }
@@ -54,7 +54,7 @@ public class ProductTypeController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: "+ex.Message);
+            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o tipo de produto: "+ex.Message);
         }
         
         return Ok(productType);
@@ -69,10 +69,10 @@ public class ProductTypeController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
+            return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo de produto.");
         }
 
-        return Ok("Grupo de produto apagado com sucesso");
+        return Ok("Tipo de produto apagado com sucesso");
     }
 
     [HttpPatch("{id}")]
@@ -84,7 +84,7 @@ public class ProductTypeController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo do produto.");
+            return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo do produto.");
         }
         
         return Ok(productType);

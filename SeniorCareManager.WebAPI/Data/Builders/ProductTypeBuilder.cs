@@ -18,9 +18,9 @@ public class ProductTypeBuilder
         modelBuilder.Entity<ProductType>()
             .HasData(new List<ProductType>
             {
-                new ProductType(1, "Medicamentos", 3),
-                new ProductType(2, "Equipamentos Médicos", 3),
-                new ProductType(3, "Suplementos", 3),
+                new ProductType(1, "Legumes", 3),
+                new ProductType(2, "Carnes", 3),
+                new ProductType(3, "Frutas", 3),
             });
     }
 }
