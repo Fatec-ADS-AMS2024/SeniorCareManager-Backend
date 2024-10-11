@@ -100,6 +100,7 @@ public class Startup
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupService, ProductGroupService>();
+        services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
         services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
         services.AddScoped<IManufacturerService, ManufacturerService>(); 
@@ -107,6 +108,7 @@ public class Startup
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
         services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
         services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
