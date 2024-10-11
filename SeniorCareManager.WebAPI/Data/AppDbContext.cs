@@ -4,13 +4,6 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data
 {
-    //recebe a conexão do Startup
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
-    
-    public DbSet<ProductGroup> ProductGroups { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }

@@ -107,7 +107,7 @@ public class Startup
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
-        services.AddScoped<IUnitOfMeasureService, UnitOfMeasureRepository>();
+        services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
         services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
         services.AddScoped<ICarrierRepository, CarrierRepository>();
