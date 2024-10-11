@@ -98,8 +98,10 @@ public class Startup
         */
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+      
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupService, ProductGroupService>();
+        services.AddScoped<IProductTypeService, ProductTypeService>();
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
         services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
@@ -109,13 +111,13 @@ public class Startup
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+        services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
         services.AddScoped<ISupplierRepository, SupplierRepository>();
         services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
         services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
         services.AddScoped<ICarrierRepository, CarrierRepository>();
         services.AddScoped<IPositionRepository, PositionRepository>();
-
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

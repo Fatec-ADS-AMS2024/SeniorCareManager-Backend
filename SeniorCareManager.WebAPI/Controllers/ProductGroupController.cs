@@ -67,7 +67,7 @@ public class ProductGroupController : Controller
             await _productGroupService.Remove(id);
         }
         catch (Exception ex)
-        {
+        {  
             return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
         }
 
