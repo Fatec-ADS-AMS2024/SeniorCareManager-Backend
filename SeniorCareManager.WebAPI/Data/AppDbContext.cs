@@ -10,6 +10,7 @@ namespace SeniorCareManager.WebAPI.Data
 
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,6 +18,7 @@ namespace SeniorCareManager.WebAPI.Data
 
             ProductGroupBuilder.Build(modelBuilder);
             ManufacturerBuilder.Build(modelBuilder);
+            HealthInsurancePlanBuilder.Build(modelBuilder);
         }
     }
 }
