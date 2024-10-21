@@ -21,6 +21,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SeniorCareManager.WebAPI.Objects.Models;
+
 
 public class Startup
 {
@@ -96,13 +98,29 @@ public class Startup
         */
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        
-        //Scoped services and interfaces services
+      
+        //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupService, ProductGroupService>();
+        services.AddScoped<IProductTypeService, ProductTypeService>();
+        services.AddScoped<ISupplierService, SupplierService>();
+        services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
+        services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
+        services.AddScoped<IManufacturerService, ManufacturerService>(); 
+        services.AddScoped<ICarrierService, CarrierService>();
+        services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
+
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+        services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
+        services.AddScoped<ISupplierRepository, SupplierRepository>();
+        services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
+        services.AddScoped<IHealthInsurancePlanRepository, HealthInsurancePlanRepository>();
+        services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+        services.AddScoped<ICarrierRepository, CarrierRepository>();
+        services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
