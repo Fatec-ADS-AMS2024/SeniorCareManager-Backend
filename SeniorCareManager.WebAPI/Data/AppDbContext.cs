@@ -4,6 +4,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data
 {
+
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -16,6 +17,7 @@ namespace SeniorCareManager.WebAPI.Data
         public DbSet<Carrier> Carriers { get; set; }
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Religion> Religions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +31,8 @@ namespace SeniorCareManager.WebAPI.Data
             CarrierBuilder.Build(modelBuilder);
             HealthInsurancePlanBuilder.Build(modelBuilder);
             PositionBuilder.Build(modelBuilder);
+            ReligionBuilder.Build(modelBuilder);
+
         }
     }
 }
