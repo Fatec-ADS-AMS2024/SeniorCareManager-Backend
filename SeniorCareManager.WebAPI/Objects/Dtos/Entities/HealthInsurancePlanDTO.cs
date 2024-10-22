@@ -5,6 +5,6 @@ public class HealthInsurancePlanDTO
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public HealthPlanType Type { get; set; }
+    public int Type { get; set; }
     public string Abbreviation { get; set; }
 }
