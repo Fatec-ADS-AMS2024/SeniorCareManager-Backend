@@ -88,7 +88,15 @@ public class Startup
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.WriteIndented = true; // Opcional, apenas para melhor legibilidade
         });
-        
+
+        services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+        {
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5173")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        }));
+
         /*
          //exemplo de correção da serialização Json com NewtonSoft.
         services.AddControllers()
@@ -156,6 +164,8 @@ public class Startup
 
         // app.UseHttpsRedirection();
         app.UseRouting();
+
+        app.UseCors("MyPolicy");
 
         // app.UseAuthorization();
 
