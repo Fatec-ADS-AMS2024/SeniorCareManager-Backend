@@ -38,7 +38,7 @@ public class ReligionController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova Religião.");
+            return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova religião.");
         }
         return Ok(religion);
     }
