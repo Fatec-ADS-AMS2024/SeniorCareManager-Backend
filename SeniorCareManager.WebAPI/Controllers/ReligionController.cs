@@ -18,27 +18,39 @@ public class ReligionController : Controller
     public async Task<IActionResult> Get()
     {
         var religion = await _religionService.GetAll();
-        return Ok(religion);
-    }
 
+        if (religion == null)
+        {
+            return StatusCode(500, $"Nenhuma religião encontrada!");
+        }
+
+        else
+            return Ok(religion);
+    }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var religion = await _religionService.GetById(id);
-        if (religion == null) return NotFound("Religião não encontrda!");
-        return Ok(religion);
+        var religionId = await _religionService.GetById(id);
+        if (religionId == null) return NotFound("Religião não encontrda!");
+        return Ok(religionId);
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(Religion religion)
     {
+        if (religion.Name == string.Empty)
+            return StatusCode(500, $"O nome da religião não pode ser nulo!");
+
+        if (religion.Id < 0)
+            return StatusCode(500, "O id da religião não pode ser inferior a 0!");
+
         try
         {
             await _religionService.Create(religion);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova religião.");
+            return StatusCode(500, $"Ocorreu um erro ao tentar inserir uma nova Religião! {ex}");
         }
         return Ok(religion);
     }
