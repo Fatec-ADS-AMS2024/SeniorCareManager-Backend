@@ -27,7 +27,6 @@ public class ReligionController : Controller
         else
             return Ok(religion);
     }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
