@@ -23,32 +23,57 @@ public class ReligionController : Controller
     public async Task<IActionResult> Get()
     {
         var religion = await _religionService.GetAll();
-
-        if (religion == null)
-        {
-            return StatusCode(500, $"Nenhuma religião encontrada!");
-        }
-
-        else
-            return Ok(religion);
+        _response.Code = ResponseEnum.Success;
+        _response.Data = religion;
+        _response.Message = "Lista de religiões!";
+        return Ok(_response);
     }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var religionId = await _religionService.GetById(id);
-        if (religionId == null) return NotFound("Religião não encontrda!");
-        return Ok(religionId);
+        try
+        {
+            var religion = await _religionService.GetById(id);
+            if (religion == null)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = "Religião não encontrada.";
+                _response.Data = religion;
+                return NotFound(_response);
+            }
+
+            _response.Code = ResponseEnum.Success;
+            _response.Message = "Religião " + religion.Name + " obtido com sucesso!";
+            _response.Data = religion;
+            return Ok(_response);
+
+        }
+        catch (Exception ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = "Não foi possível adquirir a religião.";
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(ReligionDTO religionDto)
     {
         var religions = await _religionService.GetAll();
-        if (!CheckDuplicates(religions, religionDto))
+        if (religions == null)
         {
             _response.Code = ResponseEnum.Invalid;
             _response.Data = religionDto;
-            _response.Message = "Nome duplicado ou inválido";
+            _response.Message = "Nome inválido.";
+            return BadRequest(_response);
+        }
+        if (!CheckDuplicates(religions, religionDto))
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Data = religionDto;
+            _response.Message = "Nome duplicado.";
             return BadRequest(_response);
         }
         try
@@ -56,13 +81,13 @@ public class ReligionController : Controller
             await _religionService.Create(religionDto);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião Cadastrado com sucesso!";
-            _response.Data = null;
+            _response.Data = religionDto;
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível cadastrar a Religião!";
-            _response.Data = null;
+            _response.Message = "Não foi possível cadastrar a Religião.";
+            _response.Data = religionDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
         return Ok(_response);
@@ -72,25 +97,32 @@ public class ReligionController : Controller
     public async Task<IActionResult> Put(int id, ReligionDTO religionDto)
     {
         var religions = await _religionService.GetAll();
-        if (!CheckDuplicates(religions, religionDto))
+        if (religionDto == null)
         {
             _response.Code = ResponseEnum.Invalid;
             _response.Data = religionDto;
-            _response.Message = "Nome duplicado ou inválido";
+            _response.Message = "Nome inválido.";
+            return BadRequest(_response);
+        }
+        if (!CheckDuplicates(religions, religionDto))
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Data = religionDto;
+            _response.Message = "Nome duplicado.";
             return BadRequest(_response);
         }
         try
         {
-            await _religionService.Create(religionDto);
+            await _religionService.Update(religionDto, id); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião alterado com sucesso!";
-            _response.Data = null;
+            _response.Data = religionDto;
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
             _response.Message = "Não foi possível alterar a Religião!";
-            _response.Data = null;
+            _response.Data = religionDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
         return Ok(_response);
@@ -102,13 +134,20 @@ public class ReligionController : Controller
         try
         {
             await _religionService.Remove(id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover a religião.");
+            _response.Code = ResponseEnum.Success;
+            _response.Message = "Grupo de religião apagado com sucesso!";
+            _response.Data = null;
         }
 
-        return Ok("Grupo de religião apagado com sucesso");
+        catch (Exception ex)
+        {
+            await _religionService.Remove(id);
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Erro ao tentar apagar grupo de religião.";
+            _response.Data = null;
+        }
+        return Ok(_response);
+
     }
     private static bool CheckDuplicates(IEnumerable<ReligionDTO> religionsDTO, ReligionDTO religionDTO)
     {

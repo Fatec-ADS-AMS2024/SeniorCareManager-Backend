@@ -7,7 +7,7 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class ReligionService : GenericService<ReligionDTO>, IReligionService
+public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionService
 {
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;

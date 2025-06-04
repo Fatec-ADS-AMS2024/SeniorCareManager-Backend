@@ -4,7 +4,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data.Repositories;
 
-public class ReligionRepository : GenericRepository<ReligionDTO>, IReligionRepository
+public class ReligionRepository : GenericRepository<Religion>, IReligionRepository
 {
     private readonly AppDbContext _context;
 
