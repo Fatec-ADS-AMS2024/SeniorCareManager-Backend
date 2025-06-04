@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,50 +18,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HealthInsurancePlan.cs",
-              "DocumentMoniker": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs",
-              "RelativeDocumentMoniker": "SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs",
-              "ToolTip": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs",
-              "RelativeToolTip": "SeniorCareManager.WebAPI\\Objects\\Models\\HealthInsurancePlan.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Title": "CarrierController.cs",
+              "DocumentMoniker": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs",
+              "RelativeDocumentMoniker": "SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs",
+              "ToolTip": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs",
+              "RelativeToolTip": "SeniorCareManager.WebAPI\\Controllers\\CarrierController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T16:25:35.332Z",
+              "WhenOpened": "2025-06-04T16:37:51.785Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EmployeeController.cs",
+              "DocumentMoniker": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs",
+              "RelativeDocumentMoniker": "SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs",
+              "ToolTip": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs",
+              "RelativeToolTip": "SeniorCareManager.WebAPI\\Controllers\\EmployeeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T16:35:03.456Z",
               "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Employee.cs",
-              "DocumentMoniker": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs",
-              "RelativeDocumentMoniker": "SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs",
-              "ToolTip": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs",
-              "RelativeToolTip": "SeniorCareManager.WebAPI\\Objects\\Models\\Employee.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T16:26:01.831Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Manufacturer.cs",
-              "DocumentMoniker": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs",
-              "RelativeDocumentMoniker": "SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs",
-              "ToolTip": "C:\\Users\\Aluno\\Downloads\\SeniorCareManager-Backend\\SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs",
-              "RelativeToolTip": "SeniorCareManager.WebAPI\\Objects\\Models\\Manufacturer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-04T16:25:29.22Z",
-              "EditorCaption": ""
             }
           ]
         }
