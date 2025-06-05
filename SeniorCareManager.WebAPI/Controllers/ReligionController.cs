@@ -35,7 +35,7 @@ public class ReligionController : Controller
         try
         {
             var religion = await _religionService.GetById(id);
-            if (religion == null)
+            if (religion is null)
             {
                 _response.Code = ResponseEnum.NotFound;
                 _response.Message = "Religião não encontrada.";
@@ -61,15 +61,16 @@ public class ReligionController : Controller
     [HttpPost]
     public async Task<IActionResult> Post(ReligionDTO religionDto)
     {
-        var religions = await _religionService.GetAll();
-        if (religions == null)
+        if (string.IsNullOrWhiteSpace(religionDto.Name))
         {
             _response.Code = ResponseEnum.Invalid;
-            _response.Data = religionDto;
-            _response.Message = "Nome inválido.";
+            _response.Data = null;
+            _response.Message = "Dados inválidos.";
+
             return BadRequest(_response);
         }
-        if (!CheckDuplicates(religions, religionDto))
+        var religions = await _religionService.GetAll();
+        if (CheckDuplicates(religions, religionDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = religionDto;
@@ -78,6 +79,7 @@ public class ReligionController : Controller
         }
         try
         {
+            religionDto.Id = 0;
             await _religionService.Create(religionDto);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião Cadastrado com sucesso!";
@@ -96,14 +98,14 @@ public class ReligionController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, ReligionDTO religionDto)
     {
-        var religions = await _religionService.GetAll();
-        if (religionDto == null)
+        if (string.IsNullOrWhiteSpace(religionDto.Name))
         {
             _response.Code = ResponseEnum.Invalid;
             _response.Data = religionDto;
             _response.Message = "Nome inválido.";
             return BadRequest(_response);
         }
+        var religions = await _religionService.GetAll();
         if (!CheckDuplicates(religions, religionDto))
         {
             _response.Code = ResponseEnum.Conflict;
@@ -133,6 +135,14 @@ public class ReligionController : Controller
     {
         try
         {
+            var religion = await _religionService.GetById(id);
+            if (religion is null)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Data = null;
+                _response.Message = "A religião não foi encontrada.";
+                return NotFound(_response);
+            }
             await _religionService.Remove(id);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Grupo de religião apagado com sucesso!";
@@ -141,7 +151,6 @@ public class ReligionController : Controller
 
         catch (Exception ex)
         {
-            await _religionService.Remove(id);
             _response.Code = ResponseEnum.Error;
             _response.Message = "Erro ao tentar apagar grupo de religião.";
             _response.Data = null;
@@ -153,12 +162,17 @@ public class ReligionController : Controller
     {
         foreach (var religion in religionsDTO)
         {
+            if (religionDTO.Id == religion.Id)
+            {
+                continue;
+            }
+
             if (StringValidator.CompareString(religionDTO.Name, religion.Name))
             {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 }
