@@ -58,14 +58,14 @@ namespace SeniorCareManager.WebAPI.Data.Builders
 
             modelBuilder.Entity<Company>()
                 .Property(c => c.CompanyLogo)
-                .HasMaxLength(500);
+                .HasMaxLength(200);
 
             // Inserção de dados iniciais
             modelBuilder.Entity<Company>().HasData(new List<Company>
             {
-                new Company(1, "Empresa A", "Trade A", "12345678000195", "empresa1@gmail.com", "Rua A", "123", "Bairro A", "Complemento A", "Cidade A", "SP", "12345-678", "logoA.png"),
-                new Company(2, "Empresa B", "Trade B", "12345678000196", "empresa2@gmail.com", "Rua B", "456", "Bairro B", "Complemento B", "Cidade B", "RJ", "23456-789", "logoB.png"),
-                new Company(3, "Empresa C", "Trade C", "12345678000197", "empresa3@gmail.com", "Rua C", "789", "Bairro C", "Complemento C", "Cidade C", "MG", "34567-890", "logoC.png")
+                new Company(1, "Empresa A", "Trade A", "12345678000195", "empresa1@gmail.com", "Rua A", "123", "Bairro A", "Complemento A", "Cidade A", "SP", "12345678", "logoA.png"),
+                new Company(2, "Empresa B", "Trade B", "12345678000196", "empresa2@gmail.com", "Rua B", "456", "Bairro B", "Complemento B", "Cidade B", "RJ", "23456789", "logoB.png"),
+                new Company(3, "Empresa C", "Trade C", "12345678000197", "empresa3@gmail.com", "Rua C", "789", "Bairro C", "Complemento C", "Cidade C", "MG", "34567890", "logoC.png")
             });
         }
     }

@@ -7,13 +7,13 @@ namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class CompanyController
+    public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
 
         public CompanyController(ICompanyService service)
         {
-            _companyService = service;
+            this._companyService = service;
         }
 
         [HttpGet]
@@ -37,11 +37,11 @@ namespace SeniorCareManager.WebAPI.Controllers
             {
                 await _companyService.Create(company);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova empresa.");
             }
-            return CreatedAtAction(nameof(GetById), new { id = company.Id }, company);
+            return Ok(company);
         }
 
         [HttpPut("{id}")]
@@ -51,7 +51,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             {
                 await _companyService.Update(company, id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Ocorreu um erro ao tentar atualizar a empresa.");
             }
@@ -63,21 +63,13 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
-                await _companyService.Delete(id);
+                await _companyService.Remove(id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Ocorreu um erro ao tentar excluir a empresa.");
             }
             return NoContent();
-        }
-
-        [HttpGet("search/{name}")]
-        public async Task<IActionResult> SearchByName(string name)
-        {
-            var companies = await _companyService.SearchByName(name);
-            if (companies == null || !companies.Any()) return NotFound("Nenhuma empresa encontrada com esse nome.");
-            return Ok(companies);
         }
 
     }
