@@ -3,7 +3,6 @@ using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using System.Threading;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {

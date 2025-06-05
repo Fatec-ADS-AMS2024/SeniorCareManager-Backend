@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;

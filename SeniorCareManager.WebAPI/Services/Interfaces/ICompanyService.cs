@@ -3,7 +3,7 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
-    public interface ICompanyService : IGenericService<CompanyDTO, Company>
+    public interface ICompanyService : IGenericService<Company, CompanyDTO>
     {
     }
 }
