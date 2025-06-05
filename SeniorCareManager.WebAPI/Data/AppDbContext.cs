@@ -18,6 +18,7 @@ namespace SeniorCareManager.WebAPI.Data
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Religion> Religions { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +33,7 @@ namespace SeniorCareManager.WebAPI.Data
             HealthInsurancePlanBuilder.Build(modelBuilder);
             PositionBuilder.Build(modelBuilder);
             ReligionBuilder.Build(modelBuilder);
+            EmployeeBuilder.Build(modelBuilder);
 
         }
     }
