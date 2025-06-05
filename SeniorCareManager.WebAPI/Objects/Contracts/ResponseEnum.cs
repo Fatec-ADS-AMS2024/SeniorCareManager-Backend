@@ -1,4 +1,4 @@
-﻿namespace SeniorCareManager.WebAPI.Objects.Enums
+﻿namespace SeniorCareManager.WebAPI.Objects.Contracts
 {
     public enum ResponseEnum
     {

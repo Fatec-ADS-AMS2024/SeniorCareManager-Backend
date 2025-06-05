@@ -1,6 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Enums;
-
-namespace SeniorCareManager.WebAPI.Services.Utils
+﻿namespace SeniorCareManager.WebAPI.Objects.Contracts
 {
     public class Response
     {
