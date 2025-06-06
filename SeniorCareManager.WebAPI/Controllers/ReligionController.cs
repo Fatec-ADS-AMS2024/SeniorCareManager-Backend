@@ -105,7 +105,7 @@ public class ReligionController : Controller
             return BadRequest(_response);
         }
         var religions = await _religionService.GetAll();
-        if (!CheckDuplicates(religions, religionDto))
+        if (CheckDuplicates(religions, religionDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = religionDto;
