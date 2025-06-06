@@ -14,29 +14,29 @@ public class Product
     public long Id { get; set; }
 
     [Required]
-    [Column("description", TypeName = "varchar(100)")]
+    [Column("description")]
     public string Description { get; set; }
 
     [Required]
-    [Column("genericname", TypeName = "varchar(100)")]
+    [Column("genericname")]
     public string GenericName { get; set; }
 
-    [Column("minimum_stock", TypeName = "decimal(10,2)")]
+    [Column("minimum_stock")]
     public decimal MinimumStock { get; set; }
 
-    [Column("current_stock", TypeName = "decimal(10,2)")]
+    [Column("current_stock")]
     public decimal CurrentStock { get; set; }
 
-    [Column("stock_value", TypeName = "decimal(10,2)")]
+    [Column("stock_value")]
     public decimal StockValue { get; set; }
 
-    [Column("unit_price", TypeName = "decimal(10,2)")]
+    [Column("unit_price")]
     public decimal UnitPrice { get; set; }
 
-    [Column("average_cost", TypeName = "decimal(10,2)")]
+    [Column("average_cost")]
     public decimal AverageCost { get; set; }
 
-    [Column("last_purchase_price", TypeName = "decimal(10,2)")]
+    [Column("last_purchase_price")]
     public decimal LastPurchasePrice { get; set; }
 
     [Column("high_cost")]
