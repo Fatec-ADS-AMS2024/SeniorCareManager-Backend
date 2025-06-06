@@ -1,3 +1,4 @@
+using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
