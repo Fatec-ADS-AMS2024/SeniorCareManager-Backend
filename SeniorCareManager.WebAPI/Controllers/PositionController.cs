@@ -109,7 +109,7 @@ public class PositionController: Controller
             return BadRequest(_response);
         }
         var positions = await _positionService.GetAll();
-        if (!CheckDuplicates(positions, positionDto))
+        if (CheckDuplicates(positions, positionDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = positionDto;
