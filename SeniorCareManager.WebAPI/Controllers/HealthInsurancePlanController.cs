@@ -53,7 +53,7 @@ public class HealthInsurancePlanController : Controller
         }
         catch (Exception ex)
         {
-            _response.Code = ResponseEnum.NotFound;
+            _response.Code = ResponseEnum.Error;
             _response.Message = "Não foi possível adquirir o plano de saúde.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
