@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -31,7 +32,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Supplier supplier)
+        public async Task<IActionResult> Post(SupplierDTO supplier)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Supplier supplier)
+        public async Task<IActionResult> Put(int id, SupplierDTO supplier)
         {
             try
             {

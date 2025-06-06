@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -7,7 +8,7 @@ namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class PositionController: Controller
+public class PositionController : Controller
 {
     private readonly IPositionService _positionService;
 
@@ -32,7 +33,7 @@ public class PositionController: Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Position position)
+    public async Task<IActionResult> Post(PositionDTO position)
     {
         try
         {
@@ -46,7 +47,7 @@ public class PositionController: Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, Position position)
+    public async Task<IActionResult> Put(int id, PositionDTO position)
     {
         try
         {

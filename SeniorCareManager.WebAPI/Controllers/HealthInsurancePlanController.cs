@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -31,7 +32,7 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(HealthInsurancePlan healthInsurancePlan)
+    public async Task<IActionResult> Post(HealthInsurancePlanDTO healthInsurancePlan)
     {
         try
         {
@@ -45,7 +46,7 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, HealthInsurancePlan healthInsurancePlan)
+    public async Task<IActionResult> Put(int id, HealthInsurancePlanDTO healthInsurancePlan)
     {
         try
         {
@@ -75,7 +76,7 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, HealthInsurancePlan healthInsurancePlan)
+    public async Task<IActionResult> Patch(int id, HealthInsurancePlanDTO healthInsurancePlan)
     {
         try
         {
