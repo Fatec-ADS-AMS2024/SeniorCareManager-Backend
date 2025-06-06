@@ -54,7 +54,7 @@ public class PositionController: Controller
         }
         catch (Exception ex)
         {
-            _response.Code = ResponseEnum.NotFound;
+            _response.Code = ResponseEnum.Error;
             _response.Message = "Não foi possível adquirir o cargo.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
