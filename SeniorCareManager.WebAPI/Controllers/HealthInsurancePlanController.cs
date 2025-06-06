@@ -140,7 +140,7 @@ public class HealthInsurancePlanController : Controller
             return BadRequest(_response);
         }
         var healthInsurancesPlans = await _healthInsurancePlanService.GetAll();
-        if (!CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
+        if (CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = healthInsurancePlanDto;
@@ -218,7 +218,7 @@ public class HealthInsurancePlanController : Controller
             return BadRequest(_response);
         }
         var healthInsurancesPlans = await _healthInsurancePlanService.GetAll();
-        if (!CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
+        if (CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = healthInsurancePlanDto;
