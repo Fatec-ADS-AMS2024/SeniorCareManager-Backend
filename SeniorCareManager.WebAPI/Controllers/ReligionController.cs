@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -36,7 +37,7 @@ public class ReligionController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Religion religion)
+    public async Task<IActionResult> Post(ReligionDTO religion)
     {
         if (religion.Name == string.Empty)
             return StatusCode(500, $"O nome da religião não pode ser nulo!");
@@ -56,7 +57,7 @@ public class ReligionController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, Religion religion)
+    public async Task<IActionResult> Put(int id, ReligionDTO religion)
     {
         try
         {
