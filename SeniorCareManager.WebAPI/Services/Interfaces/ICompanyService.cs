@@ -5,5 +5,6 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
     public interface ICompanyService : IGenericService<Company, CompanyDTO>
     {
+        Task Update(int id, CompanyDTO company);
     }
 }
