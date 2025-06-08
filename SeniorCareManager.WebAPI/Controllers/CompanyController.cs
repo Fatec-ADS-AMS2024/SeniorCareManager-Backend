@@ -58,6 +58,32 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CompanyDTO company)
         {
+            company.CNPJ = StringValidator.ExtractNumbers(company.CNPJ);
+            company.Email = company.Email?.Trim();
+            company.TradeName = StringValidator.RemoveDiacritics(company.TradeName);
+            company.CompanyName = StringValidator.RemoveDiacritics(company.CompanyName);
+            company.PostalCode = StringValidator.ExtractNumbers(company.PostalCode);
+            company.Number = StringValidator.ExtractNumbers(company.Number);
+
+            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.CompanyName)))
+                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
+
+            if (string.IsNullOrWhiteSpace(company.Email) || !company.Email.Contains("@"))
+                return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
+
+            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.TradeName)))
+                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
+
+            if (!CpfCnpjValidator.IsValidCNPJ(company.CNPJ))
+                return BadRequest("O CNPJ informado é inválido.");
+
+            if (!StringValidator.ExtractNumbers(company.PostalCode).Length.Equals(8))
+                return BadRequest("O Código postal informado deve conter 8 dígitos numéricos.");
+
+            if (!StringValidator.ExtractNumbers(company.Number).Length.Equals(4))
+                return BadRequest("O Número informado deve conter apenas dígitos numéricos.");
+
+
             if (company is null || string.IsNullOrWhiteSpace(company.CompanyName))
             {
                 _response.Code = ResponseEnum.Invalid;
@@ -88,17 +114,17 @@ namespace SeniorCareManager.WebAPI.Controllers
             company.CNPJ = StringValidator.ExtractNumbers(company.CNPJ);
             company.Email = company.Email?.Trim();
             company.TradeName = StringValidator.RemoveDiacritics(company.TradeName);
-            company.CompanyName = company.CompanyName?.Trim();
+            company.CompanyName = StringValidator.RemoveDiacritics(company.CompanyName);
             company.PostalCode = StringValidator.ExtractNumbers(company.PostalCode);
             company.Number = StringValidator.ExtractNumbers(company.Number);
 
-            if (string.IsNullOrWhiteSpace(company.CompanyName))
-                return BadRequest("A razão social do fornecedor é obrigatória.");
+            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.CompanyName)))
+                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
 
             if (string.IsNullOrWhiteSpace(company.Email) || !company.Email.Contains("@"))
                 return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
 
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(company.TradeName))
+            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.TradeName)))
                 return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
 
             if (!CpfCnpjValidator.IsValidCNPJ(company.CNPJ))
