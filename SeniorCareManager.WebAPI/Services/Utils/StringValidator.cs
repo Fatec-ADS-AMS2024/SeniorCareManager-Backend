@@ -39,15 +39,7 @@ namespace SeniorCareManager.WebAPI.Services.Utils
             return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool ContainsOnlyLettersAndSpaces(string tradeName)
-        {
-            return !string.IsNullOrWhiteSpace(tradeName) && Regex.IsMatch(tradeName, @"^[a-zA-ZÀ-ÿ\s]+$");
-        }
-
-
         // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
-
-
 
     }
 }
