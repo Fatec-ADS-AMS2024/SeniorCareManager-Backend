@@ -13,11 +13,9 @@ public class Product
     [Column("id")]
     public long Id { get; set; }
 
-    [Required]
     [Column("description")]
     public string Description { get; set; }
 
-    [Required]
     [Column("genericname")]
     public string GenericName { get; set; }
 

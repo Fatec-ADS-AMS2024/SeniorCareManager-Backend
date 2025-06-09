@@ -13,49 +13,49 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [Route("api/v1/[controller]")]
 public class ProductController : Controller
 {
-    private readonly IProductService _productervice;
+    private readonly IProductService _productService;
     private readonly Response _response;
 
     public ProductController(IProductService service)
     {
-        this._productervice = service;
+        this._productService = service;
         _response = new Response();
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var product = await _productervice.GetAll();
+        var product = await _productService.GetAll();
         _response.Code = ResponseEnum.Success;
         _response.Data = product;
         _response.Message = "Lista de produtos!";
         return Ok(_response);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+     [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(long id)
     {
         try
         {
-            var product = await _productervice.GetById(id);
-            if (product is null)
+            var position = await _productService.GetById(id);
+            if (position is null)
             {
                 _response.Code = ResponseEnum.NotFound;
-                _response.Message = "produto não encontrado.";
-                _response.Data = product;
+                _response.Message = "Cargo não encontrado.";
+                _response.Data = position;
                 return NotFound(_response);
             }
 
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Produto " + product.GenericName + " obtido com sucesso!";
-            _response.Data = product;
+            _response.Message = "Cargo " + position.GenericName + " obtido com sucesso!";
+            _response.Data = position;
             return Ok(_response);
 
         }
         catch (Exception ex)
         {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Message = "Não foi possível adquirir o Produto.";
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Não foi possível adquirir o cargo.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -72,8 +72,8 @@ public class ProductController : Controller
 
             return BadRequest(_response);
         }
-        var product = await _productervice.GetAll();
-        if (CheckDuplicates(product, productDto))
+        var products = await _productService.GetAll();
+        if (CheckDuplicates(products, productDto))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Data = productDto;
@@ -83,7 +83,7 @@ public class ProductController : Controller
         try
         {
             productDto.Id = 0;
-            await _productervice.Create(productDto);
+            await _productService.Create(productDto);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Produto Cadastrado com sucesso!";
             _response.Data = productDto;
@@ -108,7 +108,7 @@ public class ProductController : Controller
             _response.Message = "Nome inválido.";
             return BadRequest(_response);
         }
-        var product = await _productervice.GetAll();
+        var product = await _productService.GetAll();
         if (CheckDuplicates(product, productDto))
         {
             _response.Code = ResponseEnum.Conflict;
@@ -118,7 +118,7 @@ public class ProductController : Controller
         }
         try
         {
-            await _productervice.Update(productDto, id); ;
+            await _productService.Update(productDto, id); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Produto alterado com sucesso!";
             _response.Data = productDto;
@@ -134,11 +134,11 @@ public class ProductController : Controller
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(long id)
     {
         try
         {
-            var product = await _productervice.GetById(id);
+            var product = await _productService.GetById(id);
             if (product is null)
             {
                 _response.Code = ResponseEnum.NotFound;
@@ -146,7 +146,7 @@ public class ProductController : Controller
                 _response.Message = "O Produto não foi encontrado.";
                 return NotFound(_response);
             }
-            await _productervice.Remove(id);
+            await _productService.Remove(id);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Produto apagado com sucesso!";
             _response.Data = null;
@@ -161,16 +161,16 @@ public class ProductController : Controller
         return Ok(_response);
 
     }
-    private static bool CheckDuplicates(IEnumerable<ProductDTO> productDTO, ProductDTO productDTO)
+    private static bool CheckDuplicates(IEnumerable<ProductDTO> productsDTO, ProductDTO productDTO)
     {
-        foreach (var product in productDTO)
+        foreach (var product in productsDTO)
         {
             if (productDTO.Id == product.Id)
             {
                 continue;
             }
 
-            if (StringValidator.CompareString(productDTO.GenericName, product.Ge))
+            if (StringValidator.CompareString(productDTO.GenericName, product.GenericName))
             {
                 return true;
             }
