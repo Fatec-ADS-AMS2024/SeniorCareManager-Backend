@@ -36,21 +36,17 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(SupplierDTO supplier)
         {
-            // Remove máscaras de CpfCnpj e Phone
             supplier.CpfCnpj = StringValidator.ExtractNumbers(supplier.CpfCnpj);
             supplier.Phone = StringValidator.ExtractNumbers(supplier.Phone);
 
             var existingSuppliers = await _supplierService.GetAll();
 
-            // Verifica duplicidade de CNPJ
             if (existingSuppliers.Any(s => StringValidator.ExtractNumbers(s.CpfCnpj) == supplier.CpfCnpj))
                 return BadRequest("Já existe um fornecedor com este CPF/CNPJ.");
 
-            // Verifica duplicidade de razão social (corporate name), ignorando acento e case
             if (existingSuppliers.Any(s => StringValidator.CompareString(s.CorporateName, supplier.CorporateName)))
                 return BadRequest("Já existe um fornecedor com esta razão social.");
 
-            // Validações manuais já existentes
             if (string.IsNullOrWhiteSpace(supplier.CorporateName))
                 return BadRequest("A razão social do fornecedor é obrigatória.");
 
@@ -66,7 +62,6 @@ namespace SeniorCareManager.WebAPI.Controllers
             if (!CpfCnpjValidator.IsValidCNPJ(supplier.CpfCnpj))
                 return BadRequest("O CPF ou CNPJ informado é inválido.");
 
-            // Validações adicionais para endereço
             if (string.IsNullOrWhiteSpace(supplier.PostalCode) || !StringValidator.IsNumeric(supplier.PostalCode) || supplier.PostalCode.Length != 8)
                 return BadRequest("O CEP informado é inválido. Deve conter exatamente 8 números.");
 
@@ -78,6 +73,9 @@ namespace SeniorCareManager.WebAPI.Controllers
 
             if (!StringValidator.ContainsOnlyLettersNumbersSpaces(supplier.Number))
                 return BadRequest("O número do endereço deve conter apenas letras, números e espaços.");
+
+            if (string.IsNullOrWhiteSpace(supplier.AddressComplement))
+                return BadRequest("O complemento do endereço é obrigatório.");
 
             if (string.IsNullOrWhiteSpace(supplier.District))
                 return BadRequest("O bairro é obrigatório.");
@@ -108,21 +106,17 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, SupplierDTO supplier)
         {
-            // Remove máscaras de CpfCnpj e Phone
             supplier.CpfCnpj = StringValidator.ExtractNumbers(supplier.CpfCnpj);
             supplier.Phone = StringValidator.ExtractNumbers(supplier.Phone);
 
             var existingSuppliers = await _supplierService.GetAll();
 
-            // Verifica duplicidade de CNPJ (exceto o fornecedor que está sendo atualizado)
             if (existingSuppliers.Any(s => s.Id != id && StringValidator.ExtractNumbers(s.CpfCnpj) == supplier.CpfCnpj))
                 return BadRequest("Já existe outro fornecedor com este CPF/CNPJ.");
 
-            // Verifica duplicidade de razão social (exceto o fornecedor que está sendo atualizado)
             if (existingSuppliers.Any(s => s.Id != id && StringValidator.CompareString(s.CorporateName, supplier.CorporateName)))
                 return BadRequest("Já existe outro fornecedor com esta razão social.");
 
-            // Validações manuais já existentes
             if (string.IsNullOrWhiteSpace(supplier.CorporateName))
                 return BadRequest("A razão social do fornecedor é obrigatória.");
 
@@ -138,7 +132,6 @@ namespace SeniorCareManager.WebAPI.Controllers
             if (!CpfCnpjValidator.IsValidCNPJ(supplier.CpfCnpj))
                 return BadRequest("O CPF ou CNPJ informado é inválido.");
 
-            // Validações adicionais para endereço
             if (string.IsNullOrWhiteSpace(supplier.PostalCode) || !StringValidator.IsNumeric(supplier.PostalCode) || supplier.PostalCode.Length != 8)
                 return BadRequest("O CEP informado é inválido. Deve conter exatamente 8 números.");
 
@@ -150,6 +143,9 @@ namespace SeniorCareManager.WebAPI.Controllers
 
             if (!StringValidator.ContainsOnlyLettersNumbersSpaces(supplier.Number))
                 return BadRequest("O número do endereço deve conter apenas letras, números e espaços.");
+
+            if (string.IsNullOrWhiteSpace(supplier.AddressComplement))
+                return BadRequest("O complemento do endereço é obrigatório.");
 
             if (string.IsNullOrWhiteSpace(supplier.District))
                 return BadRequest("O bairro é obrigatório.");
