@@ -1,21 +1,50 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-
-
-namespace SeniorCareManager.WebAPI.Services.Entities;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionService
 {
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;
+    private readonly Response _response;
 
-    public ReligionService(IReligionRepository repository, IMapper mapper) : base(repository, mapper)
+    public ReligionService(IReligionRepository repository, IMapper mapper): base(repository, mapper)
     {
         _religionRepository = repository;
         _mapper = mapper;
+        _response = new Response();
+    }
+    public override async Task Create(ReligionDTO religionDto)
+    {
+        if (!religionDto.CheckName())
+            throw new ArgumentException("Nome Inválido.");
+
+        if (await CheckDuplicates(religionDto.Name))
+            throw new InvalidOperationException("Nome duplicado.");
+
+        await base.Create(religionDto);
+    }
+    public override async Task Update(ReligionDTO religionDto, int id)
+    {
+        if (!religionDto.CheckName())
+            throw new ArgumentException("Nome Inválido.");
+
+        if (await CheckDuplicates(religionDto.Name))
+            throw new InvalidOperationException("Nome duplicado.");
+
+        await base.Update(religionDto, id);
+    }
+
+    public async Task<bool> CheckDuplicates(string nome)
+    {
+        var religions = await _religionRepository.Get();
+        return religions.Any(r => StringValidator.CompareString(r.Name, nome));
 
     }
+
 }
