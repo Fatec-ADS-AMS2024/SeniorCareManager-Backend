@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -10,7 +11,7 @@ namespace SeniorCareManager.WebAPI.Controllers
     [Route("api/v1/[controller]")]
     public class UnitOfMeasureController : Controller
     {
-       private readonly IUnitOfMeasureService _unitOfMeasureService;
+        private readonly IUnitOfMeasureService _unitOfMeasureService;
 
         public UnitOfMeasureController(IUnitOfMeasureService service)
         {
@@ -21,7 +22,8 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             var unitOfMeasure = await _unitOfMeasureService.GetAll();
 
-            if (unitOfMeasure == null) {
+            if (unitOfMeasure == null)
+            {
                 return StatusCode(500, $"Nenhuma unidade de medida encontrada!");
             }
 
@@ -35,15 +37,15 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var unitOfMeasureId = await _unitOfMeasureService.GetById(id);
-                if (unitOfMeasureId == null) return NotFound("Unidade de medida não encontrada!");
-                return Ok(unitOfMeasureId);
+            if (unitOfMeasureId == null) return NotFound("Unidade de medida não encontrada!");
+            return Ok(unitOfMeasureId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UnitOfMeasure unitOfMeasure)
+        public async Task<IActionResult> Post(UnitOfMeasureDTO unitOfMeasure)
         {
             if (unitOfMeasure.Description == String.Empty) return BadRequest("Unidade de medida não pode ser vazia.");
-         
+
             if (unitOfMeasure.Abbreviation == String.Empty) return BadRequest("Abreviação não pode ser vazia.");
 
             try
@@ -58,7 +60,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UnitOfMeasure unitOfMeasure)
+        public async Task<IActionResult> Put(int id, UnitOfMeasureDTO unitOfMeasure)
         {
             try
             {
