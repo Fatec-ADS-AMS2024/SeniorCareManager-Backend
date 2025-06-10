@@ -30,6 +30,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public override async Task Create(PositionDTO positionDto)
         {
+            if (positionDto is null)
+                throw new KeyNotFoundException("Id inválido");
+
             if (!positionDto.CheckName())
                 throw new ArgumentException("Nome Inválidoa.");
 
@@ -40,11 +43,15 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public override async Task Update(PositionDTO positionDto, int id)
         {
+            var positions = await _positionRepository.Get();
+            if (positionDto is null)
+                throw new KeyNotFoundException("Id inválido");
             if (!positionDto.CheckName())
                 throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
                 throw new InvalidOperationException("Nome duplicado.");
+
 
             await base.Update(positionDto, id);
         }
@@ -58,8 +65,11 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public async Task<bool> CheckDuplicates(string name)
         {
+   
             var positions = await _positionRepository.Get();
-            return positions.Any(r => StringValidator.CompareString(r.Name, name));
+            return positions.Any(r =>
+                StringValidator.CompareString(r.Name, name)
+            );
         }
     }
 }

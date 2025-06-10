@@ -85,6 +85,13 @@ public class PositionController: Controller
             _response.Data = positionDto;
             return Conflict(_response);
         }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
@@ -95,7 +102,7 @@ public class PositionController: Controller
         return Ok(_response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}")] 
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
         try
@@ -118,6 +125,13 @@ public class PositionController: Controller
             _response.Message = ex.Message;
             _response.Data = positionDto;
             return Conflict(_response);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
         catch (Exception ex)
         {
