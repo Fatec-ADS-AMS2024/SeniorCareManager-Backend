@@ -28,29 +28,27 @@ public class ProductController : Controller
         var product = await _productService.GetAll();
         _response.Code = ResponseEnum.Success;
         _response.Data = product;
-        _response.Message = "Lista de produtos!";
+        _response.Message = "Lista de cargos!";
         return Ok(_response);
     }
 
-     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(long id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
         try
         {
-            var position = await _productService.GetById(id);
-            if (position is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Cargo não encontrado.";
-                _response.Data = position;
-                return NotFound(_response);
-            }
-
+            var product = await _productService.GetById(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo " + position.GenericName + " obtido com sucesso!";
-            _response.Data = position;
+            _response.Message = "Cargo " + product.GenericName + " obtido com sucesso!";
+            _response.Data = product;
             return Ok(_response);
-
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -61,37 +59,36 @@ public class ProductController : Controller
         }
     }
 
+
     [HttpPost]
     public async Task<IActionResult> Post(ProductDTO productDto)
     {
-        if (string.IsNullOrWhiteSpace(productDto.GenericName))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "Dados inválidos.";
-
-            return BadRequest(_response);
-        }
-        var products = await _productService.GetAll();
-        if (CheckDuplicates(products, productDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = productDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
             productDto.Id = 0;
             await _productService.Create(productDto);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Produto Cadastrado com sucesso!";
+            _response.Message = "Cargo Cadastrado com sucesso!";
             _response.Data = productDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = productDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível cadastrar o produto.";
+            _response.Message = "Não foi possível cadastrar o cargo.";
             _response.Data = productDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -101,32 +98,31 @@ public class ProductController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, ProductDTO productDto)
     {
-        if (string.IsNullOrWhiteSpace(productDto.GenericName))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = productDto;
-            _response.Message = "Nome inválido.";
-            return BadRequest(_response);
-        }
-        var product = await _productService.GetAll();
-        if (CheckDuplicates(product, productDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = productDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
             await _productService.Update(productDto, id); ;
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Produto alterado com sucesso!";
+            _response.Message = "Cargo alterado com sucesso!";
             _response.Data = productDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = productDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível alterar o Produto!";
+            _response.Message = "Não foi possível alterar o cargo!";
             _response.Data = productDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -134,49 +130,28 @@ public class ProductController : Controller
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            var product = await _productService.GetById(id);
-            if (product is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Data = null;
-                _response.Message = "O Produto não foi encontrado.";
-                return NotFound(_response);
-            }
             await _productService.Remove(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Produto apagado com sucesso!";
+            _response.Message = "Grupo de cargo apagado com sucesso!";
             _response.Data = null;
         }
-
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Data = null;
+            _response.Message = ex.Message;
+            return NotFound(_response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar apagar grupo de Produto.";
+            _response.Message = "Erro ao tentar apagar grupo de cargo.";
             _response.Data = null;
         }
         return Ok(_response);
-
     }
-    private static bool CheckDuplicates(IEnumerable<ProductDTO> productsDTO, ProductDTO productDTO)
-    {
-        foreach (var product in productsDTO)
-        {
-            if (productDTO.Id == product.Id)
-            {
-                continue;
-            }
-
-            if (StringValidator.CompareString(productDTO.GenericName, product.GenericName))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 }

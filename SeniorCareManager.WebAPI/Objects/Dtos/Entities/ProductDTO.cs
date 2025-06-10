@@ -1,5 +1,6 @@
 using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
@@ -27,5 +28,12 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public YesNo HighCost { get; set; }
 
         public YesNo ExpirationControlled { get; set; }
+
+        public bool CheckName()
+        {
+            return !string.IsNullOrWhiteSpace(GenericName) &&
+                   !string.IsNullOrWhiteSpace(Description); //Verifica se o campo esta vazio, caso sm
+                                                           //retorna False
+        }
     }
 }
