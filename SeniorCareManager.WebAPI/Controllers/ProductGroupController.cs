@@ -1,92 +1,194 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Enums;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class ProductGroupController : Controller
+public class ProductGroupController : ControllerBase
 {
     private readonly IProductGroupService _productGroupService;
 
     public ProductGroupController(IProductGroupService service)
     {
-        this._productGroupService = service;
+        _productGroupService = service;
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var productGroups = await _productGroupService.GetAll();
-        return Ok(productGroups);
+        var groups = await _productGroupService.GetAll();
+
+        return Ok(new Response
+        {
+            Code = ResponseEnum.Success,
+            Message = "Lista de grupos de produto!",
+            Data = groups
+        });
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var productGroup = await _productGroupService.GetById(id);
-        if (productGroup == null) return NotFound("Grupo Produto não encontrado!");
-        return Ok(productGroup);
-    }
-    
-    [HttpPost]
-    public async Task<IActionResult> Post(ProductGroup productGroup)
-    {
-        try{
-            await _productGroupService.Create(productGroup);
-        }
-        catch (Exception ex)
+        try
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo grupo de produto.");
+            var group = await _productGroupService.GetById(id);
+
+            if (group is null)
+            {
+                return NotFound(new Response
+                {
+                    Code = ResponseEnum.NotFound,
+                    Message = "Grupo de produto não encontrado.",
+                    Data = null
+                });
+            }
+
+            return Ok(new Response
+            {
+                Code = ResponseEnum.Success,
+                Message = $"Grupo de produto \"{group.Name}\" obtido com sucesso!",
+                Data = group
+            });
         }
-        return Ok(productGroup);
+        catch
+        {
+            return StatusCode(500, new Response
+            {
+                Code = ResponseEnum.Error,
+                Message = "Não foi possível adquirir o grupo de produto.",
+                Data = null
+            });
+        }
     }
-    
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductGroup productGroup)
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] ProductGroupDTO productGroup)
     {
+        if (string.IsNullOrWhiteSpace(productGroup.Name))
+        {
+            return BadRequest(new Response
+            {
+                Code = ResponseEnum.Invalid,
+                Message = "Nome inválido.",
+                Data = null
+            });
+        }
+
+        if (await _productGroupService.IsDuplicateNameAsync(productGroup.Name))
+        {
+            return Conflict(new Response
+            {
+                Code = ResponseEnum.Conflict,
+                Message = "Nome duplicado.",
+                Data = productGroup
+            });
+        }
+
+        try
+        {
+            productGroup.Id = 0;
+            await _productGroupService.Create(productGroup);
+
+            return Ok(new Response
+            {
+                Code = ResponseEnum.Success,
+                Message = "Grupo de produto cadastrado com sucesso!",
+                Data = productGroup
+            });
+        }
+        catch
+        {
+            return StatusCode(500, new Response
+            {
+                Code = ResponseEnum.Error,
+                Message = "Erro ao cadastrar grupo de produto.",
+                Data = productGroup
+            });
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, [FromBody] ProductGroupDTO productGroup)
+    {
+        if (string.IsNullOrWhiteSpace(productGroup.Name))
+        {
+            return BadRequest(new Response
+            {
+                Code = ResponseEnum.Invalid,
+                Message = "Nome inválido.",
+                Data = productGroup
+            });
+        }
+
+        if (await _productGroupService.IsDuplicateNameAsync(productGroup.Name, id))
+        {
+            return Conflict(new Response
+            {
+                Code = ResponseEnum.Conflict,
+                Message = "Nome duplicado.",
+                Data = productGroup
+            });
+        }
+
         try
         {
             await _productGroupService.Update(productGroup, id);
+
+            return Ok(new Response
+            {
+                Code = ResponseEnum.Success,
+                Message = "Grupo de produto alterado com sucesso!",
+                Data = productGroup
+            });
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: "+ex.Message);
+            return StatusCode(500, new Response
+            {
+                Code = ResponseEnum.Error,
+                Message = "Erro ao atualizar grupo de produto.",
+                Data = productGroup
+            });
         }
-        
-        return Ok(productGroup);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
+            var group = await _productGroupService.GetById(id);
+            if (group is null)
+            {
+                return NotFound(new Response
+                {
+                    Code = ResponseEnum.NotFound,
+                    Message = "Grupo de produto não encontrado.",
+                    Data = null
+                });
+            }
+
             await _productGroupService.Remove(id);
-        }
-        catch (Exception ex)
-        {  
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
-        }
 
-        return Ok("Grupo de produto apagado com sucesso");
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroup productGroup)
-    {
-        try
+            return Ok(new Response
+            {
+                Code = ResponseEnum.Success,
+                Message = "Grupo de produto apagado com sucesso!",
+                Data = null
+            });
+        }
+        catch
         {
-            await _productGroupService.Update(productGroup, id);
+            return StatusCode(500, new Response
+            {
+                Code = ResponseEnum.Error,
+                Message = "Erro ao tentar remover grupo de produto.",
+                Data = null
+            });
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo do produto.");
-        }
-        
-        return Ok(productGroup);
     }
-
 }

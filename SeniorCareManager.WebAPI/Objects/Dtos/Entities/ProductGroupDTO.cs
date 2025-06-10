@@ -1,4 +1,4 @@
-namespace SeniorCareManager.WebAPI.Objects.Dtos;
+namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 public class ProductGroupDTO
 {
