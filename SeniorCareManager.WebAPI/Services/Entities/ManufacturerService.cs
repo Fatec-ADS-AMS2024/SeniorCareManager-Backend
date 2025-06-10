@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
@@ -29,22 +30,49 @@ public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>
 
     public override async Task Create(ManufacturerDTO manufacturerDto)
     {
+        if (manufacturerDto is null)
+            throw new ArgumentNullException(nameof(manufacturerDto), "Fabricante não pode ser nulo.");
+
         if (!manufacturerDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
-        if (await CheckDuplicates(manufacturerDto.CorporateName))
-            throw new InvalidOperationException("Nome duplicado.");
+        if (await CheckDuplicates(manufacturerDto))
+            throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
+
+        if (!manufacturerDto.CheckEmail())
+            throw new ArgumentException("Email inválido.");
+
+        if (!manufacturerDto.CheckCpfCnpj())
+            throw new ArgumentException("CPF/CNPJ inválido.");
+
+        if(!manufacturerDto.CheckPhone())
+            throw new ArgumentException("Telefone inválido.");
+
+        if (await _manufacturerRepository.GetById(manufacturerDto.Id) is not null)
+            return; // Se já existe um fabricante com esse ID, apenas continua
 
         await base.Create(manufacturerDto);
     }
 
     public override async Task Update(ManufacturerDTO manufacturerDto, int id)
     {
+        if (manufacturerDto is null)
+            throw new ArgumentNullException(nameof(manufacturerDto), "Fabricante não pode ser nulo.");
+
         if (!manufacturerDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
-        if (await CheckDuplicates(manufacturerDto.CorporateName))
-            throw new InvalidOperationException("Nome duplicado.");
+        if (!manufacturerDto.CheckEmail())
+            throw new ArgumentException("Email inválido.");
+
+        if (!manufacturerDto.CheckCpfCnpj())
+            throw new ArgumentException("CPF/CNPJ inválido.");
+
+        if (!manufacturerDto.CheckPhone())
+            throw new ArgumentException("Telefone inválido.");
+
+        if (await CheckDuplicates(manufacturerDto))
+            throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
 
         await base.Update(manufacturerDto, id);
     }
@@ -58,9 +86,11 @@ public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>
         await base.Remove(id);
     }
 
-    public async Task<bool> CheckDuplicates(string nome)
+    public async Task<bool> CheckDuplicates(ManufacturerDTO dto)
     {
         var manufacturers = await _manufacturerRepository.Get();
-        return manufacturers.Any(m => StringValidator.CompareString(m.CorporateName, nome));
+        return manufacturers.Any(m => m.Id != dto.Id &&
+            (StringValidator.CompareString(m.CorporateName, dto.CorporateName) ||
+            StringValidator.CompareString(m.TradeName, dto.TradeName)));
     }
 }

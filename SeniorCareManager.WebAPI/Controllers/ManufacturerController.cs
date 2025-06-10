@@ -69,6 +69,13 @@ namespace SeniorCareManager.WebAPI.Controllers
 
                 return Ok(_response);
             }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return BadRequest(_response);
+            }
             catch (ArgumentException ex)
             {
                 _response.Code = ResponseEnum.Invalid;
@@ -102,6 +109,13 @@ namespace SeniorCareManager.WebAPI.Controllers
                 _response.Message = "Fabricante atualizado com sucesso!";
                 _response.Data = manufacturerDto;
                 return Ok(_response);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Data = manufacturerDto;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (ArgumentException ex)
             {
