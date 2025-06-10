@@ -37,78 +37,55 @@ public class HealthInsurancePlanController : Controller
         try
         {
             var healthInsurancePlan = await _healthInsurancePlanService.GetById(id);
-            if (healthInsurancePlan is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Plano de saúde não encontrado.";
-                _response.Data = healthInsurancePlan;
-                return NotFound(_response);
-            }
-
             _response.Code = ResponseEnum.Success;
             _response.Message = "Plano de saúde " + healthInsurancePlan.Name + " obtido com sucesso!";
             _response.Data = healthInsurancePlan;
             return Ok(_response);
-
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível adquirir o plano de saúde.";
+            _response.Message = "Não foi possível adquirir o Plano de saúde.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
-
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
-
-        if (healthInsurancePlanDto is null)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "O plano é inválido.";
-            return BadRequest(_response);
-        }
-
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "Nome inválido.";
-
-            return BadRequest(_response);
-        }
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Abbreviation))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "A abreviação do plano é obrigatória.";
-            return BadRequest(_response);
-        }
-
-        var healthInsurancesPlans = await _healthInsurancePlanService.GetAll();
-        if (CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = healthInsurancePlanDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
-            healthInsurancePlanDto.Id = 0;
-            await _healthInsurancePlanService.Create(healthInsurancePlanDto);
+            await _healthInsurancePlanService.Create(healthInsurancePlanDto); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Plano de saúde Cadastrado com sucesso!";
             _response.Data = healthInsurancePlanDto;
         }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return Conflict(_response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível cadastrar o plano de saúde.";
+            _response.Message = "Não foi possível Cadastrar o Plano de saúde.";
             _response.Data = healthInsurancePlanDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -118,46 +95,31 @@ public class HealthInsurancePlanController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, HealthInsurancePlanDTO healthInsurancePlanDto)
     {
-        if (healthInsurancePlanDto is null)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "O plano é inválido.";
-            return BadRequest(_response);
-        }
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = healthInsurancePlanDto;
-            _response.Message = "Nome inválido.";
-            return BadRequest(_response);
-        }
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Abbreviation))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "A abreviação do plano é obrigatória.";
-            return BadRequest(_response);
-        }
-        var healthInsurancesPlans = await _healthInsurancePlanService.GetAll();
-        if (CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = healthInsurancePlanDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
-            await _healthInsurancePlanService.Update(healthInsurancePlanDto, id); ;
+            await _healthInsurancePlanService.Update(healthInsurancePlanDto, id); 
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Plano de saúde alterado com sucesso!";
+            _response.Message = "Plano de saúde Alterado com sucesso!";
             _response.Data = healthInsurancePlanDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível alterar o plano de saúde.";
+            _response.Message = "Não foi possível Alterar o Plano de saúde.";
             _response.Data = healthInsurancePlanDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -169,24 +131,22 @@ public class HealthInsurancePlanController : Controller
     {
         try
         {
-            var healthInsurancePlan = await _healthInsurancePlanService.GetById(id);
-            if (healthInsurancePlan is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Data = null;
-                _response.Message = "O Plano de saúde não foi encontrado.";
-                return NotFound(_response);
-            }
             await _healthInsurancePlanService.Remove(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "O Plano de saúde foi apagado com sucesso!";
+            _response.Message = "Plano de saúde apagado com sucesso!";
             _response.Data = null;
         }
-
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Data = null;
+            _response.Message = ex.Message;
+            return NotFound(_response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar apagar o plano de saúde.";
+            _response.Message = "Erro ao tentar apagar Plano de saúde.";
             _response.Data = null;
         }
         return Ok(_response);
@@ -196,65 +156,34 @@ public class HealthInsurancePlanController : Controller
     [HttpPatch("{id}")]
     public async Task<IActionResult> Patch(int id, HealthInsurancePlanDTO healthInsurancePlanDto)
     {
-        if (healthInsurancePlanDto is null)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "O plano é inválido.";
-            return BadRequest(_response);
-        }
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = healthInsurancePlanDto;
-            _response.Message = "Nome inválido.";
-            return BadRequest(_response);
-        }
-        if (string.IsNullOrWhiteSpace(healthInsurancePlanDto.Abbreviation))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "A abreviação do plano é obrigatória.";
-            return BadRequest(_response);
-        }
-        var healthInsurancesPlans = await _healthInsurancePlanService.GetAll();
-        if (CheckDuplicates(healthInsurancesPlans, healthInsurancePlanDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = healthInsurancePlanDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
-            await _healthInsurancePlanService.Update(healthInsurancePlanDto, id); ;
+            await _healthInsurancePlanService.Update(healthInsurancePlanDto, id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Plano de saúde alterado com sucesso!";
+            _response.Message = "Plano de saúde Alterado com sucesso!";
             _response.Data = healthInsurancePlanDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível alterar o plano de saúde.";
+            _response.Message = "Não foi possível Alterar o Plano de saúde.";
             _response.Data = healthInsurancePlanDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
         return Ok(_response);
-    }
-    private static bool CheckDuplicates(IEnumerable<HealthInsurancePlanDTO> healthInsurancesPlansDTO, HealthInsurancePlanDTO healthInsurancePlanDTO)
-    {
-        foreach (var healthInsurancePlan in healthInsurancesPlansDTO)
-        {
-            if (healthInsurancePlanDTO.Id == healthInsurancePlan.Id)
-            {
-                continue;
-            }
-
-            if (StringValidator.CompareString(healthInsurancePlanDTO.Name, healthInsurancePlan.Name))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }
