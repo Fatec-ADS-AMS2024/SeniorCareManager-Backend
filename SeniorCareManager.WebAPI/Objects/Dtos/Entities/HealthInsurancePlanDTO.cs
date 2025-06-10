@@ -7,12 +7,17 @@ public class HealthInsurancePlanDTO
     public string Name { get; set; }
     public int Type { get; set; }
     public string Abbreviation { get; set; }
-    public bool CheckInfos()
+    public bool CheckInfos(string infos)
     {
-        if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Abbreviation))
-            return false;
-        if (!Enum.IsDefined(typeof(HealthPlanType), Type))
+        if (string.IsNullOrWhiteSpace(infos))
             return false;
         return true;
+    }
+
+    public bool EnumValid()
+    {
+        if (!Enum.IsDefined(typeof(HealthPlanType), Type))
+            return false;
+        return true; 
     }
 }

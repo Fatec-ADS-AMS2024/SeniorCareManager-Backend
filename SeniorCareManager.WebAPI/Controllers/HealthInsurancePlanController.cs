@@ -82,6 +82,13 @@ public class HealthInsurancePlanController : Controller
             _response.Data = healthInsurancePlanDto;
             return Conflict(_response);
         }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return NotFound(_response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
@@ -115,6 +122,13 @@ public class HealthInsurancePlanController : Controller
             _response.Message = ex.Message;
             _response.Data = healthInsurancePlanDto;
             return Conflict(_response);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {

@@ -28,8 +28,13 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     }
     public override async Task Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
-        if (!healthInsurancePlanDto.CheckInfos())
-            throw new ArgumentException("Nome ou Abreviação Inválidos.");
+        if (healthInsurancePlanDto is null)
+            throw new ArgumentNullException("Id inválido");
+        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
+            throw new ArgumentException("Nome Inválidos");
+
+        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Abbreviation))
+            throw new ArgumentException("Abreviação Inválidos");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
@@ -38,9 +43,14 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     }
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {
- 
-        if (!healthInsurancePlanDto.CheckInfos())
-            throw new ArgumentException("Nome ou Abreviação Inválidos");
+        if (healthInsurancePlanDto is null)
+            throw new ArgumentNullException("Id inválido"); 
+
+        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
+            throw new ArgumentException("Nome Inválidos");
+
+        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Abbreviation))
+            throw new ArgumentException("Abreviação Inválidos");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
