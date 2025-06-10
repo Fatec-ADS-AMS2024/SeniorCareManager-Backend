@@ -34,19 +34,10 @@ public class ReligionController : Controller
         try
         {
             var religion = await _religionService.GetById(id);
-            if (religion is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Religião não encontrada.";
-                _response.Data = religion;
-                return NotFound(_response);
-            }
-
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião " + religion.Name + " obtido com sucesso!";
             _response.Data = religion;
             return Ok(_response);
-
         }
         catch (Exception ex)
         {

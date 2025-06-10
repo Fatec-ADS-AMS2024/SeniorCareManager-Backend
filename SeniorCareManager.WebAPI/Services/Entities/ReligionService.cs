@@ -11,13 +11,19 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 {
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;
-    private readonly Response _response;
 
     public ReligionService(IReligionRepository repository, IMapper mapper): base(repository, mapper)
     {
         _religionRepository = repository;
         _mapper = mapper;
-        _response = new Response();
+    }
+    public override async Task<ReligionDTO> GetById(int id)
+    {
+        var religion = await _religionRepository.GetById(id);
+        if (religion is null)
+            throw new KeyNotFoundException("Religião com o id "+ id +" informado não foi encontrada.");
+
+        return _mapper.Map<ReligionDTO>(religion);
     }
     public override async Task Create(ReligionDTO religionDto)
     {
@@ -39,12 +45,17 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 
         await base.Update(religionDto, id);
     }
+    public override async Task Remove(int id)
+    {
+        var religion = await _religionRepository.GetById(id);
+        if (religion is null)
+            throw new KeyNotFoundException("Religião com o id " + id + " informado não foi encontrada.");
 
+        await base.Remove(id);
+    }
     public async Task<bool> CheckDuplicates(string nome)
     {
         var religions = await _religionRepository.Get();
         return religions.Any(r => StringValidator.CompareString(r.Name, nome));
-
     }
-
 }
