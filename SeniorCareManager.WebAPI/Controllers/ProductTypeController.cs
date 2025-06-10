@@ -3,7 +3,6 @@ using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Enums;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -77,11 +76,7 @@ public class ProductTypeController : Controller
             return BadRequest(_response);
         }
 
-        var existingTypes = await _productTypeService.GetAll();
-        var hasDuplicate = existingTypes.Any(pt =>
-            StringValidator.CompareString(pt.Name, productType.Name));
-
-        if (hasDuplicate)
+        if (await _productTypeService.IsDuplicateNameAsync(productType.Name))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Message = "Já existe um tipo de produto com esse nome.";
@@ -126,11 +121,7 @@ public class ProductTypeController : Controller
             return BadRequest(_response);
         }
 
-        var existingTypes = await _productTypeService.GetAll();
-        var hasDuplicate = existingTypes.Any(pt =>
-            pt.Id != id && StringValidator.CompareString(pt.Name, productType.Name));
-
-        if (hasDuplicate)
+        if (await _productTypeService.IsDuplicateNameAsync(productType.Name, id))
         {
             _response.Code = ResponseEnum.Conflict;
             _response.Message = "Já existe um tipo de produto com esse nome.";
