@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
@@ -33,21 +34,27 @@ public class ReligionController : Controller
     {
         try
         {
-            var religion = await _religionService.GetById(id);
+            var position = await _religionService.GetById(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Religião " + religion.Name + " obtido com sucesso!";
-            _response.Data = religion;
+            _response.Message = "Cargo " + position.Name + " obtido com sucesso!";
+            _response.Data = position;
             return Ok(_response);
         }
-        catch (Exception ex)
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
+        }
+        catch (Exception)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível adquirir a religião.";
+            _response.Message = "Não foi possível adquirir o cargo.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
     }
-
     [HttpPost]
     public async Task<IActionResult> Post(ReligionDTO religionDto)
     {
