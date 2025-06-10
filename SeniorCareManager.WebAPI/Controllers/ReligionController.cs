@@ -82,6 +82,13 @@ public class ReligionController : Controller
             _response.Data = religionDto;
             return Conflict(_response);
         }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return NotFound(_response);
+        }
         catch (Exception)
         {
             _response.Code = ResponseEnum.Error;
@@ -118,9 +125,9 @@ public class ReligionController : Controller
         }
         catch (KeyNotFoundException ex)
         {
-            _response.Code = ResponseEnum.NotFound;
+            _response.Code = ResponseEnum.Error;
             _response.Message = ex.Message;
-            _response.Data = null;
+            _response.Data = religionDto;
             return NotFound(_response);
         }
         catch (Exception)

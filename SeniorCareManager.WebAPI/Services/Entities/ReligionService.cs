@@ -27,6 +27,8 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task Create(ReligionDTO religionDto)
     {
+        if (religionDto is null)
+            throw new KeyNotFoundException("Id inválido");
         if (!religionDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
@@ -37,7 +39,10 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task Update(ReligionDTO religionDto, int id)
     {
+        if (religionDto is null)
+            throw new KeyNotFoundException("Id inválido");
         if (!religionDto.CheckName())
+            if (!religionDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
