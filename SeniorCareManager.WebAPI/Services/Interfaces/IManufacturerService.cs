@@ -5,5 +5,5 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
 public interface IManufacturerService : IGenericService<Manufacturer, ManufacturerDTO>
 {
-    Task<bool> CheckDuplicates(string corporatename);
+    Task<bool> CheckDuplicates(ManufacturerDTO dto);
 }
