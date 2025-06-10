@@ -46,6 +46,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var positions = await _positionRepository.Get();
             if (positionDto is null)
                 throw new KeyNotFoundException("Id inválido");
+
             if (!positionDto.CheckName())
                 throw new ArgumentException("Nome Inválido.");
 

@@ -90,7 +90,7 @@ public class PositionController: Controller
             _response.Code = ResponseEnum.Error;
             _response.Message = ex.Message;
             _response.Data = positionDto;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -128,10 +128,10 @@ public class PositionController: Controller
         }
         catch (KeyNotFoundException ex)
         {
-            _response.Code = ResponseEnum.Error;
+            _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            _response.Data = null;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
