@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
+using System;
+using System.Threading.Tasks;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
-    public class SupplierController : Controller
+    [Route("api/[controller]")]
+    public class SupplierController : ControllerBase
     {
         private readonly ISupplierService _supplierService;
 
@@ -19,78 +20,40 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var suppliers = await _supplierService.GetAll();
-            return Ok(suppliers);
+            try
+            {
+                var suppliers = await _supplierService.GetAll();
+                return Ok(suppliers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar fornecedores: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var supplier = await _supplierService.GetById(id);
-            if (supplier == null)
-                return NotFound("Fornecedor não encontrado!");
+            try
+            {
+                var supplier = await _supplierService.GetById(id);
+                if (supplier == null)
+                    return NotFound("Fornecedor não encontrado.");
 
-            return Ok(supplier);
+                return Ok(supplier);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar fornecedor: {ex.Message}");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(SupplierDTO supplier)
         {
-            supplier.CpfCnpj = StringValidator.ExtractNumbers(supplier.CpfCnpj);
-            supplier.Phone = StringValidator.ExtractNumbers(supplier.Phone);
-
-            var existingSuppliers = await _supplierService.GetAll();
-
-            if (existingSuppliers.Any(s => StringValidator.ExtractNumbers(s.CpfCnpj) == supplier.CpfCnpj))
-                return BadRequest("Já existe um fornecedor com este CPF/CNPJ.");
-
-            if (existingSuppliers.Any(s => StringValidator.CompareString(s.CorporateName, supplier.CorporateName)))
-                return BadRequest("Já existe um fornecedor com esta razão social.");
-
-            if (string.IsNullOrWhiteSpace(supplier.CorporateName))
-                return BadRequest("A razão social do fornecedor é obrigatória.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.TradeName))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!EmailValidator.IsValid(supplier.Email))
-                return BadRequest("O e-mail informado é inválido.");
-
-            if (!PhoneValidator.IsValidPhoneNumber(supplier.Phone))
-                return BadRequest("O telefone informado é inválido. Deve conter DDD e ter 10 ou 11 dígitos.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(supplier.CpfCnpj))
-                return BadRequest("O CPF ou CNPJ informado é inválido.");
-
-            if (string.IsNullOrWhiteSpace(supplier.PostalCode) || !StringValidator.IsNumeric(supplier.PostalCode) || supplier.PostalCode.Length != 8)
-                return BadRequest("O CEP informado é inválido. Deve conter exatamente 8 números.");
-
-            if (string.IsNullOrWhiteSpace(supplier.Street))
-                return BadRequest("O nome da rua é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(supplier.Number))
-                return BadRequest("O número do endereço é obrigatório.");
-
-            if (!StringValidator.ContainsOnlyLettersNumbersSpaces(supplier.Number))
-                return BadRequest("O número do endereço deve conter apenas letras, números e espaços.");
-
-            if (string.IsNullOrWhiteSpace(supplier.AddressComplement))
-                return BadRequest("O complemento do endereço é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(supplier.District))
-                return BadRequest("O bairro é obrigatório.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.District))
-                return BadRequest("O bairro deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(supplier.City))
-                return BadRequest("A cidade é obrigatória.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.City))
-                return BadRequest("A cidade deve conter apenas letras e espaços.");
-
-            if (!StringValidator.IsValidUF(supplier.State))
-                return BadRequest("O estado informado é inválido.");
+            var (isValid, errorMessage) = await supplier.ValidateAsync(_supplierService);
+            if (!isValid)
+                return BadRequest(errorMessage);
 
             try
             {
@@ -99,68 +62,18 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo fornecedor: " + ex.Message);
+                return StatusCode(500, $"Erro ao inserir fornecedor: {ex.Message}");
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, SupplierDTO supplier)
         {
-            supplier.CpfCnpj = StringValidator.ExtractNumbers(supplier.CpfCnpj);
-            supplier.Phone = StringValidator.ExtractNumbers(supplier.Phone);
+            supplier.Id = id;
 
-            var existingSuppliers = await _supplierService.GetAll();
-
-            if (existingSuppliers.Any(s => s.Id != id && StringValidator.ExtractNumbers(s.CpfCnpj) == supplier.CpfCnpj))
-                return BadRequest("Já existe outro fornecedor com este CPF/CNPJ.");
-
-            if (existingSuppliers.Any(s => s.Id != id && StringValidator.CompareString(s.CorporateName, supplier.CorporateName)))
-                return BadRequest("Já existe outro fornecedor com esta razão social.");
-
-            if (string.IsNullOrWhiteSpace(supplier.CorporateName))
-                return BadRequest("A razão social do fornecedor é obrigatória.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.TradeName))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!EmailValidator.IsValid(supplier.Email))
-                return BadRequest("O e-mail informado é inválido.");
-
-            if (!PhoneValidator.IsValidPhoneNumber(supplier.Phone))
-                return BadRequest("O telefone informado é inválido. Deve conter DDD e ter 10 ou 11 dígitos.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(supplier.CpfCnpj))
-                return BadRequest("O CPF ou CNPJ informado é inválido.");
-
-            if (string.IsNullOrWhiteSpace(supplier.PostalCode) || !StringValidator.IsNumeric(supplier.PostalCode) || supplier.PostalCode.Length != 8)
-                return BadRequest("O CEP informado é inválido. Deve conter exatamente 8 números.");
-
-            if (string.IsNullOrWhiteSpace(supplier.Street))
-                return BadRequest("O nome da rua é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(supplier.Number))
-                return BadRequest("O número do endereço é obrigatório.");
-
-            if (!StringValidator.ContainsOnlyLettersNumbersSpaces(supplier.Number))
-                return BadRequest("O número do endereço deve conter apenas letras, números e espaços.");
-
-            if (string.IsNullOrWhiteSpace(supplier.AddressComplement))
-                return BadRequest("O complemento do endereço é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(supplier.District))
-                return BadRequest("O bairro é obrigatório.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.District))
-                return BadRequest("O bairro deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(supplier.City))
-                return BadRequest("A cidade é obrigatória.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(supplier.City))
-                return BadRequest("A cidade deve conter apenas letras e espaços.");
-
-            if (!StringValidator.IsValidUF(supplier.State))
-                return BadRequest("O estado informado é inválido.");
+            var (isValid, errorMessage) = await supplier.ValidateAsync(_supplierService, isUpdate: true);
+            if (!isValid)
+                return BadRequest(errorMessage);
 
             try
             {
@@ -169,7 +82,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar o fornecedor: " + ex.Message);
+                return StatusCode(500, $"Erro ao atualizar fornecedor: {ex.Message}");
             }
         }
 
@@ -178,12 +91,16 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
+                var supplier = await _supplierService.GetById(id);
+                if (supplier == null)
+                    return NotFound("Fornecedor não encontrado.");
+
                 await _supplierService.Remove(id);
-                return Ok("Fornecedor removido com sucesso.");
+                return Ok("Fornecedor deletado com sucesso.");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar remover o fornecedor: " + ex.Message);
+                return StatusCode(500, $"Erro ao deletar fornecedor: {ex.Message}");
             }
         }
     }

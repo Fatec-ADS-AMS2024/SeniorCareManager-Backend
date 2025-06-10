@@ -8,7 +8,6 @@ public static class PhoneValidator
 
         var digits = StringValidator.ExtractNumbers(value);
 
-        // Telefones no Brasil têm 10 ou 11 dígitos (com DDD)
         return digits.Length >= 10 && digits.Length <= 11;
     }
 }
