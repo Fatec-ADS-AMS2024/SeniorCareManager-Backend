@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 namespace SeniorCareManager.WebAPI.Services.Utils;
 public static class StringValidator
 {
-    /// Remove acentos e caracteres especiais, retornando uma string "normalizada".
     public static string RemoveDiacritics(this string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -25,7 +24,6 @@ public static class StringValidator
 
         return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
     }
-    /// Extrai apenas os números de uma string.
     public static string ExtractNumbers(this string text)
     {
         if (string.IsNullOrEmpty(text))
@@ -33,12 +31,10 @@ public static class StringValidator
 
         return new string(text.Where(char.IsDigit).ToArray());
     }
-    /// Compara duas strings ignorando acentos e diferenças de maiúsculas/minúsculas.
     public static bool CompareString(string str1, string str2)
     {
         return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
     }
-    /// Verifica se há nomes duplicados em uma coleção, com suporte a comparação por ID.
     public static bool ContainsDuplicate<T>(
         IEnumerable<T> list,
         Func<T, string> nameSelector,

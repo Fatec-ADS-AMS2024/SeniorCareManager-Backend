@@ -36,7 +36,7 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
     public async Task Update(TDto entityDTO, int id)
     {
         var entity = _mapper.Map<T>(entityDTO);
-        var existingEntity = await _repository.GetById(id); // Supondo que sua entidade tenha um campo Id
+        var existingEntity = await _repository.GetById(id);
 
         if (existingEntity == null)
         {
