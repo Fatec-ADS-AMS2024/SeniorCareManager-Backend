@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Models;
-using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ManufacturerController : ControllerBase
+    public class ManufacturerController : Controller
     {
         private readonly IManufacturerService _manufacturerService;
         private readonly Response _response;
@@ -35,103 +35,100 @@ namespace SeniorCareManager.WebAPI.Controllers
             try
             {
                 var manufacturer = await _manufacturerService.GetById(id);
-                if (manufacturer is null)
-                {
-                    _response.Code = ResponseEnum.NotFound;
-                    _response.Message = "Fabricante não encontrado.";
-                    return NotFound(_response);
-                }
-
                 _response.Code = ResponseEnum.Success;
-                _response.Message = $"Fabricante {manufacturer.CorporateName} obtido com sucesso!";
+                _response.Message = "Fabricante " + manufacturer.CorporateName + " obtido com sucesso!";
                 _response.Data = manufacturer;
                 return Ok(_response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
-                _response.Message = "Erro ao tentar obter fabricante.";
+                _response.Message = "Não foi possível obter o fabricante.";
+                _response.Data = null;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Manufacturer manufacturer)
+        public async Task<IActionResult> Post(ManufacturerDTO manufacturerDto)
         {
-            manufacturer.CpfCnpj = StringValidator.ExtractNumbers(manufacturer.CpfCnpj);
-            manufacturer.Email = manufacturer.Email?.Trim();
-            manufacturer.CorporateName = StringValidator.RemoveDiacritics(manufacturer.CorporateName);
-            manufacturer.TradeName = StringValidator.RemoveDiacritics(manufacturer.TradeName);
-            manufacturer.Phone = StringValidator.ExtractNumbers(manufacturer.Phone);
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(manufacturer.CorporateName)))
-                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(manufacturer.Email) || !manufacturer.Email.Contains("@"))
-                return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(manufacturer.TradeName)))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(manufacturer.CpfCnpj) && !CpfCnpjValidator.IsValidCPF(manufacturer.CpfCnpj))
-                return BadRequest("O CPF ou CNPJ fornecido é inválido.");
-
-            if (!StringValidator.ExtractNumbers(manufacturer.Phone).Length.Equals(11))
-                return BadRequest("O número de telefone no formato incorreto.");
-
             try
             {
-                manufacturer.Id = 0;
-                await _manufacturerService.Create(manufacturer);
+                manufacturerDto.Id = 0;
+                await _manufacturerService.Create(manufacturerDto);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Fabricante cadastrado com sucesso!";
-                _response.Data = manufacturer;
+                _response.Data = manufacturerDto;
+
                 return Ok(_response);
+            }
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Message = ex.Message;
+                _response.Data = manufacturerDto;
+                return Conflict(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
-                _response.Message = "Erro ao cadastrar fabricante.";
+                _response.Message = "Não foi possível cadastrar o fabricante.";
+                _response.Data = manufacturerDto;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Manufacturer manufacturer)
+        public async Task<IActionResult> Put(int id, ManufacturerDTO manufacturerDto)
         {
-            manufacturer.CpfCnpj = StringValidator.ExtractNumbers(manufacturer.CpfCnpj);
-            manufacturer.Email = manufacturer.Email?.Trim();
-            manufacturer.CorporateName = StringValidator.RemoveDiacritics(manufacturer.CorporateName);
-            manufacturer.TradeName = StringValidator.RemoveDiacritics(manufacturer.TradeName);
-            manufacturer.Phone = StringValidator.ExtractNumbers(manufacturer.Phone);
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(manufacturer.CorporateName)))
-                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(manufacturer.Email) || !manufacturer.Email.Contains("@"))
-                return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(manufacturer.TradeName)))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(manufacturer.CpfCnpj) && !CpfCnpjValidator.IsValidCPF(manufacturer.CpfCnpj))
-                return BadRequest("O CPF ou CNPJ fornecido é inválido.");
-
-            if (!StringValidator.ExtractNumbers(manufacturer.Phone).Length.Equals(11))
-                return BadRequest("O número de telefone no formato incorreto.");
-
             try
             {
-                await _manufacturerService.Update(manufacturer, id);
+                await _manufacturerService.Update(manufacturerDto, id);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Fabricante atualizado com sucesso!";
-                _response.Data = manufacturer;
+                _response.Data = manufacturerDto;
                 return Ok(_response);
+            }
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Data = manufacturerDto;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Data = manufacturerDto;
+                _response.Message = ex.Message;
+                return Conflict(_response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
-                _response.Message = "Erro ao tentar atualizar fabricante.";
+                _response.Message = "Não foi possível atualizar o fabricante!";
+                _response.Data = manufacturerDto;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
@@ -141,23 +138,24 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
-                var manufacturer = await _manufacturerService.GetById(id);
-                if (manufacturer is null)
-                {
-                    _response.Code = ResponseEnum.NotFound;
-                    _response.Message = "Fabricante não encontrado.";
-                    return NotFound(_response);
-                }
-
                 await _manufacturerService.Remove(id);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Fabricante excluído com sucesso!";
+                _response.Data = null;
                 return Ok(_response);
             }
-            catch (Exception)
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Data = null;
+                _response.Message = ex.Message;
+                return NotFound(_response);
+            }
+            catch (Exception ex)
             {
                 _response.Code = ResponseEnum.Error;
-                _response.Message = "Erro ao tentar excluir fabricante.";
+                _response.Message = "Erro ao tentar excluir o fabricante.";
+                _response.Data = null;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
