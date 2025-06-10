@@ -5,6 +5,6 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
 public interface IHealthInsurancePlanService : IGenericService<HealthInsurancePlan, HealthInsurancePlanDTO>
 {
-    Task<bool> CheckDuplicates(string name);
+    Task<bool> CheckDuplicates(HealthInsurancePlanDTO dto);
 }
 

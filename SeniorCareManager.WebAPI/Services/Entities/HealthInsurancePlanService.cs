@@ -31,17 +31,18 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (!healthInsurancePlanDto.CheckInfos())
             throw new ArgumentException("Nome ou Abreviação Inválidos.");
 
-        if (await CheckDuplicates(healthInsurancePlanDto.Name))
+        if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
 
         await base.Create(healthInsurancePlanDto);
     }
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {
+ 
         if (!healthInsurancePlanDto.CheckInfos())
             throw new ArgumentException("Nome ou Abreviação Inválidos");
 
-        if (await CheckDuplicates(healthInsurancePlanDto.Name))
+        if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
 
         await base.Update(healthInsurancePlanDto, id);
@@ -54,9 +55,10 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
 
         await base.Remove(id);
     }
-    public async Task<bool> CheckDuplicates(string name)
+    public async Task<bool> CheckDuplicates(HealthInsurancePlanDTO dto)
     {
-        var healthInsurancePlans = await _healthInsurancePlanRepository.Get();
-        return healthInsurancePlans.Any(h => StringValidator.CompareString(h.Name, name));
+        var plans = await _healthInsurancePlanRepository.Get();
+        return plans.Any(p =>(p.Id != dto.Id) &&(StringValidator.CompareString(p.Name, dto.Name)));
     }
+
 }
