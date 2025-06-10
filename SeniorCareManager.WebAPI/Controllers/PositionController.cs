@@ -38,19 +38,17 @@ public class PositionController: Controller
         try
         {
             var position = await _positionService.GetById(id);
-            if (position is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Cargo não encontrado.";
-                _response.Data = position;
-                return NotFound(_response);
-            }
-
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo " + position.Name + " obtido com sucesso!";
             _response.Data = position;
             return Ok(_response);
-
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -61,25 +59,10 @@ public class PositionController: Controller
         }
     }
 
+
     [HttpPost]
     public async Task<IActionResult> Post(PositionDTO positionDto)
     {
-        if (string.IsNullOrWhiteSpace(positionDto.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = null;
-            _response.Message = "Dados inválidos.";
-
-            return BadRequest(_response);
-        }
-        var positions = await _positionService.GetAll();
-        if (CheckDuplicates(positions, positionDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = positionDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
             positionDto.Id = 0;
@@ -87,6 +70,20 @@ public class PositionController: Controller
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo Cadastrado com sucesso!";
             _response.Data = positionDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
@@ -101,27 +98,26 @@ public class PositionController: Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
-        if (string.IsNullOrWhiteSpace(positionDto.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Data = positionDto;
-            _response.Message = "Nome inválido.";
-            return BadRequest(_response);
-        }
-        var positions = await _positionService.GetAll();
-        if (CheckDuplicates(positions, positionDto))
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Data = positionDto;
-            _response.Message = "Nome duplicado.";
-            return BadRequest(_response);
-        }
         try
         {
             await _positionService.Update(positionDto, id); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo alterado com sucesso!";
             _response.Data = positionDto;
+        }
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return Conflict(_response);
         }
         catch (Exception ex)
         {
@@ -138,20 +134,18 @@ public class PositionController: Controller
     {
         try
         {
-            var position = await _positionService.GetById(id);
-            if (position is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Data = null;
-                _response.Message = "O cargo não foi encontrado.";
-                return NotFound(_response);
-            }
             await _positionService.Remove(id);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Grupo de cargo apagado com sucesso!";
             _response.Data = null;
         }
-
+        catch (KeyNotFoundException ex) 
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Data = null;
+            _response.Message = ex.Message;
+            return NotFound(_response);
+        }
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
@@ -159,24 +153,5 @@ public class PositionController: Controller
             _response.Data = null;
         }
         return Ok(_response);
-
     }
-    private static bool CheckDuplicates(IEnumerable<PositionDTO> positionsDTO, PositionDTO positionDTO)
-    {
-        foreach (var position in positionsDTO)
-        {
-            if (positionDTO.Id == position.Id)
-            {
-                continue;
-            }
-
-            if (StringValidator.CompareString(positionDTO.Name, position.Name))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 }
