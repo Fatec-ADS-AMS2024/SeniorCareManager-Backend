@@ -7,10 +7,15 @@ public class HealthInsurancePlanDTO
     public string Name { get; set; }
     public int Type { get; set; }
     public string Abbreviation { get; set; }
-    public bool CheckInfos(string infos)
+    public static bool IsFilledString(params string[] parametros)
     {
-        if (string.IsNullOrWhiteSpace(infos))
-            return false;
+        foreach (var parametro in parametros)
+        {
+            if (string.IsNullOrWhiteSpace(parametro))
+            {
+                return false;
+            }
+        }
         return true;
     }
 
