@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -15,14 +16,14 @@ public class ProductGroupController : Controller
     {
         this._productGroupService = service;
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         var productGroups = await _productGroupService.GetAll();
         return Ok(productGroups);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -30,11 +31,12 @@ public class ProductGroupController : Controller
         if (productGroup == null) return NotFound("Grupo Produto não encontrado!");
         return Ok(productGroup);
     }
-    
+
     [HttpPost]
-    public async Task<IActionResult> Post(ProductGroup productGroup)
+    public async Task<IActionResult> Post(ProductGroupDTO productGroup)
     {
-        try{
+        try
+        {
             await _productGroupService.Create(productGroup);
         }
         catch (Exception ex)
@@ -43,9 +45,9 @@ public class ProductGroupController : Controller
         }
         return Ok(productGroup);
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
     {
         try
         {
@@ -53,12 +55,12 @@ public class ProductGroupController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: "+ex.Message);
+            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: " + ex.Message);
         }
-        
+
         return Ok(productGroup);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -67,7 +69,7 @@ public class ProductGroupController : Controller
             await _productGroupService.Remove(id);
         }
         catch (Exception ex)
-        {  
+        {
             return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
         }
 
@@ -75,7 +77,7 @@ public class ProductGroupController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Patch(int id, ProductGroupDTO productGroup)
     {
         try
         {
@@ -85,7 +87,7 @@ public class ProductGroupController : Controller
         {
             return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo do produto.");
         }
-        
+
         return Ok(productGroup);
     }
 

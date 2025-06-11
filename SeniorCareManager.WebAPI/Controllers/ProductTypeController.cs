@@ -16,14 +16,14 @@ public class ProductTypeController : Controller
     {
         this._productTypeService = service;
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         var productTypes = await _productTypeService.GetAll();
         return Ok(productTypes);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -31,11 +31,12 @@ public class ProductTypeController : Controller
         if (productType == null) return NotFound("Tipo Produto não encontrado!");
         return Ok(productType);
     }
-    
+
     [HttpPost]
-    public async Task<IActionResult> Post(ProductType productType)
+    public async Task<IActionResult> Post(ProductTypeDTO productType)
     {
-        try{
+        try
+        {
             await _productTypeService.Create(productType);
         }
         catch (Exception ex)
@@ -44,9 +45,9 @@ public class ProductTypeController : Controller
         }
         return Ok(productType);
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductType productType)
+    public async Task<IActionResult> Put(int id, ProductTypeDTO productType)
     {
         try
         {
@@ -54,12 +55,12 @@ public class ProductTypeController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o tipo de produto: "+ex.Message);
+            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o tipo de produto: " + ex.Message);
         }
-        
+
         return Ok(productType);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -76,7 +77,7 @@ public class ProductTypeController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductType productType)
+    public async Task<IActionResult> Patch(int id, ProductTypeDTO productType)
     {
         try
         {
@@ -86,7 +87,7 @@ public class ProductTypeController : Controller
         {
             return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo do produto.");
         }
-        
+
         return Ok(productType);
     }
 
