@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
@@ -8,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class CompanyController : ControllerBase
+    public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
         private readonly Response _response;
@@ -27,6 +28,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             _response.Data = companies;
             _response.Message = "Lista de empresas obtida com sucesso!";
             return Ok(_response);
+
         }
 
         [HttpGet("{id}")]
@@ -35,119 +37,113 @@ namespace SeniorCareManager.WebAPI.Controllers
             try
             {
                 var company = await _companyService.GetById(id);
-                if (company is null)
-                {
-                    _response.Code = ResponseEnum.NotFound;
-                    _response.Message = "Empresa não encontrada.";
-                    return NotFound(_response);
-                }
-
                 _response.Code = ResponseEnum.Success;
                 _response.Message = $"Empresa {company.CompanyName} obtida com sucesso!";
                 _response.Data = company;
                 return Ok(_response);
             }
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
+            }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
                 _response.Message = "Erro ao tentar obter empresa.";
+                _response.Data = null;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CompanyDTO company)
+        public async Task<IActionResult> Post([FromBody] CompanyDTO companyDto)
         {
-            company.CNPJ = StringValidator.ExtractNumbers(company.CNPJ);
-            company.Email = company.Email?.Trim();
-            company.TradeName = StringValidator.RemoveDiacritics(company.TradeName);
-            company.CompanyName = StringValidator.RemoveDiacritics(company.CompanyName);
-            company.PostalCode = StringValidator.ExtractNumbers(company.PostalCode);
-            company.Number = StringValidator.ExtractNumbers(company.Number);
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.CompanyName)))
-                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(company.Email) || !company.Email.Contains("@"))
-                return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.TradeName)))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(company.CNPJ))
-                return BadRequest("O CNPJ informado é inválido.");
-
-            if (!StringValidator.ExtractNumbers(company.PostalCode).Length.Equals(8))
-                return BadRequest("O Código postal informado deve conter 8 dígitos numéricos.");
-
-            if (!StringValidator.ExtractNumbers(company.Number).Length.Equals(4))
-                return BadRequest("O Número informado deve conter apenas dígitos numéricos.");
-
-
-            if (company is null || string.IsNullOrWhiteSpace(company.CompanyName))
-            {
-                _response.Code = ResponseEnum.Invalid;
-                _response.Message = "Empresa inválida.";
-                return BadRequest(_response);
-            }
-
             try
             {
-                company.Id = 0;
-                await _companyService.Create(company);
+                companyDto.Id = 0;
+                await _companyService.Create(companyDto);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Empresa cadastrada com sucesso!";
-                _response.Data = company;
+                _response.Data = companyDto;
                 return Ok(_response);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return BadRequest(_response);
+            }
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Message = ex.Message;
+                _response.Data = companyDto;
+                return Conflict(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
                 _response.Message = "Erro ao cadastrar empresa.";
+                _response.Data = companyDto;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CompanyDTO company)
+        public async Task<IActionResult> Put(int id, [FromBody] CompanyDTO companyDto)
         {
-            company.CNPJ = StringValidator.ExtractNumbers(company.CNPJ);
-            company.Email = company.Email?.Trim();
-            company.TradeName = StringValidator.RemoveDiacritics(company.TradeName);
-            company.CompanyName = StringValidator.RemoveDiacritics(company.CompanyName);
-            company.PostalCode = StringValidator.ExtractNumbers(company.PostalCode);
-            company.Number = StringValidator.ExtractNumbers(company.Number);
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.CompanyName)))
-                return BadRequest("O nome da empresa deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(company.Email) || !company.Email.Contains("@"))
-                return BadRequest("O e-mail do fornecedor é obrigatório e deve ser válido.");
-
-            if (string.IsNullOrWhiteSpace(StringValidator.RemoveDiacritics(company.TradeName)))
-                return BadRequest("O nome fantasia deve conter apenas letras e espaços.");
-
-            if (!CpfCnpjValidator.IsValidCNPJ(company.CNPJ))
-                return BadRequest("O CNPJ informado é inválido.");
-
-            if (!StringValidator.ExtractNumbers(company.PostalCode).Length.Equals(8))
-                return BadRequest("O Código postal informado deve conter 8 dígitos numéricos.");
-
-            if (!StringValidator.ExtractNumbers(company.Number).Length.Equals(4))
-                return BadRequest("O Número informado deve conter apenas dígitos numéricos.");
-
             try
             {
-                await _companyService.Update(id, company);
+                await _companyService.Update(companyDto, id);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Empresa atualizada com sucesso!";
-                _response.Data = company;
+                _response.Data = companyDto;
                 return Ok(_response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = companyDto;
+                return BadRequest(_response);
+            }
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = companyDto;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Message = ex.Message;
+                _response.Data = companyDto;
+                return Conflict(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
                 _response.Message = "Erro ao tentar atualizar empresa.";
+                _response.Data = companyDto;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
@@ -157,23 +153,24 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
-                var company = await _companyService.GetById(id);
-                if (company is null)
-                {
-                    _response.Code = ResponseEnum.NotFound;
-                    _response.Message = "Empresa não encontrada.";
-                    return NotFound(_response);
-                }
-
                 await _companyService.Remove(id);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Empresa excluída com sucesso!";
+                _response.Data = null; 
                 return Ok(_response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
             }
             catch (Exception)
             {
                 _response.Code = ResponseEnum.Error;
                 _response.Message = "Erro ao tentar excluir empresa.";
+                _response.Data = null;
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }

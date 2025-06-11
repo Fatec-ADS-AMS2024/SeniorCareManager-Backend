@@ -1,6 +1,8 @@
 using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Services.Interfaces;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
@@ -15,28 +17,28 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<TDto>> GetAll()
+    public virtual async Task<IEnumerable<TDto>> GetAll()
     {
         var entities = await _repository.Get();
         return _mapper.Map<IEnumerable<TDto>>(entities);
     }
 
-    public async Task<TDto> GetById(int id)
+    public virtual async Task<TDto> GetById(int id)
     {
         var entity = await _repository.GetById(id);
         return _mapper.Map<TDto>(entity);
     }
 
-    public async Task Create(TDto entityDTO)
+    public virtual async Task Create(TDto entityDTO)
     {
         var entity = _mapper.Map<T>(entityDTO);
         await _repository.Add(entity);
     }
 
-    public async Task Update(TDto entityDTO, int id)
+    public virtual async Task Update(TDto entityDTO, int id)
     {
         var entity = _mapper.Map<T>(entityDTO);
-        var existingEntity = await _repository.GetById(id); // Supondo que sua entidade tenha um campo Id
+        var existingEntity = await _repository.GetById(id);
 
         if (existingEntity == null)
         {
@@ -46,12 +48,12 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         await _repository.Update(entity);
     }
 
-    public async Task Remove(int id)
+    public virtual async Task Remove(int id)
     {
         var entity = await _repository.GetById(id);
         if (entity == null)
         {
-            throw new KeyNotFoundException($"Entidade com id: {id} não encontrado");
+            throw new KeyNotFoundException($"Entity with id: {id} not found");
         }
 
         await _repository.Remove(entity);
