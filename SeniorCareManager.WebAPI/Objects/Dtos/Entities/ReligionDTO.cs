@@ -6,10 +6,15 @@ public class ReligionDTO
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public bool CheckName()
+    public static bool IsFilledString(params string[] parametros)
     {
-        if (string.IsNullOrWhiteSpace(Name))
-            return false;
+        foreach (var parametro in parametros)
+        {
+            if (string.IsNullOrWhiteSpace(parametro))
+            {
+                return false;
+            }
+        }
         return true;
     }
 }

@@ -30,7 +30,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nulo.");
 
-        if (!religionDto.CheckName())
+        if (!ReligionDTO.IsFilledString(religionDto.Name))
             throw new ArgumentException("Nome Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
@@ -43,7 +43,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nulo.");
 
-        if (!religionDto.CheckName())
+        if (!ReligionDTO.IsFilledString(religionDto.Name))
             throw new ArgumentException("Nome Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
