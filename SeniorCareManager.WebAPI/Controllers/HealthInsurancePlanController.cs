@@ -111,7 +111,7 @@ public class HealthInsurancePlanController : Controller
         }
         catch (ArgumentNullException ex)
         {
-            _response.Code = ResponseEnum.Invalid;
+            _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
             _response.Data = healthInsurancePlanDto;
             return NotFound(_response);

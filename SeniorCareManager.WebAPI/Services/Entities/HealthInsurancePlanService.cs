@@ -22,19 +22,19 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     {
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new KeyNotFoundException("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ArgumentNullException("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<HealthInsurancePlanDTO>(healthInsurancePlan);
     }
     public override async Task Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("Plano de saúde com o id nulo");
+            throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
 
-        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
+        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Name))
             throw new ArgumentException("Nome Inválidos");
 
-        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Abbreviation))
+        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Abbreviation))
             throw new ArgumentException("Abreviação Inválidos");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
@@ -45,12 +45,12 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("Plano de saúde com o id nulo");
+            throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
 
-        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
+        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Name))
             throw new ArgumentException("Nome Inválidos");
 
-        if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Abbreviation))
+        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Abbreviation))
             throw new ArgumentException("Abreviação Inválidos");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
