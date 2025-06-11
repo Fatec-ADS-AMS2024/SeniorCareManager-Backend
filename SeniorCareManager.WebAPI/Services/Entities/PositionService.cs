@@ -31,9 +31,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public override async Task Create(PositionDTO positionDto)
         {
             if (positionDto is null)
-                throw new ArgumentNullException("Cargo é nulo");
+                throw new ArgumentNullException("O Cargo não pode ser nulo.");
 
-            if (!positionDto.CheckName())
+            if (PositionDTO.IsFilledString(positionDto.Name))
                 throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
@@ -43,16 +43,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public override async Task Update(PositionDTO positionDto, int id)
         {
-            var positions = await _positionRepository.Get();
             if (positionDto is null)
-                throw new ArgumentNullException("Cargo é nulo");
+                throw new ArgumentNullException("O Cargo não pode ser nulo.");
 
-            if (!positionDto.CheckName())
+            if (PositionDTO.IsFilledString(positionDto.Name))
                 throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
                 throw new InvalidOperationException("Nome duplicado.");
-
 
             await base.Update(positionDto, id);
         }
@@ -66,7 +64,6 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public async Task<bool> CheckDuplicates(string name)
         {
-   
             var positions = await _positionRepository.Get();
             return positions.Any(r =>
                 StringUtils.CompareString(r.Name, name)
