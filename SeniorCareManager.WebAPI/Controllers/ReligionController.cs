@@ -34,13 +34,13 @@ public class ReligionController : Controller
     {
         try
         {
-            var position = await _religionService.GetById(id);
+            var religion = await _religionService.GetById(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo " + position.Name + " obtido com sucesso!";
-            _response.Data = position;
+            _response.Message = "Religião " + religion.Name + " obtido com sucesso!";
+            _response.Data = religion;
             return Ok(_response);
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
@@ -68,6 +68,13 @@ public class ReligionController : Controller
 
             return Ok(_response);
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -81,13 +88,6 @@ public class ReligionController : Controller
             _response.Message = ex.Message;
             _response.Data = religionDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = religionDto;
-            return NotFound(_response);
         }
         catch (Exception)
         {
@@ -109,6 +109,13 @@ public class ReligionController : Controller
             _response.Data = religionDto;
             return Ok(_response);
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -122,13 +129,6 @@ public class ReligionController : Controller
             _response.Data = religionDto;
             _response.Message = ex.Message;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = religionDto;
-            return NotFound(_response);
         }
         catch (Exception)
         {
@@ -146,11 +146,11 @@ public class ReligionController : Controller
         {
             await _religionService.Remove(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Grupo de religião apagado com sucesso!";
+            _response.Message = "A religião apagado com sucesso!";
             _response.Data = null;
             return Ok(_response);
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Data = null;
@@ -160,7 +160,7 @@ public class ReligionController : Controller
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar apagar grupo de religião.";
+            _response.Message = "Erro ao tentar apagar a religião.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }

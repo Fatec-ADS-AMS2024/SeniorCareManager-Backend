@@ -21,14 +21,15 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     {
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
-            throw new KeyNotFoundException("Religião com o id "+ id +" informado não foi encontrada.");
+            throw new ArgumentNullException("Religião com o id "+ id +" informado não foi encontrada.");
 
         return _mapper.Map<ReligionDTO>(religion);
     }
     public override async Task Create(ReligionDTO religionDto)
     {
         if (religionDto is null)
-            throw new KeyNotFoundException("Id inválido");
+            throw new ArgumentNullException("A Religião não pode ser nulo.");
+
         if (!religionDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
@@ -40,9 +41,9 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     public override async Task Update(ReligionDTO religionDto, int id)
     {
         if (religionDto is null)
-            throw new KeyNotFoundException("Id inválido");
+            throw new ArgumentNullException("A Religião não pode ser nulo.");
+
         if (!religionDto.CheckName())
-            if (!religionDto.CheckName())
             throw new ArgumentException("Nome Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
@@ -54,13 +55,13 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     {
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
-            throw new KeyNotFoundException("Religião com o id " + id + " informado não foi encontrada.");
+            throw new ArgumentNullException("Religião com o id " + id + " informado não foi encontrada.");
 
         await base.Remove(id);
     }
     public async Task<bool> CheckDuplicates(string nome)
     {
         var religions = await _religionRepository.Get();
-        return religions.Any(r => StringValidator.CompareString(r.Name, nome));
+        return religions.Any(r => StringUtils.CompareString(r.Name, nome));
     }
 }
