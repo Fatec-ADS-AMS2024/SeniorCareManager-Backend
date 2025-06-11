@@ -69,7 +69,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public async Task<bool> CheckDuplicates(HealthInsurancePlanDTO dto)
     {
         var plans = await _healthInsurancePlanRepository.Get();
-        return plans.Any(p =>(p.Id != dto.Id) &&(StringValidator.CompareString(p.Name, dto.Name)));
+        return plans.Any(p =>(p.Id != dto.Id) &&(StringUtils.CompareString(p.Name, dto.Name)));
     }
 
 }
