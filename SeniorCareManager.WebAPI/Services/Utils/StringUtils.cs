@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
 {
-    public static class StringValidator
+    public static class StringUtils
     {
         //Deixa os nomes iguais para depois ver se tem duplicados
         public static string RemoveDiacritics(this string text)

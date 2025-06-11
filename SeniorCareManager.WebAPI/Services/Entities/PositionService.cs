@@ -69,7 +69,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
    
             var positions = await _positionRepository.Get();
             return positions.Any(r =>
-                StringValidator.CompareString(r.Name, name)
+                StringUtils.CompareString(r.Name, name)
             );
         }
     }
