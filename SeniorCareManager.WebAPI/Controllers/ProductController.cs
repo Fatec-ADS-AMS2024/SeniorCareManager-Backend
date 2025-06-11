@@ -28,7 +28,7 @@ public class ProductController : Controller
         var product = await _productService.GetAll();
         _response.Code = ResponseEnum.Success;
         _response.Data = product;
-        _response.Message = "Lista de cargos!";
+        _response.Message = "Lista de produtos!";
         return Ok(_response);
     }
 
@@ -39,7 +39,7 @@ public class ProductController : Controller
         {
             var product = await _productService.GetById(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo " + product.GenericName + " obtido com sucesso!";
+            _response.Message = "produto " + product.GenericName + " obtido com sucesso!";
             _response.Data = product;
             return Ok(_response);
         }
@@ -53,7 +53,7 @@ public class ProductController : Controller
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível adquirir o cargo.";
+            _response.Message = "Não foi possível adquirir o produto.";
             _response.Data = null;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -68,7 +68,7 @@ public class ProductController : Controller
             productDto.Id = 0;
             await _productService.Create(productDto);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo Cadastrado com sucesso!";
+            _response.Message = "Produto Cadastrado com sucesso!";
             _response.Data = productDto;
         }
         catch (ArgumentException ex)
@@ -88,7 +88,7 @@ public class ProductController : Controller
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível cadastrar o cargo.";
+            _response.Message = "Não foi possível cadastrar o produto.";
             _response.Data = productDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -102,7 +102,7 @@ public class ProductController : Controller
         {
             await _productService.Update(productDto, id); ;
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo alterado com sucesso!";
+            _response.Message = "produto alterado com sucesso!";
             _response.Data = productDto;
         }
         catch (ArgumentException ex)
@@ -122,7 +122,7 @@ public class ProductController : Controller
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível alterar o cargo!";
+            _response.Message = "Não foi possível alterar o produto!";
             _response.Data = productDto;
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
@@ -136,7 +136,7 @@ public class ProductController : Controller
         {
             await _productService.Remove(id);
             _response.Code = ResponseEnum.Success;
-            _response.Message = "Grupo de cargo apagado com sucesso!";
+            _response.Message = "Grupo de produto apagado com sucesso!";
             _response.Data = null;
         }
         catch (KeyNotFoundException ex)
@@ -149,7 +149,7 @@ public class ProductController : Controller
         catch (Exception ex)
         {
             _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar apagar grupo de cargo.";
+            _response.Message = "Erro ao tentar apagar grupo de produto.";
             _response.Data = null;
         }
         return Ok(_response);
