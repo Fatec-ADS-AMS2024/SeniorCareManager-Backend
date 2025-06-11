@@ -29,7 +29,8 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public override async Task Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("Id inválido");
+            throw new ArgumentNullException("Plano de saúde com o id nulo");
+
         if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
             throw new ArgumentException("Nome Inválidos");
 
@@ -44,7 +45,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("Id inválido"); 
+            throw new ArgumentNullException("Plano de saúde com o id nulo");
 
         if (!healthInsurancePlanDto.CheckInfos(healthInsurancePlanDto.Name))
             throw new ArgumentException("Nome Inválidos");
@@ -61,7 +62,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     {
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new KeyNotFoundException("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ArgumentNullException("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         await base.Remove(id);
     }

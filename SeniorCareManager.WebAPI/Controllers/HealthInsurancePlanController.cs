@@ -42,7 +42,7 @@ public class HealthInsurancePlanController : Controller
             _response.Data = healthInsurancePlan;
             return Ok(_response);
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
@@ -68,6 +68,13 @@ public class HealthInsurancePlanController : Controller
             _response.Message = "Plano de saúde Cadastrado com sucesso!";
             _response.Data = healthInsurancePlanDto;
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -81,13 +88,6 @@ public class HealthInsurancePlanController : Controller
             _response.Message = ex.Message;
             _response.Data = healthInsurancePlanDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = healthInsurancePlanDto;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -109,6 +109,13 @@ public class HealthInsurancePlanController : Controller
             _response.Message = "Plano de saúde Alterado com sucesso!";
             _response.Data = healthInsurancePlanDto;
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -122,13 +129,6 @@ public class HealthInsurancePlanController : Controller
             _response.Message = ex.Message;
             _response.Data = healthInsurancePlanDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = healthInsurancePlanDto;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -150,7 +150,7 @@ public class HealthInsurancePlanController : Controller
             _response.Message = "Plano de saúde apagado com sucesso!";
             _response.Data = null;
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Data = null;
@@ -177,6 +177,13 @@ public class HealthInsurancePlanController : Controller
             _response.Message = "Plano de saúde Alterado com sucesso!";
             _response.Data = healthInsurancePlanDto;
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = healthInsurancePlanDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -201,3 +208,4 @@ public class HealthInsurancePlanController : Controller
         return Ok(_response);
     }
 }
+
