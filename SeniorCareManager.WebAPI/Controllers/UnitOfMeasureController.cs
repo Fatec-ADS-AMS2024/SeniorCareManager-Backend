@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -40,7 +41,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UnitOfMeasure unitOfMeasure)
+        public async Task<IActionResult> Post(UnitOfMeasureDTO unitOfMeasure)
         {
             if (unitOfMeasure.Description == String.Empty) return BadRequest("Unidade de medida não pode ser vazia.");
          
@@ -58,7 +59,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UnitOfMeasure unitOfMeasure)
+        public async Task<IActionResult> Put(int id, UnitOfMeasureDTO unitOfMeasure)
         {
             try
             {

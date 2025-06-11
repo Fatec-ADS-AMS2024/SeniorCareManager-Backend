@@ -3,8 +3,8 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
-    public interface IPositionService : IGenericService<Position, PositionDTO>
+    public interface ICompanyService : IGenericService<Company, CompanyDTO>
     {
-   
+        Task<bool> CheckDuplicates(CompanyDTO dto);
     }
 }

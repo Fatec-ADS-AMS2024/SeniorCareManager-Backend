@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Dtos;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -32,7 +33,7 @@ public class ProductGroupController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Post(ProductGroup productGroup)
+    public async Task<IActionResult> Post(ProductGroupDTO productGroup)
     {
         try{
             await _productGroupService.Create(productGroup);
@@ -45,7 +46,7 @@ public class ProductGroupController : Controller
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
     {
         try
         {
@@ -75,7 +76,7 @@ public class ProductGroupController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Patch(int id, ProductGroupDTO productGroup)
     {
         try
         {

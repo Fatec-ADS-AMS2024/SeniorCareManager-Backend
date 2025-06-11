@@ -1,14 +1,13 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Data.Repositories;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class PositionService : GenericService<Position>, IPositionService
+    public class PositionService : GenericService<Position, PositionDTO>, IPositionService
     {
         private readonly IPositionRepository _positionRepository;
         private readonly IMapper _mapper;

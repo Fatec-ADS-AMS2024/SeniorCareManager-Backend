@@ -26,6 +26,8 @@ public class MappingProfile : Profile
         CreateMap<Carrier, CarrierDTO>();
         CreateMap<ReligionDTO, Religion>().ReverseMap();
         CreateMap<Religion, ReligionDTO>();
+        CreateMap<CompanyDTO, Company>().ReverseMap();
+        CreateMap<Company, CompanyDTO>();
 
     }
 }
