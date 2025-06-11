@@ -24,17 +24,17 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new KeyNotFoundException("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
 
             return _mapper.Map<PositionDTO>(position);
         }
         public override async Task Create(PositionDTO positionDto)
         {
             if (positionDto is null)
-                throw new KeyNotFoundException("Id inválido");
+                throw new ArgumentNullException("Cargo é nulo");
 
             if (!positionDto.CheckName())
-                throw new ArgumentException("Nome Inválidoa.");
+                throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
                 throw new InvalidOperationException("Nome duplicadoa.");
@@ -45,7 +45,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var positions = await _positionRepository.Get();
             if (positionDto is null)
-                throw new KeyNotFoundException("Id inválido");
+                throw new ArgumentNullException("Cargo é nulo");
 
             if (!positionDto.CheckName())
                 throw new ArgumentException("Nome Inválido.");
@@ -60,7 +60,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new KeyNotFoundException("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
 
             await base.Remove(id);
         }

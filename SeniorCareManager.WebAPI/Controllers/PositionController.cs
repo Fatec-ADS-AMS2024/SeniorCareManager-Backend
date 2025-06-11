@@ -43,7 +43,7 @@ public class PositionController: Controller
             _response.Data = position;
             return Ok(_response);
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
@@ -71,6 +71,13 @@ public class PositionController: Controller
             _response.Message = "Cargo Cadastrado com sucesso!";
             _response.Data = positionDto;
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -84,13 +91,6 @@ public class PositionController: Controller
             _response.Message = ex.Message;
             _response.Data = positionDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -112,6 +112,13 @@ public class PositionController: Controller
             _response.Message = "Cargo alterado com sucesso!";
             _response.Data = positionDto;
         }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
+        }
         catch (ArgumentException ex)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -125,13 +132,6 @@ public class PositionController: Controller
             _response.Message = ex.Message;
             _response.Data = positionDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
