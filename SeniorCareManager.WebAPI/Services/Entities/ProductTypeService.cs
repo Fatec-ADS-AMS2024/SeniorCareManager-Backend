@@ -29,4 +29,20 @@ public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, I
             idSelector: pt => pt.Id
         );
     }
+
+    public async Task<int?> GetGroupIdIfDuplicateAsync(string name, int currentId = 0)
+    {
+        var allTypes = await _productTypeRepository.Get();
+        var match = allTypes
+            .Where(pt => pt.Id != currentId && StringValidator.CompareString(pt.Name.Trim(), name.Trim()))
+            .FirstOrDefault();
+
+        return match?.ProductGroupId;
+    }
+
+    public async Task<bool> GroupExistsAsync(int groupId)
+    {
+        var allTypes = await _productTypeRepository.Get();
+        return allTypes.Any(x => x.ProductGroupId == groupId);
+    }
 }

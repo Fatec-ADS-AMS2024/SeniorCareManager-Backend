@@ -68,6 +68,8 @@ public class ProductTypeController : Controller
             return BadRequest(_response);
         }
 
+        productType.Name = productType.Name.Trim();
+
         if (productType.ProductGroupId <= 0)
         {
             _response.Code = ResponseEnum.Invalid;
@@ -76,10 +78,19 @@ public class ProductTypeController : Controller
             return BadRequest(_response);
         }
 
-        if (await _productTypeService.IsDuplicateNameAsync(productType.Name))
+        if (!await _productTypeService.GroupExistsAsync(productType.ProductGroupId))
+        {
+            _response.Code = ResponseEnum.Unauthorized;
+            _response.Message = "Grupo de produto não encontrado.";
+            _response.Data = productType;
+            return StatusCode(StatusCodes.Status401Unauthorized, _response);
+        }
+
+        var existingGroupId = await _productTypeService.GetGroupIdIfDuplicateAsync(productType.Name);
+        if (existingGroupId != null)
         {
             _response.Code = ResponseEnum.Conflict;
-            _response.Message = "Já existe um tipo de produto com esse nome.";
+            _response.Message = $"Produto já cadastrado no grupo {existingGroupId}.";
             _response.Data = productType;
             return Conflict(_response);
         }
@@ -105,6 +116,14 @@ public class ProductTypeController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] ProductTypeDTO productType)
     {
+        if (id != productType.Id)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = "O ID da URL e o ID do corpo não coincidem.";
+            _response.Data = productType;
+            return BadRequest(_response);
+        }
+
         if (string.IsNullOrWhiteSpace(productType.Name))
         {
             _response.Code = ResponseEnum.Invalid;
@@ -112,6 +131,8 @@ public class ProductTypeController : Controller
             _response.Data = productType;
             return BadRequest(_response);
         }
+
+        productType.Name = productType.Name.Trim();
 
         if (productType.ProductGroupId <= 0)
         {
@@ -121,10 +142,19 @@ public class ProductTypeController : Controller
             return BadRequest(_response);
         }
 
-        if (await _productTypeService.IsDuplicateNameAsync(productType.Name, id))
+        if (!await _productTypeService.GroupExistsAsync(productType.ProductGroupId))
+        {
+            _response.Code = ResponseEnum.Unauthorized;
+            _response.Message = "Grupo de produto não encontrado.";
+            _response.Data = productType;
+            return StatusCode(StatusCodes.Status401Unauthorized, _response);
+        }
+
+        var existingGroupId = await _productTypeService.GetGroupIdIfDuplicateAsync(productType.Name, id);
+        if (existingGroupId != null)
         {
             _response.Code = ResponseEnum.Conflict;
-            _response.Message = "Já existe um tipo de produto com esse nome.";
+            _response.Message = $"Produto já cadastrado no grupo {existingGroupId}.";
             _response.Data = productType;
             return Conflict(_response);
         }
