@@ -8,14 +8,14 @@ public static class CpfCnpjValidator
 {
     public static bool IsValidCNPJ(string cnpj)
     {
-        cnpj = StringValidator.ExtractNumbers(cnpj);
+        cnpj = StringUtils.ExtractNumbers(cnpj);
 
         return cnpj.Length == 14 && long.TryParse(cnpj, out _);
     }
 
     public static bool IsValidCPF(string cpf)
     {
-        cpf = StringValidator.ExtractNumbers(cpf);
+        cpf = StringUtils.ExtractNumbers(cpf);
 
         if (cpf.Length != 11 || !cpf.All(char.IsDigit))
             return false;
