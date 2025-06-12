@@ -10,11 +10,17 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
 public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, IProductTypeService
 {
     private readonly IProductTypeRepository _productTypeRepository;
+    private readonly IProductGroupRepository _productGroupRepository;
     private readonly IMapper _mapper;
 
-    public ProductTypeService(IProductTypeRepository repository, IMapper mapper) : base(repository, mapper)
+    public ProductTypeService(
+        IProductTypeRepository productTypeRepository,
+        IProductGroupRepository productGroupRepository,
+        IMapper mapper
+    ) : base(productTypeRepository, mapper)
     {
-        _productTypeRepository = repository;
+        _productTypeRepository = productTypeRepository;
+        _productGroupRepository = productGroupRepository;
         _mapper = mapper;
     }
 
@@ -42,7 +48,6 @@ public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, I
 
     public async Task<bool> GroupExistsAsync(int groupId)
     {
-        var allTypes = await _productTypeRepository.Get();
-        return allTypes.Any(x => x.ProductGroupId == groupId);
+        return await _productGroupRepository.ExistsAsync(groupId);
     }
 }
