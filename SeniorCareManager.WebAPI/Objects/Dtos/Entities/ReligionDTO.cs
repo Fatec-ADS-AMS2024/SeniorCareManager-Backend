@@ -1,21 +1,18 @@
-﻿namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+﻿using System.Reflection.Metadata;
+using System.Xml.Linq;
+
+namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 public class ReligionDTO
 {
 
     public int Id { get; set; }
-    public string Name { get; set; }
-
-    public static bool IsFilledString(params string[] parametros)
+    private string _name;
+    public string Name
     {
-        foreach (var parametro in parametros)
-        {
-            if (string.IsNullOrWhiteSpace(parametro))
-            {
-                return false;
-            }
-        }
-        return true;
+        get => _name;
+        set => _name = string.IsNullOrWhiteSpace(value) ? value : value.Trim();
     }
+
 }
 
