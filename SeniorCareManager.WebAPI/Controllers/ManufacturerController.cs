@@ -15,7 +15,7 @@ namespace SeniorCareManager.WebAPI.Controllers
 
         public ManufacturerController(IManufacturerService service)
         {
-            _manufacturerService = service;
+            this._manufacturerService = service;
             _response = new Response();
         }
 
@@ -40,7 +40,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 _response.Data = manufacturer;
                 return Ok(_response);
             }
-            catch (KeyNotFoundException ex)
+            catch (ArgumentNullException ex)
             {
                 _response.Code = ResponseEnum.NotFound;
                 _response.Message = ex.Message;
@@ -112,10 +112,10 @@ namespace SeniorCareManager.WebAPI.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                _response.Code = ResponseEnum.Invalid;
+                _response.Code = ResponseEnum.NotFound;
                 _response.Data = manufacturerDto;
                 _response.Message = ex.Message;
-                return BadRequest(_response);
+                return NotFound(_response);
             }
             catch (ArgumentException ex)
             {
@@ -130,13 +130,6 @@ namespace SeniorCareManager.WebAPI.Controllers
                 _response.Data = manufacturerDto;
                 _response.Message = ex.Message;
                 return Conflict(_response);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return NotFound(_response);
             }
             catch (Exception)
             {
@@ -158,7 +151,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 _response.Data = null;
                 return Ok(_response);
             }
-            catch (KeyNotFoundException ex)
+            catch(ArgumentNullException ex)
             {
                 _response.Code = ResponseEnum.NotFound;
                 _response.Data = null;

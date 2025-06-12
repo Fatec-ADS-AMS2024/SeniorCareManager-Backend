@@ -1,38 +1,82 @@
-﻿public class ManufacturerDTO
+﻿using SeniorCareManager.WebAPI.Services.Utils;
+
+public class ManufacturerDTO
 {
     public int Id { get; set; }
-    public string CorporateName { get; set; }
-    public string TradeName { get; set; }
-    public string CpfCnpj { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
 
-    public bool CheckName()
+    private string _corporatename;
+    private string _tradename;
+    private string _cpfCnpj;
+    private string _phone;
+    private string _email; 
+
+    public string CorporateName
     {
-        if (string.IsNullOrWhiteSpace(CorporateName)||string.IsNullOrWhiteSpace(TradeName))
-            return false;
-        return true;
+        get => _corporatename;
+        set => _corporatename = value.Trim();
     }
 
-    public bool CheckCpfCnpj()
+    public string TradeName
     {
-        if (string.IsNullOrWhiteSpace(CpfCnpj))
-            return false;
-        return CpfCnpj.Length == 11 || CpfCnpj.Length == 14; // CPF tem 11 dígitos, CNPJ tem 14
+        get => _tradename;
+        set => _tradename = value.Trim();
+    }
+    // Formatação do CPF/CNPJ
+    public string CpfCnpj
+    {
+        get => _cpfCnpj;
+        set
+        {
+            if (CpfCnpjValidator.IsValidCNPJ(value))
+            {
+                _cpfCnpj = value.Trim();
+            }
+            else
+            {
+                _cpfCnpj = null;
+            }
+        }
     }
 
-    public bool CheckPhone()
+    // Formatação do telefone
+    public string Phone
     {
-        if (string.IsNullOrWhiteSpace(Phone))
-            return false;
-        return Phone.Length >= 10 && Phone.Length <= 11; // Telefones no Brasil têm 10 ou 11 dígitos (com DDD)
+        get => _phone;
+        set
+        {
+            if (PhoneValidator.IsValidPhoneNumber(value))
+            {
+                _phone = value.Trim();
+            }
+        }
     }
 
-    public bool CheckEmail()
+    // Validação de email
+    public string Email
     {
-        if (string.IsNullOrWhiteSpace(Email))
+        get => _email;
+        set
+        {
+            if (EmailValidator.IsValid(value))
+            {
+                _email = value.Trim();
+            }
+            else
+            {
+                _email = null;
+            }
+        }
+    }
+
+    public static bool IsFilledString(params string[] parametros)
+    {
+         foreach (var parametro in parametros)
+         {
+           if (string.IsNullOrWhiteSpace(parametro))
+           {
             return false;
-        var addr = new System.Net.Mail.MailAddress(Email);
-        return addr.Address == Email;
+           }
+         }
+       return true;
     }
 }
