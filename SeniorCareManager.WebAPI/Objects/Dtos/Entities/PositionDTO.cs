@@ -3,7 +3,12 @@
     public class PositionDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => _name = value.Trim();
+        }
         public static bool IsFilledString(params string[] parametros)
         {
             foreach (var parametro in parametros)
