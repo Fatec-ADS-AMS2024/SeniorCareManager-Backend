@@ -30,9 +30,6 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nula.");
 
-        if (!ReligionDTO.IsFilledString(religionDto.Name))
-            throw new ArgumentException("Nome da religião é Inválido.");
-
         if (await CheckDuplicates(religionDto.Name))
             throw new InvalidOperationException("Nome já existente.");
 
@@ -43,8 +40,8 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nula.");
 
-        if (!ReligionDTO.IsFilledString(religionDto.Name))
-            throw new ArgumentException("Nome da religião é Inválido.");
+        if (religionDto.Id == id)
+            throw new Arasdsa("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new InvalidOperationException("Nome já existente.");
