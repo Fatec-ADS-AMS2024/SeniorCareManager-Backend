@@ -12,7 +12,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;
 
-    public ReligionService(IReligionRepository repository, IMapper mapper): base(repository, mapper)
+    public ReligionService(IReligionRepository repository, IMapper mapper) : base(repository, mapper)
     {
         _religionRepository = repository;
         _mapper = mapper;
@@ -21,27 +21,33 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     {
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
-            throw new ArgumentNullException("Religião com o id "+ id +" informado não foi encontrada.");
+            throw new ArgumentNullException("Religião com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<ReligionDTO>(religion);
     }
     public override async Task Create(ReligionDTO religionDto)
     {
         if (religionDto is null)
-            throw new ArgumentNullException("A Religião não pode ser nulo.");
+            throw new ArgumentNullException("A Religião não pode ser nula.");
+
+        if (!ReligionDTO.IsFilledString(religionDto.Name))
+            throw new ArgumentException("Nome da religião é Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
-            throw new InvalidOperationException("Nome duplicado.");
+            throw new InvalidOperationException("Nome já existente.");
 
         await base.Create(religionDto);
     }
     public override async Task Update(ReligionDTO religionDto, int id)
     {
         if (religionDto is null)
-            throw new ArgumentNullException("A Religião não pode ser nulo.");
+            throw new ArgumentNullException("A Religião não pode ser nula.");
+
+        if (!ReligionDTO.IsFilledString(religionDto.Name))
+            throw new ArgumentException("Nome da religião é Inválido.");
 
         if (await CheckDuplicates(religionDto.Name))
-            throw new InvalidOperationException("Nome duplicado.");
+            throw new InvalidOperationException("Nome já existente.");
 
         await base.Update(religionDto, id);
     }

@@ -11,8 +11,18 @@ public class ReligionDTO
     public string Name
     {
         get => _name;
-        set => _name = string.IsNullOrWhiteSpace(value) ? value : value.Trim();
+        set => _name = value.Trim();
     }
-
+    public static bool IsFilledString(params string[] parametros)
+    {
+        foreach (var parametro in parametros)
+        {
+            if (string.IsNullOrWhiteSpace(parametro))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
