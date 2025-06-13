@@ -60,6 +60,8 @@ public class ReligionController : Controller
     {
         try
         {
+            ReligionDTO.IdIsValid(religionDto.Id);
+            ReligionDTO.IsFilledString(religionDto.Name);
             religionDto.Id = 0;
             await _religionService.Create(religionDto);
             _response.Code = ResponseEnum.Success;

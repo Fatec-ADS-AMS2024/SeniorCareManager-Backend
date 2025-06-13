@@ -1,4 +1,9 @@
-﻿public class ReligionDTO
+﻿using System.Reflection.Metadata;
+using System.Xml.Linq;
+
+namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+
+public class ReligionDTO
 {
     private string _name;
     private int? _id;
@@ -8,20 +13,32 @@
         get => _id;
         set
         {
-            if (value == null)
-                throw new ArgumentException("O ID não pode ser nulo.");
-            _id = value.Value;
+            _id = value;
         }
     }
-
     public string Name
     {
         get => _name;
-        set
+        set 
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("O nome da religião é obrigatório.");
             _name = value.Trim();
         }
+    }
+
+    public static bool IsFilledString(params string[] parametros)
+    {
+        foreach (var parametro in parametros)
+        {
+            if (string.IsNullOrWhiteSpace(parametro))
+            {
+                throw new ArgumentException("O campo não pode ser nulo.");
+            }
+        }
+        return true;
+    }
+    public static void IdIsValid(int? id)
+    {
+        if (id == null)
+            throw new ArgumentNullException("O Id não pode ser nulo.");
     }
 }
