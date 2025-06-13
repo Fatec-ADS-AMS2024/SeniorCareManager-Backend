@@ -1,51 +1,27 @@
-﻿using System.Reflection.Metadata;
-using System.Xml.Linq;
-
-namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-
-public class ReligionDTO
+﻿public class ReligionDTO
 {
-
-    private int _id;
     private string _name;
-    public int Id
+    private int? _id;
+
+    public int? Id
     {
         get => _id;
         set
         {
             if (value == null)
-            {
-                throw new ArgumentNullException("A Religião não pode ser nula.");
-            }
-
+                throw new ArgumentException("O ID não pode ser nulo.");
+            _id = value.Value;
         }
     }
+
     public string Name
     {
         get => _name;
         set
         {
-            if (IsFilledString(value))
-            {
-                _name = value.Trim();
-            }
-            else
-            {
-                _name = null;
-            }
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("O nome da religião é obrigatório.");
+            _name = value.Trim();
         }
-    }
-
-    public static bool IsFilledString(params string[] parametros)
-    {
-        foreach (var parametro in parametros)
-        {
-            if (string.IsNullOrWhiteSpace(parametro))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }
-
