@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -38,7 +39,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (await CheckDuplicates(allergyDTO.Name))
                 throw new InvalidOperationException("Nome da alergia já existe.");
 
-            base.Create(allergyDTO);
+            await base.Create(allergyDTO);
             return allergyDTO;
         }
 
@@ -57,6 +58,10 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Remove(int id)
         {
+            //Quando a classe ResidentAllergy for implementada, verificar se existe alguma alergia associada a este id se for o caso não permitir a remoção
+            /*var hasRelations = await _context.ResidentAllergies.AnyAsync(r => r.AllergyId == id);
+            if (hasRelations)
+                throw new InvalidOperationException("Alergia vinculada a residente. Exclusão bloqueada.");*/
             var allergies = await _allergyRepository.GetById(id);
             if (allergies is null)
                 throw new KeyNotFoundException("Alergia com o id " + id + " informado não foi encontrada.");
