@@ -20,14 +20,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             _positionRepository = repository;
             _mapper = mapper;
         }
-        public override async Task<PositionDTO> GetById(int id)
-        {
-            var position = await _positionRepository.GetById(id);
-            if (position is null)
-                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
 
-            return _mapper.Map<PositionDTO>(position);
-        }
         public override async Task Create(PositionDTO positionDto)
         {
             if (positionDto is null)
@@ -37,7 +30,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
-                throw new InvalidOperationException("Nome duplicadoa.");
+                throw new InvalidOperationException("Nome duplicado.");
 
             await base.Create(positionDto);
         }
