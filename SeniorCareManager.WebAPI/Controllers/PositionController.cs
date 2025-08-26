@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Enums;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -25,11 +21,21 @@ public class PositionController: Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var position = await _positionService.GetAll();
-        _response.Code = ResponseEnum.Success;
-        _response.Data = position;
-        _response.Message = "Lista de cargos!";
-        return Ok(_response);
+        try
+        {
+            var position = await _positionService.GetAll();
+            _response.Code = ResponseEnum.Success;
+            _response.Data = position;
+            _response.Message = "Lista de cargos!";
+            return Ok(_response);
+        }
+        catch (Exception ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpGet("{id}")]
@@ -50,7 +56,7 @@ public class PositionController: Controller
             _response.Data = null;
             return NotFound(_response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             _response.Code = ResponseEnum.Error;
             _response.Message = "Não foi possível adquirir o cargo.";
@@ -58,7 +64,6 @@ public class PositionController: Controller
             return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
     }
-
 
     [HttpPost]
     public async Task<IActionResult> Post(PositionDTO positionDto)

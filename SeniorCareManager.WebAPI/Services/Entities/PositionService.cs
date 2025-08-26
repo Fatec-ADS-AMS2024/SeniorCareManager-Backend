@@ -1,8 +1,5 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
-using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -19,6 +16,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             _positionRepository = repository;
             _mapper = mapper;
+        }
+        public override async Task<PositionDTO> GetById(int id)
+        {
+            var position = await _positionRepository.GetById(id);
+            if (position is null)
+                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
+
+            return _mapper.Map<PositionDTO>(position);
         }
 
         public override async Task Create(PositionDTO positionDto)
