@@ -31,7 +31,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Manufacturer manufacturer)
+        public async Task<IActionResult> Post(ManufacturerDTO manufacturer)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Manufacturer manufacturer)
+        public async Task<IActionResult> Put(int id, ManufacturerDTO manufacturer)
         {
             try
             {

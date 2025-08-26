@@ -2,6 +2,6 @@
 
 namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
-public interface IManufacturerService : IGenericService<Manufacturer>
+public interface IManufacturerService : IGenericService<Manufacturer, ManufacturerDTO>
 {
 }

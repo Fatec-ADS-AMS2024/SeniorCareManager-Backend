@@ -33,7 +33,7 @@ public class ProductTypeController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> Post(ProductType productType)
+    public async Task<IActionResult> Post(ProductTypeDTO productType)
     {
         try{
             await _productTypeService.Create(productType);
@@ -46,7 +46,7 @@ public class ProductTypeController : Controller
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductType productType)
+    public async Task<IActionResult> Put(int id, ProductTypeDTO productType)
     {
         try
         {
@@ -76,7 +76,7 @@ public class ProductTypeController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductType productType)
+    public async Task<IActionResult> Patch(int id, ProductTypeDTO productType)
     {
         try
         {
