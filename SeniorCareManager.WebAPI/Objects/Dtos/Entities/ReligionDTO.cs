@@ -1,21 +1,9 @@
-﻿using System.Reflection.Metadata;
-using System.Xml.Linq;
-
-namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+﻿namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 public class ReligionDTO
 {
+    public int id { get; set; }
     private string _name;
-    private int? _id;
-
-    public int? Id
-    {
-        get => _id;
-        set
-        {
-            _id = value;
-        }
-    }
     public string Name
     {
         get => _name;
@@ -35,10 +23,5 @@ public class ReligionDTO
             }
         }
         return true;
-    }
-    public static void IdIsValid(int? id)
-    {
-        if (id == null)
-            throw new ArgumentNullException("O Id não pode ser nulo.");
     }
 }

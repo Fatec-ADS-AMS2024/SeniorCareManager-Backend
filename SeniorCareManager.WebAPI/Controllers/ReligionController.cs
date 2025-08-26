@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 [ApiController]
@@ -22,12 +20,23 @@ public class ReligionController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var religion = await _religionService.GetAll();
-        _response.Code = ResponseEnum.Success;
-        _response.Data = religion;
-        _response.Message = "Lista de religiões!";
-        return Ok(_response);
+        try
+        {
+            var religion = await _religionService.GetAll();
+            _response.Code = ResponseEnum.Success;
+            _response.Data = religion;
+            _response.Message = "Lista de religiões!";
+            return Ok(_response);
+        }
+        catch (Exception ex) 
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
+
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
@@ -60,9 +69,7 @@ public class ReligionController : Controller
     {
         try
         {
-            ReligionDTO.IdIsValid(religionDto.Id);
-            ReligionDTO.IsFilledString(religionDto.Name);
-            religionDto.Id = 0;
+            religionDto.id = 0;
             await _religionService.Create(religionDto);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião cadastrada com sucesso!";

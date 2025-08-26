@@ -27,11 +27,14 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task Create(ReligionDTO religionDto)
     {
+        ReligionDTO.IsFilledString(religionDto.Name);
+
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nula.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new InvalidOperationException("Nome já existente.");
+
 
         await base.Create(religionDto);
     }
@@ -40,7 +43,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nula.");
 
-        if (religionDto.Id != id)
+        if (religionDto.id != id)
             throw new ArgumentException("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
