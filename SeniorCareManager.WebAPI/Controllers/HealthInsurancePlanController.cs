@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
-using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -24,11 +21,21 @@ public class HealthInsurancePlanController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var healthInsurancePlan = await _healthInsurancePlanService.GetAll();
-        _response.Code = ResponseEnum.Success;
-        _response.Data = healthInsurancePlan;
-        _response.Message = "Lista de planos de saúde!";
-        return Ok(_response);
+        try
+        {
+            var healthInsurancePlan = await _healthInsurancePlanService.GetAll();
+            _response.Code = ResponseEnum.Success;
+            _response.Data = healthInsurancePlan;
+            _response.Message = "Lista de planos de saúde!";
+            return Ok(_response);
+        }
+        catch (Exception)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Não foi possível adquirir a lista de planos de saúde.";
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpGet("{id}")]
