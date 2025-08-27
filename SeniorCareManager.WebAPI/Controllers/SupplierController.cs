@@ -2,7 +2,6 @@
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Objects.Dtos;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
