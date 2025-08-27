@@ -1,6 +1,5 @@
 ﻿using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Models;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 namespace SeniorCareManager.WebAPI.Data.Repositories
 {
@@ -10,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Data.Repositories
 
         public ManufacturerRepository(AppDbContext context) : base(context)
         {
-            this._context = context; 
+            _context = context; 
         }
     }
 }
