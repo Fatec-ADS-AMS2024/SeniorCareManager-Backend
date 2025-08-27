@@ -7,5 +7,4 @@ public interface IProductTypeService : IGenericService<ProductType, ProductTypeD
 {
     Task<bool> IsDuplicateNameAsync(string name, int id = 0);
     Task<int?> GetGroupIdIfDuplicateAsync(string name, int currentId = 0);
-    Task<bool> GroupExistsAsync(int groupId);
 }
