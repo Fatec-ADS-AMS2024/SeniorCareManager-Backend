@@ -13,8 +13,4 @@ public class ProductGroupRepository : GenericRepository<ProductGroup>,  IProduct
     {
         this._context = context;
     }
-    public async Task<bool> ExistsAsync(int id)
-    {
-        return await _context.ProductGroups.AnyAsync(pg => pg.Id == id);
-    }
 }
