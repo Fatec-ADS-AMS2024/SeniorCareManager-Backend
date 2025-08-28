@@ -2,6 +2,7 @@
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -70,6 +71,7 @@ public class PositionController: Controller
     {
         try
         {
+            Execute.Executar(positionDto);
             positionDto.Id = 0;
             await _positionService.Create(positionDto);
             _response.Code = ResponseEnum.Success;
@@ -112,6 +114,7 @@ public class PositionController: Controller
     {
         try
         {
+            Execute.Executar(positionDto);
             await _positionService.Update(positionDto, id); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo alterado com sucesso!";

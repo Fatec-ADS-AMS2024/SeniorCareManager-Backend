@@ -31,8 +31,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (positionDto is null)
                 throw new ArgumentNullException("O Cargo não pode ser nulo.");
 
-            if (PositionDTO.IsFilledString(positionDto.Name))
-                throw new ArgumentException("Nome Inválido.");
+
 
             if (await CheckDuplicates(positionDto.Name))
                 throw new InvalidOperationException("Nome duplicado.");
@@ -44,8 +43,8 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (positionDto is null)
                 throw new ArgumentNullException("O Cargo não pode ser nulo.");
 
-            if (PositionDTO.IsFilledString(positionDto.Name))
-                throw new ArgumentException("Nome Inválido.");
+            //if (PositionDTO.IsFilledString(positionDto.Name))
+                //throw new ArgumentException("Nome Inválido.");
 
             if (await CheckDuplicates(positionDto.Name))
                 throw new InvalidOperationException("Nome duplicado.");
