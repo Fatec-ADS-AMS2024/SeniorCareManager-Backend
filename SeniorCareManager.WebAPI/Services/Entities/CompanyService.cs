@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
-using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -73,8 +72,18 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (!companyDto.CheckCpfCnpj())
                 throw new ArgumentException("CNPJ inválido.");
 
-
             await base.Update(companyDto, id);
+        }
+        public async Task UpdateLogo(CompanyDTO companyDto)
+        {
+            var company = await _companyRepository.GetById(companyDto.Id);
+            if (company is null)
+                throw new KeyNotFoundException($"Empresa com o id {companyDto.Id} não foi encontrada.");
+
+            company.CompanyLogo = companyDto.CompanyLogo;
+
+            _companyRepository.Update(company);
+            await _companyRepository.SaveChanges();
         }
 
         public override async Task Remove(int id)

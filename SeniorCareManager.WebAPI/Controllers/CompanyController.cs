@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -99,6 +97,53 @@ namespace SeniorCareManager.WebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
         }
+
+        [HttpPost("{id}/upload-logo")]
+        public async Task<IActionResult> UploadLogo(int id, IFormFile logo)
+        {
+            if (logo?.Length <= 0)
+                return BadRequest(new Response
+                {
+                    Code = ResponseEnum.Invalid,
+                    Message = "Nenhuma imagem foi enviada.",
+                    Data = null
+                });
+
+            var company = await _companyService.GetById(id);
+            if (company is null)
+                return NotFound(new Response
+                {
+                    Code = ResponseEnum.NotFound,
+                    Message = "Empresa não encontrada.",
+                    Data = null
+                });
+
+            try
+            {
+                using var ms = new MemoryStream();
+                await logo.CopyToAsync(ms);
+                company.CompanyLogo = ms.ToArray();
+
+                await _companyService.UpdateLogo(company);
+
+                return Ok(new Response
+                {
+                    Code = ResponseEnum.Success,
+                    Message = "Logo da empresa atualizado com sucesso!",
+                    Data = null
+                });
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response
+                {
+                    Code = ResponseEnum.Error,
+                    Message = "Erro ao tentar atualizar o logo da empresa.",
+                    Data = null
+                });
+            }
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] CompanyDTO companyDto)

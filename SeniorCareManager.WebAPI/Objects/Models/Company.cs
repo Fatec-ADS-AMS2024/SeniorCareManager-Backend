@@ -42,11 +42,11 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         public string PostalCode { get; set; }
 
         [Column("companylogo")]
-        public string CompanyLogo { get; set; }
+        public byte[] CompanyLogo { get; set; }
 
         public Company() { }
 
-        public Company(int id, string companyName, string tradeName, string cnpj, string email, string street, string number, string district, string addressComplement, string city, string state, string postalCode, string companyLogo)
+        public Company(int id, string companyName, string tradeName, string cnpj, string email, string street, string number, string district, string addressComplement, string city, string state, string postalCode, byte[] companyLogo)
         {
             Id = id;
             CompanyName = companyName;

@@ -16,7 +16,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
-        public string CompanyLogo { get; set; }
+        public byte[] CompanyLogo { get; set; }
 
         public bool CheckName()
         {
