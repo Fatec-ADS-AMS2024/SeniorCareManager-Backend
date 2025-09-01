@@ -6,7 +6,7 @@ public class DateValidator : BaseAnnotation
 {
     public DateValidator(params object[]? parameters) : base(parameters)
     {
-        if (parameters is null || parameters.Length == 0)
+        if (parameters is null)
             throw new ArgumentNullException("Essa função precisa de parâmetros: mínimo e/ou máximo.");
     }
 
@@ -19,27 +19,29 @@ public class DateValidator : BaseAnnotation
         }
 
         DateTime? minDate = null;
-        DateTime? maxDate = null;
 
         foreach (var param in Parameters)
         {
             if (param is DateTime dt)
             {
-                if (minDate is null) minDate = dt;
-                else maxDate = dt;
+                minDate = dt;
+                break; 
+            }
+            else if (param is string str && DateTime.TryParse(str, out var parsed))
+            {
+                minDate = parsed;
+                break;
+            }
+            else
+            {
+                ReturnError("Parâmetro inválido para data mínima.");
+                return;
             }
         }
 
         if (minDate.HasValue && date < minDate.Value)
         {
             ReturnError($"A data não pode ser anterior a {minDate:dd/MM/yyyy}.");
-            return;
-        }
-
-        if (maxDate.HasValue && date > maxDate.Value)
-        {
-            ReturnError($"A data não pode ser posterior a {maxDate:dd/MM/yyyy}.");
-            return;
         }
     }
 }
