@@ -1,6 +1,5 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
