@@ -1,4 +1,5 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
@@ -7,7 +8,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public int Id { get; set; }
 
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
-        [ValidateQtdCaracters(1, 50,ErrorMessage = "O campo deve ter entre 1 e 50 caracteres.")]
+        [RemoveSpaces]
         public string Name { get; set; }
 
     }

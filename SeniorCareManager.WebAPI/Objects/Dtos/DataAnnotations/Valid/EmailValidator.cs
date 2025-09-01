@@ -1,7 +1,7 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using System.Text.RegularExpressions;
 
-namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 public class EmailValidator : BaseAnnotation
 {
     public EmailValidator(params object[]? parameters) : base(parameters)
@@ -13,20 +13,11 @@ public class EmailValidator : BaseAnnotation
     @"^[\w\.-]+@[\w\.-]+\.\w{2,}$",
     RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-    public static bool IsValid(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email)) return false;
-        return _emailRegex.IsMatch(email);
-    }
     public override void Execute()
     {
         string valor = Value?.ToString();
 
-        if (string.IsNullOrWhiteSpace(valor))
-            ReturnError("O campo não pode ser nulo ou vazio.");
-
-        if (!IsValid(valor))
+        if (!_emailRegex.IsMatch(valor))
             ReturnError("Email inválido.");
-
     }
 }

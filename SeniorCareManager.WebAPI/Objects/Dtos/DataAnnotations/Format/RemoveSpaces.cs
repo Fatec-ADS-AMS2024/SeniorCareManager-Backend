@@ -1,18 +1,17 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
-public class NullOrEmpty : BaseAnnotation
+public class RemoveSpaces : BaseAnnotation
 {
-    public NullOrEmpty(params object[]? parameters) : base(parameters)
+    public RemoveSpaces(params object[]? parameters) : base(parameters)
     {
         if (parameters is null)
             throw new ArgumentNullException("Essa funcão precisa de parâmetros");
     }
     public override void Execute()
     {
-        string valor = Value?.ToString();
+        string valor = Value?.ToString().Trim();
 
-        if (string.IsNullOrWhiteSpace(valor))
-            ReturnError("O campo não pode ser nulo ou vazio.");
+        SetValue(valor);
     }
 }
