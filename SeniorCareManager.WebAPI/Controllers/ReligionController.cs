@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -9,25 +10,35 @@ namespace SeniorCareManager.WebAPI.Controllers;
 public class ReligionController : Controller
 {
     private readonly IReligionService _religionService;
+    private readonly Response _response;
 
     public ReligionController(IReligionService service)
     {
         this._religionService = service;
+        _response = new Response();
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var religion = await _religionService.GetAll();
-
-        if (religion == null)
+        try
         {
-            return StatusCode(500, $"Nenhuma religião encontrada!");
+            var religion = await _religionService.GetAll();
+            _response.Code = ResponseEnum.Success;
+            _response.Data = religion;
+            _response.Message = "Lista de religiões!";
+            return Ok(_response);
         }
-
-        else
-            return Ok(religion);
+        catch (Exception ex) 
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
+
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -37,38 +48,87 @@ public class ReligionController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(ReligionDTO religion)
+    public async Task<IActionResult> Post(ReligionDTO religionDto)
     {
-        if (religion.Name == string.Empty)
-            return StatusCode(500, $"O nome da religião não pode ser nulo!");
-
-        if (religion.Id < 0)
-            return StatusCode(500, "O id da religião não pode ser inferior a 0!");
-
         try
         {
-            await _religionService.Create(religion);
+            religionDto.id = 0;
+            await _religionService.Create(religionDto);
+            _response.Code = ResponseEnum.Success;
+            _response.Message = "Religião cadastrada com sucesso!";
+            _response.Data = religionDto;
+
+            return Ok(_response);
         }
-        catch (Exception ex)
+        catch (ArgumentNullException ex)
         {
-            return StatusCode(500, $"Ocorreu um erro ao tentar inserir uma nova Religião! {ex}");
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return NotFound(_response);
         }
-        return Ok(religion);
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return Conflict(_response);
+        }
+        catch (Exception)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Não foi possível cadastrar a Religião.";
+            _response.Data = religionDto;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ReligionDTO religion)
+    public async Task<IActionResult> Put(int id, ReligionDTO religionDto)
     {
         try
         {
-            await _religionService.Update(religion, id);
+            await _religionService.Update(religionDto, id);
+            _response.Code = ResponseEnum.Success;
+            _response.Message = "Religião alterada com sucesso!";
+            _response.Data = religionDto;
+            return Ok(_response);
         }
-        catch (Exception ex)
+        catch (ArgumentNullException ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar a religião: " + ex.Message);
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = religionDto;
+            return NotFound(_response);
         }
-
-        return Ok(religion);
+        catch (ArgumentException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Data = religionDto;
+            _response.Message = ex.Message;
+            return BadRequest(_response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _response.Code = ResponseEnum.Conflict;
+            _response.Data = religionDto;
+            _response.Message = ex.Message;
+            return Conflict(_response);
+        }
+        catch (Exception)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Não foi possível alterar a Religião!";
+            _response.Data = religionDto;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpDelete("{id}")]
@@ -77,12 +137,25 @@ public class ReligionController : Controller
         try
         {
             await _religionService.Remove(id);
+            _response.Code = ResponseEnum.Success;
+            _response.Message = "A religião apagado com sucesso!";
+            _response.Data = null;
+            return Ok(_response);
+        }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Data = null;
+            _response.Message = ex.Message;
+            return NotFound(_response);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover a religião.");
+            _response.Code = ResponseEnum.Error;
+            _response.Message = "Erro ao tentar apagar a religião.";
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
         }
-
-        return Ok("Grupo de religião apagado com sucesso");
     }
+
 }
