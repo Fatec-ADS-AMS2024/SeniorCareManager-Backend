@@ -22,8 +22,7 @@ public class User
     [Column("userstatus")]
     public UserStatus UserStatus { get; set; }
 
-    [JsonIgnore]
-    public ICollection<Employee>? Employees { get; set; }
+
 
     public User()
     {
