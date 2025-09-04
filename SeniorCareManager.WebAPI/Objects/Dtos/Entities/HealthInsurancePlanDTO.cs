@@ -5,13 +5,15 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 public class HealthInsurancePlanDTO
 {
     public int Id { get; set; }
+
     [NullOrEmpty(ErrorMessage = "O campo tipo não pode ser nulo ou vazio.")]
     public int Type { get; set; }
-    [NullOrEmpty(ErrorMessage = "O campo tipo não pode ser nulo ou vazio.")]
-    [RemoveSpaces]
 
+    [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+    [RemoveSpaces]
     public string Name { get; set; }
-    [NullOrEmpty(ErrorMessage = "O campo nome tipo não pode ser nulo ou vazio.")]
+
+    [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
     [RemoveSpaces]
     [UpperCaracters]
     public string Abbreviation { get; set; }

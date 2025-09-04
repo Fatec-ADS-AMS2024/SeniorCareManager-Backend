@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -70,6 +71,7 @@ public class HealthInsurancePlanController : Controller
     {
         try
         {
+            Execute.Executar(healthInsurancePlanDto);
             await _healthInsurancePlanService.Create(healthInsurancePlanDto); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Plano de saúde Cadastrado com sucesso!";
@@ -111,6 +113,7 @@ public class HealthInsurancePlanController : Controller
     {
         try
         {
+            Execute.Executar(healthInsurancePlanDto);
             await _healthInsurancePlanService.Update(healthInsurancePlanDto, id); 
             _response.Code = ResponseEnum.Success;
             _response.Message = "Plano de saúde Alterado com sucesso!";

@@ -30,12 +30,6 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (healthInsurancePlanDto is null)
             throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
 
-        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Name))
-            throw new ArgumentException("Nome Inválidos");
-
-        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Abbreviation))
-            throw new ArgumentException("Abreviação Inválidos");
-
         if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
 
@@ -45,12 +39,6 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     {
         if (healthInsurancePlanDto is null)
             throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
-
-        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Name))
-            throw new ArgumentException("Nome Inválidos");
-
-        if (!HealthInsurancePlanDTO.IsFilledString(healthInsurancePlanDto.Abbreviation))
-            throw new ArgumentException("Abreviação Inválidos");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
             throw new InvalidOperationException("Nome duplicado.");
