@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+<<<<<<< HEAD
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+=======
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Models;
+>>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -66,7 +71,11 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPost]
+<<<<<<< HEAD
     public async Task<IActionResult> Post(HealthInsurancePlanDTO healthInsurancePlanDto)
+=======
+    public async Task<IActionResult> Post(HealthInsurancePlanDTO healthInsurancePlan)
+>>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
@@ -107,7 +116,11 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPut("{id}")]
+<<<<<<< HEAD
     public async Task<IActionResult> Put(int id, HealthInsurancePlanDTO healthInsurancePlanDto)
+=======
+    public async Task<IActionResult> Put(int id, HealthInsurancePlanDTO healthInsurancePlan)
+>>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
@@ -175,7 +188,11 @@ public class HealthInsurancePlanController : Controller
     }
 
     [HttpPatch("{id}")]
+<<<<<<< HEAD
     public async Task<IActionResult> Patch(int id, HealthInsurancePlanDTO healthInsurancePlanDto)
+=======
+    public async Task<IActionResult> Patch(int id, HealthInsurancePlanDTO healthInsurancePlan)
+>>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
