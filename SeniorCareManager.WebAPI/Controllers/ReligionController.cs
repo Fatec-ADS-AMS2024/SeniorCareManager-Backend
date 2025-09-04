@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -51,6 +52,7 @@ public class ReligionController : Controller
     {
         try
         {
+            Execute.Executar(religionDto);
             religionDto.id = 0;
             await _religionService.Create(religionDto);
             _response.Code = ResponseEnum.Success;
@@ -94,6 +96,7 @@ public class ReligionController : Controller
     {
         try
         {
+            Execute.Executar(religionDto);
             await _religionService.Update(religionDto, id);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Religião alterada com sucesso!";
