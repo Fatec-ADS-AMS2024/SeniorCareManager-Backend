@@ -9,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Data.Repositories
 
         public void Update(Company company)
         {
-            base.Update(company); 
+            base.Update(company);
         }
 
         public async Task SaveChanges()

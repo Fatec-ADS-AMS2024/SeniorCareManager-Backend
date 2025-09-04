@@ -3,69 +3,104 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data.Builders
 {
-    public class CompanyBuilder
+    public static class CompanyBuilder
     {
         public static void Build(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Company>().HasKey(c => c.Id);
+            var entity = modelBuilder.Entity<Company>();
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.CompanyName)
+            entity.HasKey(c => c.Id);
+
+            entity.Property(c => c.CompanyName)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.TradeName)
+            entity.Property(c => c.TradeName)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.CNPJ)
+            entity.Property(c => c.CNPJ)
                 .IsRequired()
                 .HasMaxLength(14);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.Email)
+            entity.Property(c => c.Email)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.Street)
+            entity.Property(c => c.Street)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.Number)
+            entity.Property(c => c.Number)
                 .HasMaxLength(10);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.District)
+            entity.Property(c => c.District)
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.AddressComplement)
+            entity.Property(c => c.AddressComplement)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.City)
+            entity.Property(c => c.City)
                 .HasMaxLength(50);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.State)
+            entity.Property(c => c.State)
                 .HasMaxLength(2);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.PostalCode)
+            entity.Property(c => c.PostalCode)
                 .HasMaxLength(8);
 
-            modelBuilder.Entity<Company>()
-                .Property(c => c.CompanyLogo)
-                .HasMaxLength(200);
+            // CompanyLogo agora é byte[] — não precisa de HasMaxLength
+            entity.Property(c => c.CompanyLogo)
+                .HasColumnType("BYTEA"); // PostgreSQL tipo binário
 
-            // Inserção de dados iniciais
-            modelBuilder.Entity<Company>().HasData(new List<Company>
+            entity.HasData(new List<Company>
             {
-                new Company(1, "Empresa A", "Trade A", "12345678000195", "empresa1@gmail.com", "Rua A", "123", "Bairro A", "Complemento A", "Cidade A", "SP", "12345678", "logoA.png"),
-                new Company(2, "Empresa B", "Trade B", "12345678000196", "empresa2@gmail.com", "Rua B", "456", "Bairro B", "Complemento B", "Cidade B", "RJ", "23456789", "logoB.png"),
-                new Company(3, "Empresa C", "Trade C", "12345678000197", "empresa3@gmail.com", "Rua C", "789", "Bairro C", "Complemento C", "Cidade C", "MG", "34567890", "logoC.png")
+                new Company
+                {
+                    Id = 1,
+                    CompanyName = "Empresa A",
+                    TradeName = "Trade A",
+                    CNPJ = "12345678000195",
+                    Email = "empresa1@gmail.com",
+                    Street = "Rua A",
+                    Number = "123",
+                    District = "Bairro A",
+                    AddressComplement = "Complemento A",
+                    City = "Cidade A",
+                    State = "SP",
+                    PostalCode = "12345678",
+                    CompanyLogo = null
+                },
+                new Company
+                {
+                    Id = 2,
+                    CompanyName = "Empresa B",
+                    TradeName = "Trade B",
+                    CNPJ = "12345678000196",
+                    Email = "empresa2@gmail.com",
+                    Street = "Rua B",
+                    Number = "456",
+                    District = "Bairro B",
+                    AddressComplement = "Complemento B",
+                    City = "Cidade B",
+                    State = "RJ",
+                    PostalCode = "23456789",
+                    CompanyLogo = null
+                },
+                new Company
+                {
+                    Id = 3,
+                    CompanyName = "Empresa C",
+                    TradeName = "Trade C",
+                    CNPJ = "12345678000197",
+                    Email = "empresa3@gmail.com",
+                    Street = "Rua C",
+                    Number = "789",
+                    District = "Bairro C",
+                    AddressComplement = "Complemento C",
+                    City = "Cidade C",
+                    State = "MG",
+                    PostalCode = "34567890",
+                    CompanyLogo = null
+                }
             });
         }
     }

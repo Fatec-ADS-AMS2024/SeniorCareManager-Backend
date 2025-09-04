@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -201,7 +202,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 await _companyService.Remove(id);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Empresa excluída com sucesso!";
-                _response.Data = null; 
+                _response.Data = null;
                 return Ok(_response);
             }
             catch (KeyNotFoundException ex)

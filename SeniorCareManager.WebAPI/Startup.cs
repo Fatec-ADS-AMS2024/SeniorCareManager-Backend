@@ -9,12 +9,9 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace SeniorCareManager.WebAPI;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +19,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SeniorCareManager.WebAPI.Objects.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 public class Startup
@@ -37,7 +38,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        
+
+
+        services.Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10 MB
+        });
+
         if (env == "Production")
         {
             services.AddDbContext<AppDbContext>(options =>
@@ -48,7 +55,7 @@ public class Startup
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
-        
+
         //configuração do swagger
         services.AddSwaggerGen(c =>
         {
@@ -81,7 +88,7 @@ public class Startup
                 }
             });
         });
-        
+
         //adiciona controllers e trata a serialização Json
         services.AddControllers().AddJsonOptions(options =>
         {
@@ -106,17 +113,17 @@ public class Startup
         */
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-      
+
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupService, ProductGroupService>();
         services.AddScoped<IProductTypeService, ProductTypeService>();
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
         services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
-        services.AddScoped<IManufacturerService, ManufacturerService>(); 
+        services.AddScoped<IManufacturerService, ManufacturerService>();
         services.AddScoped<ICarrierService, CarrierService>();
         services.AddScoped<IPositionService, PositionService>();
-        services.AddScoped<IReligionService,  ReligionService>();
+        services.AddScoped<IReligionService, ReligionService>();
         services.AddScoped<ICompanyService, CompanyService>();
 
         //Scoped Repositories and Interfaces repo
@@ -163,6 +170,7 @@ public class Startup
             app.UseExceptionHandler("/home/Error");
             app.UseHsts();
         }
+
 
         // app.UseHttpsRedirection();
         app.UseRouting();

@@ -84,6 +84,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             _companyRepository.Update(company);
             await _companyRepository.SaveChanges();
+            Console.WriteLine($"Tamanho da imagem recebida: {companyDto.CompanyLogo.Length} bytes");
         }
 
         public override async Task Remove(int id)

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Text;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
@@ -36,10 +35,11 @@ namespace SeniorCareManager.WebAPI.Services.Utils
         }
         public static bool CompareString(string str1, string str2)
         {
-            return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(
+                SeniorCareManager.WebAPI.Services.Utils.StringValidator.RemoveDiacritics(str1),
+                SeniorCareManager.WebAPI.Services.Utils.StringValidator.RemoveDiacritics(str2),
+                StringComparison.OrdinalIgnoreCase
+            );
         }
-
-        // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
-
     }
 }

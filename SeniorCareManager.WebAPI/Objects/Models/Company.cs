@@ -42,7 +42,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         public string PostalCode { get; set; }
 
         [Column("companylogo")]
-        public byte[] CompanyLogo { get; set; }
+        public byte[]? CompanyLogo { get; set; }
 
         public Company() { }
 

@@ -42,10 +42,11 @@ public class GenericRepository<T>: IGenericRepository<T> where T : class
         // Se a entidade já estiver sendo rastreada, desanexa
         if (trackedEntity != null)
         {
-            _context.Entry(trackedEntity.Entity).State = EntityState.Detached;
+            trackedEntity.State = EntityState.Detached;
         }
 
         // Anexa a nova entidade e marca como 'Modified'
+        _dbSet.Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
 
         // Salva as alterações no banco de dados
