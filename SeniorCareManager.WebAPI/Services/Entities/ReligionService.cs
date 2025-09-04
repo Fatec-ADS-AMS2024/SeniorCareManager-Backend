@@ -29,7 +29,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task Create(ReligionDTO religionDto)
     {
-        ReligionDTO.IsFilledString(religionDto.Name);
+       
 
         if (religionDto is null)
             throw new ArgumentNullException("A Religião não pode ser nula.");
