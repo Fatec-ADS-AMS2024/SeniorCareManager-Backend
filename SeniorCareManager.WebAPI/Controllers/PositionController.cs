@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
@@ -74,11 +67,7 @@ public class PositionController: Controller
     }
 
     [HttpPost]
-<<<<<<< HEAD
-    public async Task<IActionResult> Post(PositionDTO position)
-=======
     public async Task<IActionResult> Post(PositionDTO positionDto)
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
@@ -120,13 +109,8 @@ public class PositionController: Controller
         return Ok(_response);
     }
 
-<<<<<<< HEAD
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, PositionDTO position)
-=======
     [HttpPut("{id}")] 
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {

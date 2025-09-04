@@ -40,11 +40,7 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
 
         if (existingEntity == null)
         {
-<<<<<<< HEAD
             throw new KeyNotFoundException($"Entidade com o id: {id} não encontrado.");
-=======
-            throw new KeyNotFoundException($"Entidade com id: {id} nï¿½o encontrado.");
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
         }
 
         await _repository.Update(entity);
@@ -55,11 +51,7 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         var entity = await _repository.GetById(id);
         if (entity == null)
         {
-<<<<<<< HEAD
             throw new KeyNotFoundException($"Entidade com id: {id} não encontrado");
-=======
-            throw new KeyNotFoundException($"Entidade com id: {id} nï¿½o encontrado.");
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
         }
 
         await _repository.Remove(entity);

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-<<<<<<< HEAD
-=======
 using SeniorCareManager.WebAPI.Objects.Contracts;
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -51,11 +47,7 @@ public class ReligionController : Controller
     }
 
     [HttpPost]
-<<<<<<< HEAD
-    public async Task<IActionResult> Post(ReligionDTO religion)
-=======
     public async Task<IActionResult> Post(ReligionDTO religionDto)
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
@@ -98,11 +90,7 @@ public class ReligionController : Controller
     }
 
     [HttpPut("{id}")]
-<<<<<<< HEAD
-    public async Task<IActionResult> Put(int id, ReligionDTO religion)
-=======
     public async Task<IActionResult> Put(int id, ReligionDTO religionDto)
->>>>>>> 9acafb3e03fff0ba3a9956f0e48de3c8625b3d62
     {
         try
         {
