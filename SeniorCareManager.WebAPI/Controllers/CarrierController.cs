@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.RegularExpressions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -14,53 +13,145 @@ namespace SeniorCareManager.WebAPI.Controllers
 
         private readonly ICarrierService _carrierService;
 
-        public CarrierController(ICarrierService carrierService)
+        private readonly Response _response;
+
+        public CarrierController(ICarrierService service)
         {
-            this._carrierService = carrierService;
+            this._carrierService = service;
+            _response = new Response();
         }
+        
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var carriers = await _carrierService.GetAll();
-            return Ok(carriers);
+            try
+            {
+                var carriers = await _carrierService.GetAll();
+                _response.Code = ResponseEnum.Success;
+                _response.Data = carriers;
+                _response.Message = "Lista de transportadoras carregada com sucesso.";
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var carriers = await _carrierService.GetById(id);
-            if (carriers == null)
-                return NotFound("Transportadora não encontrada");
-            return Ok(carriers);
+            try
+            {
+                var carriers = await _carrierService.GetById(id);
+                _response.Code = ResponseEnum.Success;
+                _response.Message = "Transportadora " + carriers.TradeName + " encontrada com sucesso";
+                _response.Data = carriers;
+                return Ok(_response);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
+            }
+            catch (Exception)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = "Não foi possível consultar a transportadora.";
+                _response.Data = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CarrierDTO carrier)
+        public async Task<IActionResult> Post(CarrierDTO carrierDto)
         {
             try
             {
-                await _carrierService.Create(carrier);
+                Execute.Executar(carrierDto);
+                carrierDto.Id = 0;
+                await _carrierService.Create(carrierDto);
+                _response.Code = ResponseEnum.Success;
+                _response.Message = "Transportadora cadastrada com sucesso!";
+                _response.Data = carrierDto;
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova transportadora");
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return NotFound(_response);
             }
-            return Ok(carrier);
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return Conflict(_response);
+            }
+            catch (Exception)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = "Não foi possível cadastrar a transportadora";
+                _response.Data = carrierDto;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, CarrierDTO carrier)
+        public async Task<IActionResult> Put(int id, CarrierDTO carrierDto)
         {
             try
             {
-                await _carrierService.Update(carrier, id);
+                Execute.Executar(carrierDto);
+                await _carrierService.Update(carrierDto, id);
+                _response.Code = ResponseEnum.Success;
+                _response.Message = "Transportadora atualizada com sucesso!";
+                _response.Data = carrierDto;
             }
-            catch (Exception ex)
+            catch(ArgumentNullException ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da transportadora" + ex.Message);
+                _response.Code = ResponseEnum.NotFound;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return NotFound(_response);
             }
-            return Ok(carrier);
+            catch (ArgumentException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return BadRequest(_response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _response.Code = ResponseEnum.Conflict;
+                _response.Message = ex.Message;
+                _response.Data = carrierDto;
+                return Conflict(_response);
+            }
+            catch (Exception)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = "Não foi possível atualizar a transportadora.";
+                _response.Data = carrierDto;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
         }
 
         [HttpDelete("{id}")]
@@ -69,12 +160,24 @@ namespace SeniorCareManager.WebAPI.Controllers
             try
             {
                 await _carrierService.Remove(id);
+                _response.Code = ResponseEnum.Success;
+                _response.Message = "Transportadora removida com sucesso.";
+                _response.Data = null;
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao tentar remover uma transportadora.");
+                _response.Code = ResponseEnum.NotFound;
+                _response.Data = null;
+                _response.Message = ex.Message;
+                return NotFound(_response);
             }
-            return Ok("Transportadora removida com suceso");
+            catch (Exception)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = "Não foi possível remover a transportadora.";
+                _response.Data = null;
+            }
+            return Ok(_response);
         }
     }
 }
