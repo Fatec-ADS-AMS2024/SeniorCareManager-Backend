@@ -19,28 +19,32 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [RemoveSpaces]
         public string GenericName { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "Estoque minímo obrigatório.")]
+        [NullOrEmpty(ErrorMessage = "Estoque mínimo obrigatório.")]
         [RemoveSpaces]
-        [NumValidator(ErrorMessage = "Estoque minimo tem que ser maior que zero")]
+        [NumValidator(1, ErrorMessage = "Estoque mínimo tem que ser maior que zero")]
         public decimal MinimumStock { get; set; }
-
+ 
         [NullOrEmpty(ErrorMessage = "Quantidade atual do estoque obrigatório.")]
         [RemoveSpaces]
-        public decimal CurrentStock { get; set; }
+		[NumValidator(0, ErrorMessage = "Preço unitário não pode ser negativo")]
+		public decimal CurrentStock { get; set; }
 
         [NullOrEmpty(ErrorMessage = "Valor do estoque obrigatório.")]
         [RemoveSpaces]
-        public decimal StockValue { get; set; }
+		[NumValidator(0, ErrorMessage = "Valor do estoque não pode ser negativo")]
+		public decimal StockValue { get; set; }
 
         [NullOrEmpty(ErrorMessage = "Preço unitário obrigatório.")]
         [RemoveSpaces]
-        public decimal UnitPrice { get; set; }
+		[NumValidator(0, ErrorMessage = "Preço unitário não pode ser negativo")]
+		public decimal UnitPrice { get; set; }
 
         public decimal AverageCost { get; set; }
 
         [NullOrEmpty(ErrorMessage = "Preço da última compra obrigatório.")]
         [RemoveSpaces]
-        public decimal LastPurchasePrice { get; set; }
+		[NumValidator(0, ErrorMessage = "Preço da ultima compra não pode ser negativo")]
+		public decimal LastPurchasePrice { get; set; }
 
 
         public YesNo HighCost { get; set; }
