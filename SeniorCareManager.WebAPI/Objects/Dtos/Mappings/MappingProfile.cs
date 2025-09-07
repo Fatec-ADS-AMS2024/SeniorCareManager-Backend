@@ -9,7 +9,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ProductGroupDTO, ProductGroup>().ReverseMap();
-        CreateMap<ProductGroup, ProductGroupDTO>(); 
+        CreateMap<ProductGroup, ProductGroupDTO>();
         CreateMap<ProductTypeDTO, ProductType>().ReverseMap();
         CreateMap<ProductType, ProductTypeDTO>();
         CreateMap<PositionDTO, Position>().ReverseMap();
@@ -22,10 +22,9 @@ public class MappingProfile : Profile
         CreateMap<HealthInsurancePlan, HealthInsurancePlanDTO>();
         CreateMap<ManufacturerDTO, Manufacturer>().ReverseMap();
         CreateMap<Manufacturer, ManufacturerDTO>();
-        CreateMap<CarrierDTO, Carrier>().ReverseMap();
+        CreateMap<CarrierDTO, Carrier>().ForMember(dest => dest.Id, opt => opt.Ignore()); //Mapeamento de escrita alterado para receber o ID
         CreateMap<Carrier, CarrierDTO>();
         CreateMap<ReligionDTO, Religion>().ReverseMap();
         CreateMap<Religion, ReligionDTO>();
-
     }
 }

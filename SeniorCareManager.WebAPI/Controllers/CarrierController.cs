@@ -53,7 +53,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 _response.Data = carriers;
                 return Ok(_response);
             }
-            catch (ArgumentNullException ex)
+            catch (KeyNotFoundException ex)
             {
                 _response.Code = ResponseEnum.NotFound;
                 _response.Message = ex.Message;

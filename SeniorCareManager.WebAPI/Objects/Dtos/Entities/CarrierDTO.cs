@@ -37,9 +37,11 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public string City { get; set; }
 
         [NullOrEmpty(ErrorMessage = "Estado obrigatório")]
+        [StringLength(2, MinimumLength = 2, ErrorMessage = "O estado (UF) deve ter exatamente 2 caracteres.")]
         public string State { get; set; }
 
         [NullOrEmpty(ErrorMessage = "CEP obrigatório")]
+        [ExtractNumbers]
         public string PostalCode { get; set; }
 
         [NullOrEmpty(ErrorMessage = "Telefone obrigatório")]

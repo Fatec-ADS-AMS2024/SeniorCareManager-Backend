@@ -4,6 +4,7 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
+using System.Collections.Generic; // Adicione este using se KeyNotFoundException não for encontrado
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
@@ -21,7 +22,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var carrier = await _carrierRepository.GetById(id);
             if (carrier is null)
-                throw new ArgumentNullException("Transportadora com o id " + id + " informado não foi encontrado.");
+                throw new KeyNotFoundException("Transportadora com o id " + id + " informado não foi encontrado."); // Mudança para KeyNotFoundException é uma boa prática para "não encontrado por ID"
             return _mapper.Map<CarrierDTO>(carrier);
         }
 
@@ -29,7 +30,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             if (carrierDto is null)
                 throw new ArgumentNullException("A Transportadora não pode ser nula.");
-            
+
             if (await CheckDuplicates(carrierDto.CpfCnpj))
                 throw new InvalidOperationException("CPF/CNPJ duplicado.");
             await base.Create(carrierDto);
@@ -39,17 +40,31 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             if (carrierDto is null)
                 throw new ArgumentNullException("A Transportadora não pode ser nula.");
-            
-            if (await CheckDuplicates(carrierDto.CpfCnpj))
-                throw new InvalidOperationException("CPF/CNPJ duplicado.");
-            await base.Update(carrierDto, id);
+
+            var existingCarrier = await _carrierRepository.GetById(id);
+            if (existingCarrier is null)
+                throw new KeyNotFoundException($"Transportadora com o id {id} não foi encontrada para atualização."); // Mudança para KeyNotFoundException
+
+            //A criação do método ExistisByCpfCnpjAsync foi necessária pois o CheckDuplicates não atende a necessidade 
+            //da classe carrier, que quando era atualizada o CheckDuplicates barrava a operação devido a existência do mesmo cnpj na base de dados (a própria empresa)
+            if (await _carrierRepository.ExistsByCpfCnpjAsync(carrierDto.CpfCnpj, id))
+                throw new InvalidOperationException("O CNPJ informado já pertence a outra transportadora.");
+
+            // 1. Mapeia as propriedades do DTO para a entidade que JÁ EXISTE no banco.
+            //    Isso atualiza os campos de 'existingCarrier' sem tocar no Id.
+            _mapper.Map(carrierDto, existingCarrier);
+
+            // 2. Manda o repositório salvar a entidade que foi buscada e agora está atualizada.
+            await _repository.Update(existingCarrier);
+
+            // ========================== FIM DA CORREÇÃO ===========================
         }
 
         public override async Task Remove(int id)
         {
-            var carrier = await _carrierRepository.GetById(id);           
+            var carrier = await _carrierRepository.GetById(id);
             if (carrier is null)
-                throw new ArgumentNullException("Transportadora com o id " + id + " informado não foi encontrado.");
+                throw new KeyNotFoundException("Transportadora com o id " + id + " informado não foi encontrado."); // Mudança para KeyNotFoundException
             await base.Remove(id);
         }
 
