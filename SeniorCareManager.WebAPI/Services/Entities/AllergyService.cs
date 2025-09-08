@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Data; 
 using SeniorCareManager.WebAPI.Data.Interfaces;
-using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
+
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
@@ -14,66 +13,66 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         private readonly IAllergyRepository _allergyRepository;
         private readonly IMapper _mapper;
 
-        public AllergyService(IAllergyRepository repository, IMapper mapper) : base(repository, mapper)
+        private readonly AppDbContext _context;
+
+        public AllergyService(IAllergyRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
         {
             _allergyRepository = repository;
             _mapper = mapper;
+            _context = context;
         }
 
         public override async Task<AllergyDTO> GetById(int id)
         {
             var allergy = await _allergyRepository.GetById(id);
             if (allergy is null)
-                throw new KeyNotFoundException($"Allergy with id {id} not found.");
+                throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
+
             return _mapper.Map<AllergyDTO>(allergy);
         }
 
-        public override async Task<AllergyDTO> Create(AllergyDTO allergyDTO)
+        public override async Task Create(AllergyDTO allergyDTO)
         {
             if (allergyDTO is null)
-                throw new KeyNotFoundException("Id inválido");
+                throw new ArgumentNullException("Os dados da Alergia não podem ser nulos.");
 
-            if (!allergyDTO.CheckName())
-                throw new ArgumentException("Nome inválido.");
-
-            if (await CheckDuplicates(allergyDTO.Name))
-                throw new InvalidOperationException("Nome da alergia já existe.");
+            if (await _allergyRepository.ExistsByNameAsync(allergyDTO.Name))
+                throw new InvalidOperationException("Uma alergia com este nome já existe.");
 
             await base.Create(allergyDTO);
-            return allergyDTO;
         }
 
-        public override async Task<AllergyDTO> Update(AllergyDTO allergyDTO, int id)
+        public override async Task Update(AllergyDTO allergyDTO, int id)
         {
-            var allergies = await _allergyRepository.Get();
-            if (allergyDTO is null)
-                throw new KeyNotFoundException("Id inválido");
-            if (!allergyDTO.CheckName())
-                throw new ArgumentException("Nome inválido.");
-            if (await CheckDuplicates(allergyDTO.Name))
-                throw new InvalidOperationException("Nome da alergia já existe.");
-            await base.Update(allergyDTO, id);
-            return allergyDTO;
+            var existingEntity = await _allergyRepository.GetById(id);
+            if (existingEntity == null)
+            {
+                throw new KeyNotFoundException($"Alergia com id: {id} não encontrada para atualização.");
+            }
+
+            if (await _allergyRepository.ExistsByNameAsync(allergyDTO.Name, id))
+            {
+                throw new InvalidOperationException("O nome informado já pertence a outra alergia.");
+            }
+
+            _mapper.Map(allergyDTO, existingEntity);
+            await _allergyRepository.Update(existingEntity);
         }
 
         public override async Task Remove(int id)
         {
-            //Quando a classe ResidentAllergy for implementada, verificar se existe alguma alergia associada a este id se for o caso não permitir a remoção
-            /*var hasRelations = await _context.ResidentAllergies.AnyAsync(r => r.AllergyId == id);
-            if (hasRelations)
-                throw new InvalidOperationException("Alergia vinculada a residente. Exclusão bloqueada.");*/
-            var allergies = await _allergyRepository.GetById(id);
-            if (allergies is null)
-                throw new KeyNotFoundException("Alergia com o id " + id + " informado não foi encontrada.");
+            var allergy = await _allergyRepository.GetById(id);
+            if (allergy is null)
+                throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
+
+            /* Validação de regra de negócio: verifica se a alergia está em uso. - Classe a ser implementada ResidentAllergy
+            var isAllergyInUse = await _context.Set<ResidentAllergy>().AnyAsync(ra => ra.AllergyId == id);
+            if (isAllergyInUse)
+            {
+                throw new InvalidOperationException("Esta alergia não pode ser removida pois está vinculada a um ou mais residentes.");
+            }*/
 
             await base.Remove(id);
         }
-
-        public async Task<bool> CheckDuplicates(string name)
-        {
-            var allergies = await _allergyRepository.Get();
-            return allergies.Any(r => ValidatorString.CompareString(r.Name, name));
-        }
     }
 }
-

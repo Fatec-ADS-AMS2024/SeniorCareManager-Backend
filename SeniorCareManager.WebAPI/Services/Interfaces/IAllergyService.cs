@@ -5,6 +5,5 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
     public interface IAllergyService : IGenericService<Allergy, AllergyDTO>
     {
-        Task<bool> IsFilledString(string name);   
     }
 }
