@@ -1,4 +1,5 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 public class PhoneFormat : BaseAnnotation
@@ -8,14 +9,15 @@ public class PhoneFormat : BaseAnnotation
         if (parameters is null)
             throw new ArgumentNullException("Essa funcão precisa de parâmetros");
     }
-    public override void Execute()
+    public override FieldError? Execute()
     {
         string valor = new string(Value.ToString()?.Where(char.IsDigit).ToArray());
 
         if (valor.Length != 10 && valor.Length != 11)
-            ReturnError("Telefone inválido.");
+            return ReturnError(NameProperty, "Telefone inválido.");
         if (valor.Length == 11 && valor[2] != '9')
-            ReturnError("Número de celular inválido.");
+            return ReturnError(NameProperty, "Número de celular inválido.");
         SetValue(valor);
+        return null;
     }
 }

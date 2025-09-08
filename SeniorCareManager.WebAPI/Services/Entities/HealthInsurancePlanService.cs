@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -19,37 +21,41 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     }
     public override async Task<HealthInsurancePlanDTO> GetById(int id)
     {
+        var errors = new List<FieldError>();
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new ArgumentNullException("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionBadRequest("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<HealthInsurancePlanDTO>(healthInsurancePlan);
     }
     public override async Task Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
+        var errors = new List<FieldError>();
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
+            throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
-            throw new InvalidOperationException("Nome duplicado.");
+            throw new ExceptionConflict("Nome duplicado.");
 
         await base.Create(healthInsurancePlanDto);
     }
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {
+        var errors = new List<FieldError>();
         if (healthInsurancePlanDto is null)
-            throw new ArgumentNullException("O Plano de Saúde não pode ser nulo.");
+            throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (await CheckDuplicates(healthInsurancePlanDto))
-            throw new InvalidOperationException("Nome duplicado.");
+            throw new ExceptionConflict("Nome duplicado.");
 
         await base.Update(healthInsurancePlanDto, id);
     }
     public override async Task Remove(int id)
     {
+        var errors = new List<FieldError>();
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new ArgumentNullException("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionBadRequest("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         await base.Remove(id);
     }
