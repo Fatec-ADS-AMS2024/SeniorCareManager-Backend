@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Entities;
@@ -21,15 +22,23 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-
+            try
+            {
                 var allergies = await _allergyService.GetAll();
                 _response.Code = ResponseEnum.Success;
                 _response.Data = allergies;
                 _response.Message = "Lista de alergias!";
                 return Ok(_response);
-            
+            }
+            catch (Exception ex)
+            {
+                _response.Code = ResponseEnum.Error;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
         }
 
         [HttpGet("{id}")]
@@ -37,9 +46,11 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
-                var allergy = await _allergyService.GetById(id);
-                if (allergy == null) return NotFound("Alergia não encontrada!");
-                return Ok(allergy);
+                var allergies = await _allergyService.GetById(id);
+                _response.Code = ResponseEnum.Success;
+                _response.Message = "Alergia " + allergies.Name + " obtida com sucesso!";
+                _response.Data = allergies;
+                return Ok(_response);
             }
             catch (KeyNotFoundException ex)
             {
@@ -62,11 +73,19 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
+                Execute.Executar(allergyDTO);
                 allergyDTO.Id = 0;
                 await _allergyService.Create(allergyDTO);
                 _response.Code = ResponseEnum.Success;
                 _response.Message = "Alergia cadastrada com sucesso!";
                 _response.Data = allergyDTO;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = null;
+                return NotFound(_response);
             }
             catch (ArgumentException ex)
             {
@@ -97,10 +116,18 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
+                Execute.Executar(allergyDTO);
                 await _allergyService.Update(allergyDTO, id); ;
                 _response.Code = ResponseEnum.Success;
-                _response.Message = "Alergia alterada com sucesso!";
+                _response.Message = "Alergia atualizada com sucesso!";
                 _response.Data = allergyDTO;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _response.Code = ResponseEnum.Invalid;
+                _response.Message = ex.Message;
+                _response.Data = allergyDTO;
+                return NotFound(_response);
             }
             catch (ArgumentException ex)
             {
