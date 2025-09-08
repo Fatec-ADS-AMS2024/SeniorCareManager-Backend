@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Enums;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -25,11 +22,21 @@ public class PositionController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var position = await _positionService.GetAll();
-        _response.Code = ResponseEnum.Success;
-        _response.Data = position;
-        _response.Message = "Lista de cargos!";
-        return Ok(_response);
+        try
+        {
+            var position = await _positionService.GetAll();
+            _response.Code = ResponseEnum.Success;
+            _response.Data = position;
+            _response.Message = "Lista de cargos!";
+            return Ok(_response);
+        }
+        catch (Exception ex)
+        {
+            _response.Code = ResponseEnum.Error;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return StatusCode(StatusCodes.Status500InternalServerError, _response);
+        }
     }
 
     [HttpGet("{id}")]
@@ -43,14 +50,14 @@ public class PositionController : Controller
             _response.Data = position;
             return Ok(_response);
         }
-        catch (KeyNotFoundException ex)
+        catch (ArgumentNullException ex)
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Message = ex.Message;
             _response.Data = null;
             return NotFound(_response);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             _response.Code = ResponseEnum.Error;
             _response.Message = "Não foi possível adquirir o cargo.";
@@ -59,17 +66,24 @@ public class PositionController : Controller
         }
     }
 
-
     [HttpPost]
     public async Task<IActionResult> Post(PositionDTO positionDto)
     {
         try
         {
+            Execute.Executar(positionDto);
             positionDto.Id = 0;
             await _positionService.Create(positionDto);
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo Cadastrado com sucesso!";
             _response.Data = positionDto;
+        }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.Invalid;
+            _response.Message = ex.Message;
+            _response.Data = positionDto;
+            return NotFound(_response);
         }
         catch (ArgumentException ex)
         {
@@ -84,13 +98,6 @@ public class PositionController : Controller
             _response.Message = ex.Message;
             _response.Data = positionDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -102,15 +109,23 @@ public class PositionController : Controller
         return Ok(_response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}")] 
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
         try
         {
+            Execute.Executar(positionDto);
             await _positionService.Update(positionDto, id); ;
             _response.Code = ResponseEnum.Success;
             _response.Message = "Cargo alterado com sucesso!";
             _response.Data = positionDto;
+        }
+        catch (ArgumentNullException ex)
+        {
+            _response.Code = ResponseEnum.NotFound;
+            _response.Message = ex.Message;
+            _response.Data = null;
+            return NotFound(_response);
         }
         catch (ArgumentException ex)
         {
@@ -125,13 +140,6 @@ public class PositionController : Controller
             _response.Message = ex.Message;
             _response.Data = positionDto;
             return Conflict(_response);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return NotFound(_response);
         }
         catch (Exception ex)
         {
@@ -153,7 +161,7 @@ public class PositionController : Controller
             _response.Message = "Grupo de cargo apagado com sucesso!";
             _response.Data = null;
         }
-        catch (KeyNotFoundException ex)
+        catch (KeyNotFoundException ex) 
         {
             _response.Code = ResponseEnum.NotFound;
             _response.Data = null;

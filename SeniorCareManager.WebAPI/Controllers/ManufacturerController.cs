@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -35,6 +37,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             try
             {
+                Execute.Executar(manufacturer);
                 await _manufacturerService.Create(manufacturer);
             }
             catch (Exception)
