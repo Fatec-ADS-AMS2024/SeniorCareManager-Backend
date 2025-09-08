@@ -5,7 +5,6 @@ using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
-
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
     public class CompanyService : GenericService<Company, CompanyDTO>, ICompanyService
@@ -23,7 +22,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var company = await _companyRepository.GetById(id);
             if (company is null)
-                throw new KeyNotFoundException("Empresa com o id " + id + " informado não foi encontrada.");
+                throw new KeyNotFoundException($"Empresa com o id {id} informado não foi encontrada.");
 
             return _mapper.Map<CompanyDTO>(company);
         }
@@ -37,7 +36,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
 
             if (!companyDto.CheckName())
-                throw new ArgumentException("Nome Inválido.");
+                throw new ArgumentException("Nome inválido.");
 
             if (!companyDto.CheckEmail())
                 throw new ArgumentException("Email inválido.");
@@ -48,11 +47,11 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (!companyDto.CheckPostalCode())
                 throw new ArgumentException("Código Postal inválido.");
 
-
             if (await _companyRepository.GetById(companyDto.Id) is not null)
-                return; // Se já existe uma empresa com esse ID, apenas continua
+                return;
 
             await base.Create(companyDto);
+            await _companyRepository.SaveChanges();
         }
 
         public override async Task Update(CompanyDTO companyDto, int id)
@@ -64,7 +63,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
 
             if (!companyDto.CheckName())
-                throw new ArgumentException("Nome Inválido.");
+                throw new ArgumentException("Nome inválido.");
 
             if (!companyDto.CheckEmail())
                 throw new ArgumentException("Email inválido.");
@@ -74,33 +73,64 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             await base.Update(companyDto, id);
         }
-        public async Task UpdateLogo(CompanyDTO companyDto)
+
+        public async Task UpdateLogo(CompanyLogoDTO dto)
         {
-            var company = await _companyRepository.GetById(companyDto.Id);
+            if (dto is null || dto.CompanyLogo == null || dto.CompanyLogo.Length == 0)
+                throw new ArgumentException("Logo inválido ou vazio.");
+
+            Company company;
+
+            try
+            {
+                company = await _companyRepository.GetById(dto.Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao buscar empresa: {ex.Message}");
+                throw;
+            }
+
             if (company is null)
-                throw new KeyNotFoundException($"Empresa com o id {companyDto.Id} não foi encontrada.");
+                throw new KeyNotFoundException($"Empresa com o id {dto.Id} não foi encontrada.");
 
-            company.CompanyLogo = companyDto.CompanyLogo;
+            company.CompanyLogo = dto.CompanyLogo;
+            company.CompanyLogoMimeType = dto.CompanyLogoMimeType ?? "image/png";
 
-            _companyRepository.Update(company);
-            await _companyRepository.SaveChanges();
-            Console.WriteLine($"Tamanho da imagem recebida: {companyDto.CompanyLogo.Length} bytes");
+            try
+            {
+                await _companyRepository.Update(company); // já salva internamente
+                Console.WriteLine($"Logo atualizado: {dto.CompanyLogo.Length} bytes | Tipo: {company.CompanyLogoMimeType}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Erro de concorrência no DbContext: {ex.Message}");
+                throw new Exception("Erro interno ao salvar o logo. Tente novamente.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro inesperado ao atualizar logo: {ex.Message}");
+                throw;
+            }
         }
+
+
 
         public override async Task Remove(int id)
         {
             var company = await _companyRepository.GetById(id);
             if (company is null)
-                throw new KeyNotFoundException("Empresa com o id " + id + " informado não foi encontrada.");
+                throw new KeyNotFoundException($"Empresa com o id {id} informado não foi encontrada.");
 
             await base.Remove(id);
         }
+
         public async Task<bool> CheckDuplicates(CompanyDTO dto)
         {
             var companies = await _companyRepository.Get();
             return companies.Any(m => m.Id != dto.Id &&
                 (StringValidator.CompareString(m.CompanyName, dto.CompanyName) ||
-                StringValidator.CompareString(m.TradeName, dto.TradeName)));
+                 StringValidator.CompareString(m.TradeName, dto.TradeName)));
         }
     }
 }

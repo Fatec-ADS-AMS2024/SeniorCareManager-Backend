@@ -110,7 +110,22 @@ namespace SeniorCareManager.WebAPI.Controllers
                     Data = null
                 });
 
-            var company = await _companyService.GetById(id);
+            CompanyDTO company;
+
+            try
+            {
+                company = await _companyService.GetById(id); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response
+                {
+                    Code = ResponseEnum.Error,
+                    Message = $"Erro ao buscar empresa: {ex.Message}",
+                    Data = null
+                });
+            }
+
             if (company is null)
                 return NotFound(new Response
                 {
@@ -123,9 +138,15 @@ namespace SeniorCareManager.WebAPI.Controllers
             {
                 using var ms = new MemoryStream();
                 await logo.CopyToAsync(ms);
-                company.CompanyLogo = ms.ToArray();
 
-                await _companyService.UpdateLogo(company);
+                var logoDto = new CompanyLogoDTO
+                {
+                    Id = company.Id,
+                    CompanyLogo = ms.ToArray(),
+                    CompanyLogoMimeType = logo.ContentType
+                };
+
+                await _companyService.UpdateLogo(logoDto); 
 
                 return Ok(new Response
                 {
@@ -134,17 +155,43 @@ namespace SeniorCareManager.WebAPI.Controllers
                     Data = null
                 });
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response
                 {
                     Code = ResponseEnum.Error,
-                    Message = "Erro ao tentar atualizar o logo da empresa.",
+                    Message = $"Erro ao atualizar logo: {ex.Message}",
                     Data = null
                 });
             }
         }
 
+
+        [HttpGet("{id}/logo-base64")]
+        public async Task<IActionResult> GetCompanyLogoBase64(int id)
+        {
+            var company = await _companyService.GetById(id);
+            if (company == null || company.CompanyLogo == null)
+            {
+                return NotFound(new Response
+                {
+                    Code = ResponseEnum.NotFound,
+                    Message = "Logo não encontrado.",
+                    Data = null
+                });
+            }
+
+            var base64 = Convert.ToBase64String(company.CompanyLogo);
+            var mimeType = "image/png"; // ou o tipo real
+            var dataUrl = $"data:{mimeType};base64,{base64}";
+
+            return Ok(new Response
+            {
+                Code = ResponseEnum.Success,
+                Message = "Logo obtido com sucesso.",
+                Data = dataUrl
+            });
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] CompanyDTO companyDto)

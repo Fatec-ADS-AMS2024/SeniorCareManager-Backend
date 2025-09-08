@@ -3,7 +3,7 @@ using SeniorCareManager.WebAPI.Data.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Data.Repositories;
 
-public class GenericRepository<T>: IGenericRepository<T> where T : class
+public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly AppDbContext _context;
     private readonly DbSet<T> _dbSet;
@@ -13,7 +13,7 @@ public class GenericRepository<T>: IGenericRepository<T> where T : class
         this._context = context;
         this._dbSet = _context.Set<T>();
     }
-    
+
     public async Task<IEnumerable<T>> Get()
     {
         return await _dbSet.ToListAsync();
@@ -42,11 +42,10 @@ public class GenericRepository<T>: IGenericRepository<T> where T : class
         // Se a entidade já estiver sendo rastreada, desanexa
         if (trackedEntity != null)
         {
-            trackedEntity.State = EntityState.Detached;
+            _context.Entry(trackedEntity.Entity).State = EntityState.Detached;
         }
 
         // Anexa a nova entidade e marca como 'Modified'
-        _dbSet.Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
 
         // Salva as alterações no banco de dados

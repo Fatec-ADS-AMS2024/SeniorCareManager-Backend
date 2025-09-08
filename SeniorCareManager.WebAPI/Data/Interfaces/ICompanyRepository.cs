@@ -4,8 +4,5 @@ namespace SeniorCareManager.WebAPI.Data.Interfaces
 {
     public interface ICompanyRepository : IGenericRepository<Company>
     {
-        void Update(Company company);
-        Task SaveChanges();
-
     }
 }
