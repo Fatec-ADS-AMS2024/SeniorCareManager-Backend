@@ -36,7 +36,7 @@ namespace SeniorCareManager.WebAPI.Services.Utils
         }
         public static bool CompareString(string str1, string str2)
         {
-            return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
         }
         // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
 
