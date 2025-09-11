@@ -74,7 +74,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             await base.Update(companyDto, id);
         }
 
-        public async Task UpdateLogo(CompanyLogoDTO dto)
+        public async Task UpdateLogo(CompanyDTO dto)
         {
             if (dto is null || dto.CompanyLogo == null || dto.CompanyLogo.Length == 0)
                 throw new ArgumentException("Logo inválido ou vazio.");
@@ -95,12 +95,11 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new KeyNotFoundException($"Empresa com o id {dto.Id} não foi encontrada.");
 
             company.CompanyLogo = dto.CompanyLogo;
-            company.CompanyLogoMimeType = dto.CompanyLogoMimeType ?? "image/png";
 
             try
             {
                 await _companyRepository.Update(company); // já salva internamente
-                Console.WriteLine($"Logo atualizado: {dto.CompanyLogo.Length} bytes | Tipo: {company.CompanyLogoMimeType}");
+                Console.WriteLine($"Logo atualizado: {dto.CompanyLogo.Length} bytes");
             }
             catch (InvalidOperationException ex)
             {

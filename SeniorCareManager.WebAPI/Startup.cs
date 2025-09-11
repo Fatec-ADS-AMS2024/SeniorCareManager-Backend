@@ -39,12 +39,6 @@ public class Startup
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-
-        services.Configure<FormOptions>(options =>
-        {
-            options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10 MB
-        });
-
         if (env == "Production")
         {
             services.AddDbContext<AppDbContext>(options =>

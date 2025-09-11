@@ -139,14 +139,13 @@ namespace SeniorCareManager.WebAPI.Controllers
                 using var ms = new MemoryStream();
                 await logo.CopyToAsync(ms);
 
-                var logoDto = new CompanyLogoDTO
+                var Dto = new CompanyDTO
                 {
                     Id = company.Id,
                     CompanyLogo = ms.ToArray(),
-                    CompanyLogoMimeType = logo.ContentType
                 };
 
-                await _companyService.UpdateLogo(logoDto); 
+                await _companyService.UpdateLogo(Dto); 
 
                 return Ok(new Response
                 {

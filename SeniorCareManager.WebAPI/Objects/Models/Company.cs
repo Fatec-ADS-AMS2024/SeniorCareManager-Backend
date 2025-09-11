@@ -44,12 +44,9 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("companylogo")]
         public byte[]? CompanyLogo { get; set; }
 
-        [Column("companylogomimetype")]
-        public string? CompanyLogoMimeType { get; set; }
-
         public Company() { }
 
-        public Company(int id, string companyName, string tradeName, string cnpj, string email, string street, string number, string district, string addressComplement, string city, string state, string postalCode, byte[] companyLogo, string? companyLogoMimeType)
+        public Company(int id, string companyName, string tradeName, string cnpj, string email, string street, string number, string district, string addressComplement, string city, string state, string postalCode, byte[] companyLogo)
         {
             Id = id;
             CompanyName = companyName;
@@ -64,7 +61,6 @@ namespace SeniorCareManager.WebAPI.Objects.Models
             State = state;
             PostalCode = postalCode;
             CompanyLogo = companyLogo;
-            CompanyLogoMimeType = companyLogoMimeType;
         }
     }
 }
