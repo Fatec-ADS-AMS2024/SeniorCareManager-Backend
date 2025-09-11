@@ -10,13 +10,22 @@ public static class UserBuilder
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).HasColumnName("id").ValueGeneratedOnAdd();
-            entity.Property(e => e.Email).HasColumnName("email").IsRequired().HasMaxLength(255);
-            entity.Property(e => e.Password).HasColumnName("password").IsRequired().HasMaxLength(255);
-            entity.Property(e => e.UserType).HasColumnName("usertype").IsRequired();
-            entity.Property(e => e.UserStatus).HasColumnName("userstatus").IsRequired();
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Password).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.UserType).IsRequired();
+            entity.Property(e => e.UserStatus).IsRequired();
             
             entity.HasIndex(e => e.Email).IsUnique();
+
+            entity.HasData(new User
+            {
+                Id = 1,
+                Email = "admin@123.com",
+                Password = "123456",
+                UserType = Objects.Enums.UserType.ADMIN,
+                UserStatus = Objects.Enums.UserStatus.ACTIVE
+            });
         });
     }
 }

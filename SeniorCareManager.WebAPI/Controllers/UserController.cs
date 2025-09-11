@@ -21,19 +21,11 @@ public class UserController : Controller
         var users = await _userService.GetAll();
         return Ok(users);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _userService.GetById(id);
-        if (user == null) return NotFound("Usuário não encontrado!");
-        return Ok(user);
-    }
-    
-    [HttpGet("email/{email}")]
-    public async Task<IActionResult> GetByEmail(string email)
-    {
-        var user = await _userService.GetByEmail(email);
         if (user == null) return NotFound("Usuário não encontrado!");
         return Ok(user);
     }
@@ -79,20 +71,5 @@ public class UserController : Controller
         }
 
         return Ok("Usuário apagado com sucesso");
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, UserDTO user)
-    {
-        try
-        {
-            await _userService.Update(user, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o usuário.");
-        }
-        
-        return Ok(user);
     }
 }
