@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -22,61 +21,45 @@ public class PositionController: Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var position = await _positionService.GetAll();
-        return Ok(position);
+        var positions = await _positionService.GetAll();
+        return Response<IEnumerable<PositionDTO>>.Ok(positions, "Lista de Position obtidas com sucesso!");
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var position = await _positionService.GetById(id);
-        if (position == null) return NotFound("Cargo não encontrado!");
-        return Ok(position);
+        
+        return Response<PositionDTO>.Ok(position, "Position obtido com sucesso!");
+    
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(PositionDTO position)
+    public async Task<IActionResult> Post(PositionDTO positionDto)
     {
-        try
-        {
-            await _positionService.Create(position);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo cargo.");
-        }
-        return Ok(position);
+        Execute.Executar(positionDto);
+        positionDto.Id = 0;
+        await _positionService.Create(positionDto);
+
+        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!"); 
+
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, PositionDTO position)
+    [HttpPut("{id}")] 
+    public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
-        try
-        {
-            await _positionService.Update(position, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o cargo: " + ex.Message);
-        }
+        Execute.Executar(positionDto);
+        await _positionService.Update(positionDto, id); ;
 
-        return Ok(position);
+        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!"); 
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _positionService.Remove(id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o cargo.");
-        }
 
-        return Ok("cargo apagado com sucesso");
+        await _positionService.Remove(id);
+
+        return Response<object>.NoContent("Grupo de cargo apagado com sucesso!");
     }
-
-
 }

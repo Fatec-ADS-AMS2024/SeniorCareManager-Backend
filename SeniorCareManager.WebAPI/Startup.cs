@@ -11,18 +11,13 @@ namespace SeniorCareManager.WebAPI;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SeniorCareManager.WebAPI.Objects.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+
 
 
 public class Startup
@@ -84,10 +79,13 @@ public class Startup
         });
 
         //adiciona controllers e trata a serialização Json
-        services.AddControllers().AddJsonOptions(options =>
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<HttpExceptionFilter>();
+        }).AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-            options.JsonSerializerOptions.WriteIndented = true; // Opcional, apenas para melhor legibilidade
+            options.JsonSerializerOptions.WriteIndented = true;
         });
 
         services.AddCors(o => o.AddPolicy("MyPolicy", builder =>

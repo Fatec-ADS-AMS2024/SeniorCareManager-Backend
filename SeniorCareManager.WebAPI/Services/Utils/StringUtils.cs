@@ -5,7 +5,6 @@ namespace SeniorCareManager.WebAPI.Services.Utils
 {
     public static class StringUtils
     {
-        //Deixa os nomes iguais para depois ver se tem duplicados
         public static string RemoveDiacritics(this string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -25,21 +24,10 @@ namespace SeniorCareManager.WebAPI.Services.Utils
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
-
-        public static string ExtractNumbers(this string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                return string.Empty;
-
-            return new string(text.Where(char.IsDigit).ToArray());
-        }
         public static bool CompareString(string str1, string str2)
         {
-            return string.Equals(
-                SeniorCareManager.WebAPI.Services.Utils.StringUtils.RemoveDiacritics(str1),
-                SeniorCareManager.WebAPI.Services.Utils.StringUtils.RemoveDiacritics(str2),
-                StringComparison.OrdinalIgnoreCase
-            );
+            return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
         }
+
     }
 }
