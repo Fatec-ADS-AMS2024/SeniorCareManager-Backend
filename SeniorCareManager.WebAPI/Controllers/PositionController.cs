@@ -9,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class PositionController: Controller
+public class PositionController : Controller
 {
     private readonly IPositionService _positionService;
 
@@ -29,9 +29,9 @@ public class PositionController: Controller
     public async Task<IActionResult> GetById(int id)
     {
         var position = await _positionService.GetById(id);
-        
+
         return Response<PositionDTO>.Ok(position, "Position obtido com sucesso!");
-    
+
     }
 
     [HttpPost]
@@ -41,17 +41,17 @@ public class PositionController: Controller
         positionDto.Id = 0;
         await _positionService.Create(positionDto);
 
-        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!"); 
+        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!");
 
     }
 
-    [HttpPut("{id}")] 
+    [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
         Execute.Executar(positionDto);
         await _positionService.Update(positionDto, id); ;
 
-        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!"); 
+        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!");
     }
 
     [HttpDelete("{id}")]
@@ -59,7 +59,6 @@ public class PositionController: Controller
     {
 
         await _positionService.Remove(id);
-
-        return Response<object>.NoContent("Grupo de cargo apagado com sucesso!");
+        return Response<object>.Ok(null, "Grupo de cargo apagado com sucesso!");
     }
 }

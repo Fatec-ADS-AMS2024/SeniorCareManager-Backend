@@ -34,7 +34,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (healthInsurancePlanDto is null)
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
-        if (await CheckDuplicates(healthInsurancePlanDto))
+        if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Nome duplicado.");
 
         await base.Create(healthInsurancePlanDto);
@@ -45,8 +45,14 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (healthInsurancePlanDto is null)
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
-        if (await CheckDuplicates(healthInsurancePlanDto))
-            throw new ExceptionConflict("Nome duplicado.");
+        if (healthInsurancePlanDto.Id != id)
+            throw new ExceptionBadRequest("O id de Plano de Saúde dever ser o mesmo.");
+
+        if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
+            errors.Add(new FieldError { Field = "Nome", Message = "Nome duplicado." });
+
+        if (errors.Count() > 0)
+            throw new ExceptionBadRequest("Erros na requisição", errors);
 
         await base.Update(healthInsurancePlanDto, id);
     }
@@ -59,10 +65,13 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
 
         await base.Remove(id);
     }
-    public async Task<bool> CheckDuplicates(HealthInsurancePlanDTO dto)
+    public async Task<bool> CheckDuplicates(Func<HealthInsurancePlan, string?> selector, string? valor, int idIgnor)
     {
-        var plans = await _healthInsurancePlanRepository.Get();
-        return plans.Any(p =>(p.Id != dto.Id) &&(StringUtils.CompareString(p.Name, dto.Name)));
+        var planos = await _healthInsurancePlanRepository.Get();
+        return planos.Any(p =>
+            p.Id != idIgnor &&
+            StringUtils.CompareString(selector(p)!, valor)
+        );
     }
 
 }
