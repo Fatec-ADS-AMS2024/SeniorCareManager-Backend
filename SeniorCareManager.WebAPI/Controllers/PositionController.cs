@@ -59,7 +59,6 @@ public class PositionController : Controller
     {
 
         await _positionService.Remove(id);
-
-        return Response<object>.NoContent("Grupo de cargo apagado com sucesso!");
+        return Response<object>.Ok(null, "Grupo de cargo apagado com sucesso!");
     }
 }
