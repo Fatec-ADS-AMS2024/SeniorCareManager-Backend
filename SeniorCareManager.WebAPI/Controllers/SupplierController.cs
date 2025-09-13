@@ -58,7 +58,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _supplierService.Remove(id);
-            return Response<object>.NoContent("O fornecedor foi apagado com sucesso!");
+            return Response<object>.Ok(null, "O fornecedor foi apagado com sucesso!");
         }
     }
 }
