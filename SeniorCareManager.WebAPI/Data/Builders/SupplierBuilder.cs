@@ -60,7 +60,7 @@ public class SupplierBuilder
         modelBuilder.Entity<Supplier>()
            .HasData(new List<Supplier>
            {
-                new Supplier(1, "COLA COCA","COCA","25940984000111","cocafornecedora.com","1745458080", "15600088", "Avenida Afonso Cáfaro", "850", "Centro", "Avenida", "Fernandópolis", "SP")
+                new Supplier(1, "COLA COCA","COCA","25940984000111","cocafornecedora@gmail.com","1745458080", "15600088", "Avenida Afonso Cáfaro", "850", "Centro", "Avenida", "Fernandópolis", "SP")
            });
     }
 }
