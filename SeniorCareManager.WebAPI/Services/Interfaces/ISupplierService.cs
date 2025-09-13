@@ -6,6 +6,7 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
 public interface ISupplierService : IGenericService<Supplier, SupplierDTO>
 {
-    Task<bool> ExistsByCpfCnpj(string cpfCnpj, int? excludeId = null);
-    Task<bool> ExistsByCorporateName(string corporateName, int? excludeId = null);
+    public interface ISupplierService : IGenericService<Supplier, SupplierDTO>
+    {
+    }
 }

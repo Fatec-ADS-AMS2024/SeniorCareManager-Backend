@@ -35,33 +35,33 @@ public class CarrierController : Controller
         return Ok(carriers);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Post(CarrierDTO carrier)
-    {
-        try
+        [HttpPost]
+        public async Task<IActionResult> Post(CarrierDTO carrier)
         {
-            await _carrierService.Create(carrier);
+            try
+            {
+                await _carrierService.Create(carrier);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova transportadora");
+            }
+            return Ok(carrier);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova transportadora");
-        }
-        return Ok(carrier);
-    }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, CarrierDTO carrier)
-    {
-        try
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, CarrierDTO carrier)
         {
-            await _carrierService.Update(carrier, id);
+            try
+            {
+                await _carrierService.Update(carrier, id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da transportadora" + ex.Message);
+            }
+            return Ok(carrier);
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da transportadora" + ex.Message);
-        }
-        return Ok(carrier);
-    }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

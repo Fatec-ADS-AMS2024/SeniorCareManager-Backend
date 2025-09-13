@@ -1,83 +1,65 @@
-﻿using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
-namespace SeniorCareManager.WebAPI.Objects.Dtos
+namespace SeniorCareManager.WebAPI.Objects.Dtos;
+public class SupplierDTO
 {
-    public class SupplierDTO
-    {
-        public int Id { get; set; }
-        public string CorporateName { get; set; }
-        public string TradeName { get; set; }
-        public string CpfCnpj { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string PostalCode { get; set; }
-        public string Street { get; set; }
-        public string Number { get; set; }
-        public string District { get; set; }
-        public string AddressComplement { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+    public int Id { get; set; }
 
-        public async Task<(bool IsValid, string ErrorMessage)> ValidateAsync(ISupplierService service, bool isUpdate = false)
-        {
-            CpfCnpj = StringValidator.ExtractNumbers(CpfCnpj);
-            Phone = StringValidator.ExtractNumbers(Phone);
+    [NullOrEmpty(ErrorMessage = "Nome corporativo obrigatório.")]
+    [RemoveSpaces]
+    public string CorporateName { get; set; }
 
-            if (await service.ExistsByCpfCnpj(CpfCnpj, isUpdate ? Id : null))
-                return (false, "Já existe um fornecedor com este CPF/CNPJ.");
+    [NullOrEmpty(ErrorMessage = "Nome comercial obrigatório.")]
+    [RemoveSpaces]
+    public string TradeName { get; set; }
 
-            if (await service.ExistsByCorporateName(CorporateName, isUpdate ? Id : null))
-                return (false, "Já existe um fornecedor com esta razão social.");
+    [NullOrEmpty(ErrorMessage = "CPF ou CNPJ obrigatório.")]
+    [CpfCnpjFormat]
+    [ExtractNumbers]
+    [RemoveSpaces]
+    public string CpfCnpj { get; set; }
 
-            if (string.IsNullOrWhiteSpace(CorporateName))
-                return (false, "A razão social do fornecedor é obrigatória.");
+    [NullOrEmpty(ErrorMessage = "E-mail obrigatório.")]
+    [EmailValidator(ErrorMessage = "E-mail inválido.")]
+    [RemoveSpaces]
+    public string Email { get; set; }
 
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(TradeName))
-                return (false, "O nome fantasia deve conter apenas letras e espaços.");
+    [NullOrEmpty(ErrorMessage = "Telefone obrigatório.")]
+    [PhoneFormat]
+    [ExtractNumbers]
+    [RemoveSpaces]
+    public string Phone { get; set; }
 
-            if (!EmailValidator.IsValid(Email))
-                return (false, "O e-mail informado é inválido.");
+    [NullOrEmpty(ErrorMessage = "CEP obrigatório.")]
+    [ExtractNumbers]
+    [RemoveSpaces]
+    public string PostalCode { get; set; }
 
-            if (!PhoneValidator.IsValidPhoneNumber(Phone))
-                return (false, "O telefone informado é inválido. Deve conter DDD e ter 10 ou 11 dígitos.");
+    [NullOrEmpty(ErrorMessage = "Rua obrigatória.")]
+    [RemoveSpaces]
+    public string Street { get; set; }
 
-            if (!CpfCnpjValidator.IsValidCNPJ(CpfCnpj))
-                return (false, "O CPF ou CNPJ informado é inválido.");
+    [NullOrEmpty(ErrorMessage = "Número obrigatório.")]
+    [RemoveSpaces]
+    public string Number { get; set; }
 
-            if (string.IsNullOrWhiteSpace(PostalCode) || !StringValidator.IsNumeric(PostalCode) || PostalCode.Length != 8)
-                return (false, "O CEP informado é inválido. Deve conter exatamente 8 números.");
+    [NullOrEmpty(ErrorMessage = "Bairro obrigatório.")]
+    [RemoveSpaces]
+    public string District { get; set; }
 
-            if (string.IsNullOrWhiteSpace(Street))
-                return (false, "O nome da rua é obrigatório.");
+    [RemoveSpaces]
+    public string AddressComplement { get; set; }
 
-            if (string.IsNullOrWhiteSpace(Number))
-                return (false, "O número do endereço é obrigatório.");
+    [NullOrEmpty(ErrorMessage = "Cidade obrigatória.")]
+    [RemoveSpaces]
+    public string City { get; set; }
 
-            if (!StringValidator.ContainsOnlyLettersNumbersSpaces(Number))
-                return (false, "O número do endereço deve conter apenas letras, números e espaços.");
-
-            if (string.IsNullOrWhiteSpace(AddressComplement))
-                return (false, "O complemento do endereço é obrigatório.");
-
-            if (string.IsNullOrWhiteSpace(District))
-                return (false, "O bairro é obrigatório.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(District))
-                return (false, "O bairro deve conter apenas letras e espaços.");
-
-            if (string.IsNullOrWhiteSpace(City))
-                return (false, "A cidade é obrigatória.");
-
-            if (!StringValidator.ContainsOnlyLettersAndSpaces(City))
-                return (false, "A cidade deve conter apenas letras e espaços.");
-
-            if (!StringValidator.IsValidUF(State))
-                return (false, "O estado informado é inválido.");
-
-            return (true, null);
-        }
-    }
+    [NullOrEmpty(ErrorMessage = "Estado obrigatório.")]
+    [RemoveSpaces]
+    [UpperCaracters]
+    [UfValidator]
+    public string State { get; set; }
 }
+

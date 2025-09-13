@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos;
+using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using System;
-using System.Threading.Tasks;
+using SeniorCareManager.WebAPI.Services.Entities;
+using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -12,96 +17,48 @@ namespace SeniorCareManager.WebAPI.Controllers
     {
         private readonly ISupplierService _supplierService;
 
-        public SupplierController(ISupplierService supplierService)
+        public SupplierController(ISupplierService service)
         {
-            _supplierService = supplierService;
+            this._supplierService = service;
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            try
-            {
-                var suppliers = await _supplierService.GetAll();
-                return Ok(suppliers);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao buscar fornecedores: {ex.Message}");
-            }
+            var suppliers = await _supplierService.GetAll();
+            return Response<object>.Ok(suppliers, "Lista de Fornecedores!");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var supplier = await _supplierService.GetById(id);
-                if (supplier == null)
-                    return NotFound("Fornecedor não encontrado.");
-
-                return Ok(supplier);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao buscar fornecedor: {ex.Message}");
-            }
+            var suppliers = await _supplierService.GetById(id);
+            return Response<object>.Ok(suppliers, "Fornecedores encontrados!");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(SupplierDTO supplier)
+        public async Task<IActionResult> Post([FromBody] SupplierDTO supplierDto)
         {
-            var (isValid, errorMessage) = await supplier.ValidateAsync(_supplierService);
-            if (!isValid)
-                return BadRequest(errorMessage);
-
-            try
-            {
-                await _supplierService.Create(supplier);
-                return Ok(supplier);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao inserir fornecedor: {ex.Message}");
-            }
+            supplierDto.Id = 0;
+            Execute.Executar(supplierDto);
+            await _supplierService.Create(supplierDto);
+            return Response<object>.Created(supplierDto, "Fornecedor cadastrado com sucesso!");
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, SupplierDTO supplier)
+        public async Task<IActionResult> Put(int id, [FromBody] SupplierDTO supplierDto)
         {
-            supplier.Id = id;
-
-            var (isValid, errorMessage) = await supplier.ValidateAsync(_supplierService, isUpdate: true);
-            if (!isValid)
-                return BadRequest(errorMessage);
-
-            try
-            {
-                await _supplierService.Update(supplier, id);
-                return Ok(supplier);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao atualizar fornecedor: {ex.Message}");
-            }
+            await _supplierService.Update(supplierDto, id);
+            Execute.Executar(supplierDto);
+            return Response<object>.Ok(supplierDto, "Fornecedor alterada com sucesso!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var supplier = await _supplierService.GetById(id);
-                if (supplier == null)
-                    return NotFound("Fornecedor não encontrado.");
-
-                await _supplierService.Remove(id);
-                return Ok("Fornecedor deletado com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao deletar fornecedor: {ex.Message}");
-            }
+            await _supplierService.Remove(id);
+            return Response<object>.NoContent("O fornecedor foi apagado com sucesso!");
         }
     }
 }

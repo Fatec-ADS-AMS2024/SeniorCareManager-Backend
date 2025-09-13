@@ -59,7 +59,7 @@ public class ProductTypeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ProductTypeDTO productType)
+    public async Task<IActionResult> Post(ProductTypeDTO productType)
     {
         if (string.IsNullOrWhiteSpace(productType.Name))
         {
@@ -79,7 +79,7 @@ public class ProductTypeController : Controller
 
         var existingTypes = await _productTypeService.GetAll();
         var hasDuplicate = existingTypes.Any(pt =>
-            StringValidator.CompareString(pt.Name, productType.Name));
+            StringUtils.CompareString(pt.Name, productType.Name));
 
         if (hasDuplicate)
         {
@@ -108,36 +108,8 @@ public class ProductTypeController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, [FromBody] ProductTypeDTO productType)
+    public async Task<IActionResult> Put(int id, ProductTypeDTO productType)
     {
-        if (string.IsNullOrWhiteSpace(productType.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'Name' é obrigatório.";
-            _response.Data = productType;
-            return BadRequest(_response);
-        }
-
-        if (productType.ProductGroupId <= 0)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'ProductGroupId' é obrigatório e deve ser maior que zero.";
-            _response.Data = productType;
-            return BadRequest(_response);
-        }
-
-        var existingTypes = await _productTypeService.GetAll();
-        var hasDuplicate = existingTypes.Any(pt =>
-            pt.Id != id && StringValidator.CompareString(pt.Name, productType.Name));
-
-        if (hasDuplicate)
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Message = "Já existe um tipo de produto com esse nome.";
-            _response.Data = productType;
-            return Conflict(_response);
-        }
-
         try
         {
             await _productTypeService.Update(productType, id);
@@ -185,8 +157,17 @@ public class ProductTypeController : Controller
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, [FromBody] ProductTypeDTO productType)
+    public async Task<IActionResult> Patch(int id, ProductTypeDTO productType)
     {
-        return await Put(id, productType);
+        try
+        {
+            await _productTypeService.Update(productType, id);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo do produto.");
+        }
+        
+        return Ok(productType);
     }
 }
