@@ -8,6 +8,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
@@ -37,8 +38,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (supplierDto is null)
                 throw new ExceptionBadRequest("O Fornecedor não pode ser nulo.");
 
-            if (await CheckDuplicates(supplierDto.CorporateName))
-                throw new ExceptionConflict("Nome já existente.");
+            if (await CheckDuplicates(p => p.CorporateName, supplierDto.CorporateName, supplierDto.Id))
+                throw new ExceptionConflict("Nome duplicado.");
+
+            if (await CheckDuplicates(p => p.CpfCnpj, supplierDto.CpfCnpj, supplierDto.Id))
+                throw new ExceptionConflict("Cnpj duplicado.");
+
+            if (await CheckDuplicates(p => p.Email, supplierDto.Email, supplierDto.Id))
+                throw new ExceptionConflict("Email duplicado.");
 
 
             await base.Create(supplierDto);
@@ -51,8 +58,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (supplierDto.Id != id)
                 throw new ExceptionBadRequest("O id do Fornecedor dever ser o mesmo.");
 
-            if (await CheckDuplicates(supplierDto.CorporateName))
-                throw new ExceptionConflict("Nome já existente.");
+            if (await CheckDuplicates(p => p.CorporateName, supplierDto.CorporateName, supplierDto.Id))
+                throw new ExceptionConflict("Nome duplicado.");
+
+            if (await CheckDuplicates(p => p.CpfCnpj, supplierDto.CpfCnpj, supplierDto.Id))
+                throw new ExceptionConflict("Cnpj duplicado.");
+
+            if (await CheckDuplicates(p => p.Email, supplierDto.Email, supplierDto.Id))
+                throw new ExceptionConflict("Email duplicado.");
 
             await base.Update(supplierDto, id);
         }
@@ -64,10 +77,13 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             await base.Remove(id);
         }
-        public async Task<bool> CheckDuplicates(string nome)
+        public async Task<bool> CheckDuplicates(Func<Supplier, string?> selector, string? valor, int idIgnor)
         {
-            var suppliers = await _supplierRepository.Get();
-            return suppliers.Any(r => StringUtils.CompareString(r.CorporateName, nome));
+            var planos = await _supplierRepository.Get();
+            return planos.Any(p =>
+                p.Id != idIgnor &&
+                StringUtils.CompareString(selector(p)!, valor)
+    );
         }
     }
 }

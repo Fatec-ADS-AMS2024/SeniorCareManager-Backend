@@ -8,5 +8,6 @@ public interface ISupplierService : IGenericService<Supplier, SupplierDTO>
 {
     public interface ISupplierService : IGenericService<Supplier, SupplierDTO>
     {
+        Task<bool> CheckDuplicates(Func<Supplier, string?> selector, string? valor, int idIgnor);
     }
 }
