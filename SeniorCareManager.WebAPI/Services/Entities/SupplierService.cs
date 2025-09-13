@@ -47,6 +47,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (await CheckDuplicates(p => p.Email, supplierDto.Email, supplierDto.Id))
                 throw new ExceptionConflict("Email duplicado.");
 
+            if (await CheckDuplicates(p => p.Phone, supplierDto.Phone, supplierDto.Id))
+                throw new ExceptionConflict("Telefone duplicado.");
+
 
             await base.Create(supplierDto);
         }
@@ -66,6 +69,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             if (await CheckDuplicates(p => p.Email, supplierDto.Email, supplierDto.Id))
                 throw new ExceptionConflict("Email duplicado.");
+
+            if (await CheckDuplicates(p => p.Phone, supplierDto.Phone, supplierDto.Id))
+                throw new ExceptionConflict("Telefone duplicado.");
 
             await base.Update(supplierDto, id);
         }
