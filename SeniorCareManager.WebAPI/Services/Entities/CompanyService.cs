@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -24,7 +23,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var company = await _companyRepository.GetById(id);
             if (company is null)
-                throw new KeyNotFoundException($"Empresa com o id {id} informado não foi encontrada.");
+                throw new ExceptionNotFound($"Empresa com o id {id} informado não foi encontrada.");
 
             return _mapper.Map<CompanyDTO>(company);
         }
@@ -32,10 +31,10 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public override async Task Create(CompanyDTO companyDto)
         {
             if (companyDto is null)
-                throw new ArgumentNullException(nameof(companyDto), "Empresa não pode ser nula.");
+                throw new ExceptionBadRequest("Empresa não pode ser nula.");
 
             if (await CheckDuplicates(companyDto))
-                throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
+                throw new ExceptionConflict("Nome corporativo ou nome comercial duplicado.");
 
             if (await _companyRepository.GetById(companyDto.Id) is not null)
                 return;
@@ -47,13 +46,13 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public override async Task Update(CompanyDTO companyDto, int id)
         {
             if (companyDto is null)
-                throw new ArgumentNullException(nameof(companyDto), "Empresa não pode ser nula.");
+                throw new ExceptionBadRequest("Empresa não pode ser nula.");
 
             if (await CheckDuplicates(companyDto))
-                throw new InvalidOperationException("Nome corporativo ou nome comercial duplicado.");
+                throw new ExceptionConflict("Nome corporativo ou nome comercial duplicado.");
 
             if (companyDto.Id != id)
-                throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
+                throw new ExceptionBadRequest("O id da empresa dever ser o mesmo.");
 
             await base.Update(companyDto, id);
         }
@@ -61,10 +60,10 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public async Task UpdateLogo(CompanyDTO dto)
         {
             if (dto is null || dto.CompanyLogo == null || dto.CompanyLogo.Length == 0)
-                throw new ArgumentException("Logo inválido ou vazio.");
+                throw new ExceptionBadRequest("Logo inválido ou vazio.");
 
             var company = await _companyRepository.GetById(dto.Id)
-                ?? throw new KeyNotFoundException($"Empresa com o id {dto.Id} não foi encontrada.");
+                ?? throw new ExceptionNotFound($"Empresa com o id {dto.Id} não foi encontrada.");
 
             company.CompanyLogo = dto.CompanyLogo;
 
@@ -81,17 +80,17 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public async Task UpdateLogo(int id, IFormFile file)
         {
             if (file == null || file.Length == 0)
-                throw new ArgumentException("Arquivo de logo inválido ou vazio.");
+                throw new ExceptionBadRequest("Arquivo de logo inválido ou vazio.");
 
             var company = await _companyRepository.GetById(id)
-                ?? throw new KeyNotFoundException($"Empresa com o id {id} não foi encontrada.");
+                ?? throw new ExceptionNotFound($"Empresa com o id {id} não foi encontrada.");
 
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms);
             var bytes = ms.ToArray();
 
             if (bytes.Length == 0)
-                throw new ArgumentException("Não foi possível ler o conteúdo do logo.");
+                throw new ExceptionBadRequest("Não foi possível ler o conteúdo do logo.");
 
             company.CompanyLogo = bytes;
             await _companyRepository.Update(company);
@@ -112,7 +111,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var company = await _companyRepository.GetById(id);
             if (company is null)
-                throw new KeyNotFoundException($"Empresa com o id {id} informado não foi encontrada.");
+                throw new ExceptionNotFound($"Empresa com o id {id} informado não foi encontrada.");
 
             await base.Remove(id);
         }
