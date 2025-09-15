@@ -17,7 +17,7 @@ namespace SeniorCareManager.WebAPI.Data.Repositories
         public async Task<bool> ExistsByCpfCnpjAsync(string cpfCnpj, int currentId)
         {
             var cleanedCpfCnpj = StringUtils.Clean(cpfCnpj);
-            // Procura por qualquer carrier com o mesmo CNPJ E um ID diferente do atual.
+            //Procura por qualquer carrier com o mesmo CNPJ E um ID diferente do atual.
             //A criação do método ExistisByCpfCnpjAsync foi necessária pois o CheckDuplicates não atende a necessidade 
             //da classe carrier, que quando era atualizada o CheckDuplicates barrava a operação devido a existência do mesmo cnpj na base de dados (a própria empresa)
             return await _context.Carriers.AnyAsync(c => c.CpfCnpj == cleanedCpfCnpj && c.Id != currentId);

@@ -6,7 +6,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
 
 public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class where TDto : class
 {
-    protected readonly IGenericRepository<T> _repository;
+    private readonly IGenericRepository<T> _repository;
     private readonly IMapper _mapper;
 
     public GenericService(IGenericRepository<T> repository, IMapper mapper)

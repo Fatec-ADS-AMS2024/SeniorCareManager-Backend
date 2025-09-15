@@ -4,7 +4,6 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
-using System.Collections.Generic; // Adicione este using se KeyNotFoundException não for encontrado
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
@@ -22,7 +21,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var carrier = await _carrierRepository.GetById(id);
             if (carrier is null)
-                throw new KeyNotFoundException("Transportadora com o id " + id + " informado não foi encontrado."); // Mudança para KeyNotFoundException é uma boa prática para "não encontrado por ID"
+                throw new KeyNotFoundException("Transportadora com o id " + id + " informado não foi encontrado."); 
             return _mapper.Map<CarrierDTO>(carrier);
         }
 
@@ -55,9 +54,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             _mapper.Map(carrierDto, existingCarrier);
 
             // 2. Manda o repositório salvar a entidade que foi buscada e agora está atualizada.
-            await _repository.Update(existingCarrier);
-
-            // ========================== FIM DA CORREÇÃO ===========================
+            await _carrierRepository.Update(existingCarrier);
         }
 
         public override async Task Remove(int id)

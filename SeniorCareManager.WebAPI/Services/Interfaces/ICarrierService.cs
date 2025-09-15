@@ -5,5 +5,6 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces
 {
     public interface ICarrierService : IGenericService<Carrier, CarrierDTO>
     {
+        Task<bool> CheckDuplicates(string name);
     }
 }
