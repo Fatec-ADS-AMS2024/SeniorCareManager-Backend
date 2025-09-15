@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -19,7 +20,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task<CarrierDTO> GetById(int id)
         {
+            var errors = new List<FieldError>();
             var carrier = await _carrierRepository.GetById(id);
+
             if (carrier is null)
                 throw new KeyNotFoundException("Transportadora com o id " + id + " informado não foi encontrado."); 
             return _mapper.Map<CarrierDTO>(carrier);
@@ -27,6 +30,8 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Create(CarrierDTO carrierDto)
         {
+            var errors = new List<FieldError>();
+
             if (carrierDto is null)
                 throw new ArgumentNullException("A Transportadora não pode ser nula.");
 
@@ -37,6 +42,8 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Update(CarrierDTO carrierDto, int id)
         {
+            var errors = new List<FieldError>();
+
             if (carrierDto is null)
                 throw new ArgumentNullException("A Transportadora não pode ser nula.");
 
@@ -52,8 +59,6 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             // 1. Mapeia as propriedades do DTO para a entidade que JÁ EXISTE no banco.
             //    Isso atualiza os campos de 'existingCarrier' sem tocar no Id.
             _mapper.Map(carrierDto, existingCarrier);
-
-            // 2. Manda o repositório salvar a entidade que foi buscada e agora está atualizada.
             await _carrierRepository.Update(existingCarrier);
         }
 
@@ -65,7 +70,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             await base.Remove(id);
         }
 
-        private async Task<bool> CheckDuplicates(string cpfCnpj)
+        public async Task<bool> CheckDuplicates(string cpfCnpj)
         {
             var carrier = await _carrierRepository.Get();
             return carrier.Any(r => StringUtils.CompareString(r.CpfCnpj, cpfCnpj)
