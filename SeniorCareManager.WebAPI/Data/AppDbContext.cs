@@ -9,7 +9,8 @@ namespace SeniorCareManager.WebAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<ProductGroup> ProductGroups { get; set; }
+		public DbSet<Product> Product { get; set; }
+		public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures  { get; set; }
@@ -22,7 +23,7 @@ namespace SeniorCareManager.WebAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            ProductBuilder.Build(modelBuilder);
             ProductGroupBuilder.Build(modelBuilder);
             ProductTypeBuilder.Build(modelBuilder);
             SupplierBuilder.Build(modelBuilder);

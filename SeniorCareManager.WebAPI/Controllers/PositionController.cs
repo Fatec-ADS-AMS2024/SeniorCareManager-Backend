@@ -3,6 +3,7 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -11,169 +12,54 @@ namespace SeniorCareManager.WebAPI.Controllers;
 public class PositionController: Controller
 {
     private readonly IPositionService _positionService;
-    private readonly Response _response;
 
     public PositionController(IPositionService service)
     {
         this._positionService = service;
-        _response = new Response();
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        try
-        {
-            var position = await _positionService.GetAll();
-            _response.Code = ResponseEnum.Success;
-            _response.Data = position;
-            _response.Message = "Lista de cargos!";
-            return Ok(_response);
-        }
-        catch (Exception ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        var positions = await _positionService.GetAll();
+        return Response<IEnumerable<PositionDTO>>.Ok(positions, "Lista de Position obtidas com sucesso!");
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        try
-        {
-            var position = await _positionService.GetById(id);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo " + position.Name + " obtido com sucesso!";
-            _response.Data = position;
-            return Ok(_response);
-        }
-        catch (ArgumentNullException ex)
-        {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return NotFound(_response);
-        }
-        catch (Exception)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível adquirir o cargo.";
-            _response.Data = null;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        var position = await _positionService.GetById(id);
+        
+        return Response<PositionDTO>.Ok(position, "Position obtido com sucesso!");
+    
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(PositionDTO positionDto)
     {
-        try
-        {
-            Execute.Executar(positionDto);
-            positionDto.Id = 0;
-            await _positionService.Create(positionDto);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo Cadastrado com sucesso!";
-            _response.Data = positionDto;
-        }
-        catch (ArgumentNullException ex)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return NotFound(_response);
-        }
-        catch (ArgumentException ex)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return BadRequest(_response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return Conflict(_response);
-        }
-        catch (Exception ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível cadastrar o cargo.";
-            _response.Data = positionDto;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
-        return Ok(_response);
+        Execute.Executar(positionDto);
+        positionDto.Id = 0;
+        await _positionService.Create(positionDto);
+
+        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!"); 
+
     }
 
     [HttpPut("{id}")] 
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
-        try
-        {
-            Execute.Executar(positionDto);
-            await _positionService.Update(positionDto, id); ;
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Cargo alterado com sucesso!";
-            _response.Data = positionDto;
-        }
-        catch (ArgumentNullException ex)
-        {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return NotFound(_response);
-        }
-        catch (ArgumentException ex)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = ex.Message;
-            _response.Data = null;
-            return BadRequest(_response);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Message = ex.Message;
-            _response.Data = positionDto;
-            return Conflict(_response);
-        }
-        catch (Exception ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Não foi possível alterar o cargo!";
-            _response.Data = positionDto;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
-        return Ok(_response);
+        Execute.Executar(positionDto);
+        await _positionService.Update(positionDto, id); ;
+
+        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!"); 
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _positionService.Remove(id);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Grupo de cargo apagado com sucesso!";
-            _response.Data = null;
-        }
-        catch (KeyNotFoundException ex) 
-        {
-            _response.Code = ResponseEnum.NotFound;
-            _response.Data = null;
-            _response.Message = ex.Message;
-            return NotFound(_response);
-        }
-        catch (Exception ex)
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar apagar grupo de cargo.";
-            _response.Data = null;
-        }
-        return Ok(_response);
+
+        await _positionService.Remove(id);
+
+        return Response<object>.NoContent("Grupo de cargo apagado com sucesso!");
     }
 }

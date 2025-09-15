@@ -4,8 +4,9 @@ using System.Text;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
 {
-    public static class StringUtils
+    public static class StringValidator
     {
+        //Deixa os nomes iguais para depois ver se tem duplicados
         public static string RemoveDiacritics(this string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -25,25 +26,21 @@ namespace SeniorCareManager.WebAPI.Services.Utils
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
+
+        public static string ExtractNumbers(this string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+
+            return new string(text.Where(char.IsDigit).ToArray());
+        }
         public static bool CompareString(string str1, string str2)
         {
             return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
         }
+        // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
 
-        public static string Clean(string input)
-        {
-            // 1. Verificação de Segurança
-            // Se a string for nula ou vazia, retorna uma string vazia para evitar erros.
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
 
-            // 2. A Mágica do Regex
-            // Regex.Replace encontra um padrão e o substitui por outra coisa.
-            // O padrão @"\D" é uma expressão regular que significa "qualquer caractere que NÃO seja um dígito (0-9)".
-            // A substituição "" significa que estamos trocando tudo o que não é número por "nada", efetivamente apagando.
-            return Regex.Replace(input, @"\D", "");
-        }
+
     }
 }
