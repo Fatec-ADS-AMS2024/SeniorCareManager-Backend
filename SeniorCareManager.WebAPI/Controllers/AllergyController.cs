@@ -14,169 +14,47 @@ namespace SeniorCareManager.WebAPI.Controllers
     public class AllergyController : Controller
     {
         private readonly IAllergyService _allergyService;
-        private readonly Response _response;
         public AllergyController(IAllergyService allergyService)
         {
             this._allergyService = allergyService;
-            _response = new Response();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
                 var allergies = await _allergyService.GetAll();
-                _response.Code = ResponseEnum.Success;
-                _response.Data = allergies;
-                _response.Message = "Lista de alergias!";
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.Code = ResponseEnum.Error;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
+                return Response<IEnumerable<AllergyDTO>>.Ok(allergies, "Alergias obtidas com sucesso!");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
                 var allergies = await _allergyService.GetById(id);
-                _response.Code = ResponseEnum.Success;
-                _response.Message = "Alergia " + allergies.Name + " obtida com sucesso!";
-                _response.Data = allergies;
-                return Ok(_response);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return NotFound(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.Code = ResponseEnum.Error;
-                _response.Message = "Não foi possível adquirir a alergia.";
-                _response.Data = null;
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
+                return Response<AllergyDTO>.Ok(allergies, "Alergia obtida com sucesso!");
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(AllergyDTO allergyDTO)
         {
-            try
-            {
                 Execute.Executar(allergyDTO);
                 allergyDTO.Id = 0;
                 await _allergyService.Create(allergyDTO);
-                _response.Code = ResponseEnum.Success;
-                _response.Message = "Alergia cadastrada com sucesso!";
-                _response.Data = allergyDTO;
-            }
-            catch (ArgumentNullException ex)
-            {
-                _response.Code = ResponseEnum.Invalid;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return NotFound(_response);
-            }
-            catch (ArgumentException ex)
-            {
-                _response.Code = ResponseEnum.Invalid;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return BadRequest(_response);
-            }
-            catch (InvalidOperationException ex)
-            {
-                _response.Code = ResponseEnum.Conflict;
-                _response.Message = ex.Message;
-                _response.Data = allergyDTO;
-                return Conflict(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.Code = ResponseEnum.Error;
-                _response.Message = "Não foi possível cadastrar a alergia.";
-                _response.Data = allergyDTO;
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
-            return Ok(_response);
+                return Response<AllergyDTO>.Created(allergyDTO, "Alergia criada com sucesso!");
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, AllergyDTO allergyDTO)
         {
-            try
-            {
                 Execute.Executar(allergyDTO);
                 await _allergyService.Update(allergyDTO, id); ;
-                _response.Code = ResponseEnum.Success;
-                _response.Message = "Alergia atualizada com sucesso!";
-                _response.Data = allergyDTO;
-            }
-            catch (ArgumentNullException ex)
-            {
-                _response.Code = ResponseEnum.Invalid;
-                _response.Message = ex.Message;
-                _response.Data = allergyDTO;
-                return NotFound(_response);
-            }
-            catch (ArgumentException ex)
-            {
-                _response.Code = ResponseEnum.Invalid;
-                _response.Message = ex.Message;
-                _response.Data = null;
-                return BadRequest(_response);
-            }
-            catch (InvalidOperationException ex)
-            {
-                _response.Code = ResponseEnum.Conflict;
-                _response.Message = ex.Message;
-                _response.Data = allergyDTO;
-                return Conflict(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.Code = ResponseEnum.Error;
-                _response.Message = "Não foi possível alterar a alergia!";
-                _response.Data = allergyDTO;
-                return StatusCode(StatusCodes.Status500InternalServerError, _response);
-            }
-            return Ok(_response);
+                return Response<AllergyDTO>.Ok(allergyDTO, "Alergia atualizada com sucesso!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
                 await _allergyService.Remove(id);
-                _response.Code = ResponseEnum.Success;
-                _response.Message = "Alergia apagada com sucesso!";
-                _response.Data = null;
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Data = null;
-                _response.Message = ex.Message;
-                return NotFound(_response);
-            }
-            catch (Exception ex)
-            {
-                _response.Code = ResponseEnum.Error;
-                _response.Message = "Erro ao tentar apagar alergia.";
-                _response.Data = null;
-            }
-            return Ok(_response);
+                return Response<object>.NoContent("Alergia removida com sucesso!");
         }
     }
 }

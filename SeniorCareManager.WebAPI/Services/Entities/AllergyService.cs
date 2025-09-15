@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data; 
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -13,18 +14,17 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         private readonly IAllergyRepository _allergyRepository;
         private readonly IMapper _mapper;
 
-        private readonly AppDbContext _context;
-
         public AllergyService(IAllergyRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
         {
             _allergyRepository = repository;
             _mapper = mapper;
-            _context = context;
         }
 
         public override async Task<AllergyDTO> GetById(int id)
         {
+            var errors = new List<FieldError>();
             var allergy = await _allergyRepository.GetById(id);
+
             if (allergy is null)
                 throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
 
@@ -33,6 +33,8 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Create(AllergyDTO allergyDTO)
         {
+            var errors = new List<FieldError>();
+
             if (allergyDTO is null)
                 throw new ArgumentNullException("Os dados da Alergia não podem ser nulos.");
 
@@ -44,7 +46,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Update(AllergyDTO allergyDTO, int id)
         {
+            var errors = new List<FieldError>();
             var existingEntity = await _allergyRepository.GetById(id);
+
             if (existingEntity == null)
             {
                 throw new KeyNotFoundException($"Alergia com id: {id} não encontrada para atualização.");
@@ -62,6 +66,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public override async Task Remove(int id)
         {
             var allergy = await _allergyRepository.GetById(id);
+
             if (allergy is null)
                 throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
 
