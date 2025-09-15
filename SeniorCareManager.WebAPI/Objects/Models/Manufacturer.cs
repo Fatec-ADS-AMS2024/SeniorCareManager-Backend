@@ -18,6 +18,7 @@ public class Manufacturer
     [Column("email")]
     public string Email { get; set; }
 
+    public Manufacturer() { }
     public Manufacturer(int id, string corporateName, string tradeName, string cpfCnpj, string phone, string email)
     {
         Id = id;
@@ -27,5 +28,4 @@ public class Manufacturer
         Phone = phone;
         Email = email;
     }
-    public Manufacturer() { }
 }
