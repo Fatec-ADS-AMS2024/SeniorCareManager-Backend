@@ -3,6 +3,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.RegularExpressions;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -35,7 +36,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Carrier carrier)
+        public async Task<IActionResult> Post(CarrierDTO carrier)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Carrier carrier)
+        public async Task<IActionResult> Put(int id, CarrierDTO carrier)
         {
             try
             {
