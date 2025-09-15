@@ -7,7 +7,6 @@ using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
-
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
 public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionService

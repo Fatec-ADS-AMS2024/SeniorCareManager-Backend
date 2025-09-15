@@ -15,7 +15,6 @@ public class UserDTO
     public string Email { get; set; }
 
     [NullOrEmpty(ErrorMessage = "Senha obrigatória.")]
-    [RemoveSpaces]
     public string Password { get; set; }
 
     public UserType UserType { get; set; }
