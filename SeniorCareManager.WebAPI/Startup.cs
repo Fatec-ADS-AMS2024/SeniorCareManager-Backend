@@ -11,17 +11,12 @@ namespace SeniorCareManager.WebAPI;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 
 
 public class Startup
@@ -81,12 +76,15 @@ public class Startup
                 }
             });
         });
-        
+
         //adiciona controllers e trata a serialização Json
-        services.AddControllers().AddJsonOptions(options =>
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<HttpExceptionFilter>();
+        }).AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-            options.JsonSerializerOptions.WriteIndented = true; // Opcional, apenas para melhor legibilidade
+            options.JsonSerializerOptions.WriteIndented = true;
         });
 
         services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
@@ -116,8 +114,8 @@ public class Startup
         services.AddScoped<IManufacturerService, ManufacturerService>(); 
         services.AddScoped<ICarrierService, CarrierService>();
         services.AddScoped<IPositionService, PositionService>();
-        services.AddScoped<IReligionService, ReligionService>();
-        services.AddScoped<IAllergyService, AllergyService>();
+        services.AddScoped<IReligionService,  ReligionService>();
+        services.AddScoped<IProductService, ProductService>();
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
@@ -129,7 +127,8 @@ public class Startup
         services.AddScoped<ICarrierRepository, CarrierRepository>();
         services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
-        services.AddScoped<IAllergyRepository, AllergyRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
