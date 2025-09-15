@@ -32,12 +32,17 @@ public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>
     public override async Task Create(ManufacturerDTO manufacturerDto)
     {
         var errors = new List<FieldError>();
-
         if (manufacturerDto is null)
             throw new ExceptionBadRequest("O Fabricante não pode ser nulo.");
 
-        if (await CheckDuplicates(manufacturerDto.CpfCnpj))
+        if (await CheckDuplicates(m => m.CpfCnpj, manufacturerDto.CpfCnpj, manufacturerDto.Id))
             throw new ExceptionConflict("CPF/CNPJ duplicado.");
+
+        if (await CheckDuplicates(m => m.TradeName, manufacturerDto.TradeName, manufacturerDto.Id))
+            throw new ExceptionConflict("Nome comercial duplicado.");
+
+        if (await CheckDuplicates(m => m.Phone, manufacturerDto.Phone, manufacturerDto.Id))
+            throw new ExceptionConflict("Telefone duplicado.");
 
         await base.Create(manufacturerDto);
     }
@@ -45,12 +50,20 @@ public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>
     public override async Task Update(ManufacturerDTO manufacturerDto, int id)
     {
         var errors = new List<FieldError>();
-
         if (manufacturerDto is null)
             throw new ExceptionBadRequest("O Fabricante não pode ser nulo.");
 
-        if (await CheckDuplicates(manufacturerDto.CpfCnpj))
+        if (manufacturerDto.Id != id)
+            throw new ExceptionBadRequest("O id de Fabricante deve ser o mesmo.");
+
+        if (await CheckDuplicates(m => m.CpfCnpj, manufacturerDto.CpfCnpj, manufacturerDto.Id))
             errors.Add(new FieldError { Field = "CpfCnpj", Message = "CPF/CNPJ duplicado." });
+
+        if (await CheckDuplicates(m => m.TradeName, manufacturerDto.TradeName, manufacturerDto.Id))
+            errors.Add(new FieldError { Field = "TradeName", Message = "Nome comercial duplicado." });
+
+        if (await CheckDuplicates(m => m.Phone, manufacturerDto.Phone, manufacturerDto.Id))
+            errors.Add(new FieldError { Field = "Phone", Message = "Telefone duplicado." });
 
         if (errors.Count > 0)
             throw new ExceptionBadRequest("Erros na requisição", errors);
@@ -60,18 +73,20 @@ public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>
 
     public override async Task Remove(int id)
     {
+        var errors = new List<FieldError>();
         var manufacturer = await _manufacturerRepository.GetById(id);
         if (manufacturer is null)
-            throw new ExceptionConflict("Fabricante com o id " + id + " informado não foi encontrado.");
+            throw new ExceptionBadRequest("Fabricante com o id " + id + " informado não foi encontrado.");
 
         await base.Remove(id);
     }
 
-    public async Task<bool> CheckDuplicates(string cpfCnpj)
+    public async Task<bool> CheckDuplicates(Func<Manufacturer, string?> selector, string? valor, int idIgnor)
     {
-        var manufacturers = await _manufacturerRepository.Get();
-        return manufacturers.Any(r =>
-            StringUtils.CompareString(r.CpfCnpj, cpfCnpj)
+        var fabricantes = await _manufacturerRepository.Get();
+        return fabricantes.Any(m =>
+            m.Id != idIgnor &&
+            StringUtils.CompareString(selector(m)!, valor)
         );
     }
 }
