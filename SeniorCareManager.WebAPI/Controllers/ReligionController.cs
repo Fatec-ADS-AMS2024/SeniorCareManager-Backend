@@ -50,6 +50,6 @@ public class ReligionController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _religionService.Remove(id);
-        return Response<object>.Ok(null, "A religião foi apagada com sucesso!");
+        return Response<object>.NoContent("");
     }
 }

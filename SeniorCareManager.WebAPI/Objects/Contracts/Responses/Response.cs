@@ -36,7 +36,7 @@ public class Response<T>
 
     public static ObjectResult NoContent(string message)
     {
-        return new ObjectResult(new Response<object>(204, message)) { StatusCode = StatusCodes.Status204NoContent };
+        return new ObjectResult(new Response<object>(204, message, null)) { StatusCode = StatusCodes.Status204NoContent };
     } 
 
 }
