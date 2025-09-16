@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Dtos;
+using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -100,6 +102,8 @@ public class ProductGroupController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
     {
+    public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
+    {
         if (string.IsNullOrWhiteSpace(productGroup.Name))
         {
             _response.Code = ResponseEnum.Invalid;
@@ -163,6 +167,14 @@ public class ProductGroupController : Controller
         }
     }
 
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch(int id, ProductGroupDTO productGroup)
+    {
+        try
+        {
+            await _productGroupService.Update(productGroup, id);
+        }
+        catch (Exception ex)
     private static bool CheckDuplicates(IEnumerable<ProductGroupDTO> groups, ProductGroupDTO currentGroup)
     {
         foreach (var group in groups)

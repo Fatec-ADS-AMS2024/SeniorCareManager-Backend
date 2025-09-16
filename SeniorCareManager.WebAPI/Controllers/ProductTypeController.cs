@@ -58,6 +58,7 @@ public class ProductTypeController : Controller
     }
 
     [HttpPost]
+    public async Task<IActionResult> Post(ProductTypeDTO productType)
     public async Task<IActionResult> Post([FromBody] ProductTypeDTO productType)
     {
         if (string.IsNullOrWhiteSpace(productType.Name))
@@ -114,6 +115,9 @@ public class ProductTypeController : Controller
     }
 
     [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, ProductTypeDTO productType)
+    {
+        try
     public async Task<IActionResult> Put(int id, [FromBody] ProductTypeDTO productType)
     {
         if (id != productType.Id)
@@ -176,6 +180,8 @@ public class ProductTypeController : Controller
         }
     }
 
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch(int id, ProductTypeDTO productType)
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
