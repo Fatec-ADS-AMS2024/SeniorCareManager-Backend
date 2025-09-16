@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Text;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
 {
-    public static class StringUtils
+    public static class StringValidator
     {
+        //Deixa os nomes iguais para depois ver se tem duplicados
         public static string RemoveDiacritics(this string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -24,10 +26,21 @@ namespace SeniorCareManager.WebAPI.Services.Utils
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
+
+        public static string ExtractNumbers(this string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+
+            return new string(text.Where(char.IsDigit).ToArray());
+        }
         public static bool CompareString(string str1, string str2)
         {
             return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
         }
+        // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
+
+
 
     }
 }

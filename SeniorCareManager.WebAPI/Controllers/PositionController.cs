@@ -59,6 +59,7 @@ public class PositionController : Controller
     {
 
         await _positionService.Remove(id);
-        return Response<object>.NoContent("");
+
+        return Response<object>.NoContent();
     }
 }
