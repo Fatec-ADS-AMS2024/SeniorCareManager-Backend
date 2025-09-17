@@ -1,219 +1,63 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class ProductTypeController : Controller
+public class ProductTypeController : ControllerBase
 {
-    private readonly IProductTypeService _productTypeService;
-    private readonly Response _response;
+    private readonly IProductTypeService _service;
 
     public ProductTypeController(IProductTypeService service)
     {
-        _productTypeService = service;
-        _response = new Response();
+        _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> GetAll()
     {
-        var productTypes = await _productTypeService.GetAll();
-        _response.Code = ResponseEnum.Success;
-        _response.Data = productTypes;
-        _response.Message = "Lista de tipos de produto!";
-        return Ok(_response);
+        var productTypes = await _service.GetAll();
+        return Ok(productTypes);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        try
-        {
-            var productType = await _productTypeService.GetById(id);
-            if (productType is null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Tipo de produto não encontrado.";
-                _response.Data = null;
-                return NotFound(_response);
-            }
-
-            _response.Code = ResponseEnum.Success;
-            _response.Message = $"Tipo de produto \"{productType.Name}\" obtido com sucesso!";
-            _response.Data = productType;
-            return Ok(_response);
-        }
-        catch
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao buscar tipo de produto.";
-            _response.Data = null;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        var productType = await _service.GetById(id);
+        return Ok(productType);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(ProductTypeDTO productType)
-    public async Task<IActionResult> Post([FromBody] ProductTypeDTO productType)
+    public async Task<IActionResult> Create(ProductTypeDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(productType.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'Name' é obrigatório.";
-            _response.Data = null;
-            return BadRequest(_response);
-        }
-
-        productType.Name = productType.Name.Trim();
-
-        if (productType.ProductGroupId <= 0)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'ProductGroupId' é obrigatório e deve ser maior que zero.";
-            _response.Data = null;
-            return BadRequest(_response);
-        }
-
-        if (!await _productTypeService.GroupExistsAsync(productType.ProductGroupId))
-        {
-            _response.Code = ResponseEnum.Unauthorized;
-            _response.Message = "Grupo de produto não encontrado.";
-            _response.Data = productType;
-            return StatusCode(StatusCodes.Status401Unauthorized, _response);
-        }
-
-        var existingGroupId = await _productTypeService.GetGroupIdIfDuplicateAsync(productType.Name);
-        if (existingGroupId != null)
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Message = $"Produto já cadastrado no grupo {existingGroupId}.";
-            _response.Data = productType;
-            return Conflict(_response);
-        }
-
-        try
-        {
-            productType.Id = 0;
-            await _productTypeService.Create(productType);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Tipo de produto cadastrado com sucesso!";
-            _response.Data = productType;
-            return Ok(_response);
-        }
-        catch
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar cadastrar o tipo de produto.";
-            _response.Data = productType;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        Execute.Executar(dto);
+        await _service.Create(dto);
+        return Ok(dto);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductTypeDTO productType)
+    public async Task<IActionResult> Update(int id, ProductTypeDTO dto)
     {
-        try
-    public async Task<IActionResult> Put(int id, [FromBody] ProductTypeDTO productType)
-    {
-        if (id != productType.Id)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O ID da URL e o ID do corpo não coincidem.";
-            _response.Data = productType;
-            return BadRequest(_response);
-        }
-
-        if (string.IsNullOrWhiteSpace(productType.Name))
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'Name' é obrigatório.";
-            _response.Data = productType;
-            return BadRequest(_response);
-        }
-
-        productType.Name = productType.Name.Trim();
-
-        if (productType.ProductGroupId <= 0)
-        {
-            _response.Code = ResponseEnum.Invalid;
-            _response.Message = "O campo 'ProductGroupId' é obrigatório e deve ser maior que zero.";
-            _response.Data = productType;
-            return BadRequest(_response);
-        }
-
-        if (!await _productTypeService.GroupExistsAsync(productType.ProductGroupId))
-        {
-            _response.Code = ResponseEnum.Unauthorized;
-            _response.Message = "Grupo de produto não encontrado.";
-            _response.Data = productType;
-            return StatusCode(StatusCodes.Status401Unauthorized, _response);
-        }
-
-        var existingGroupId = await _productTypeService.GetGroupIdIfDuplicateAsync(productType.Name, id);
-        if (existingGroupId != null)
-        {
-            _response.Code = ResponseEnum.Conflict;
-            _response.Message = $"Produto já cadastrado no grupo {existingGroupId}.";
-            _response.Data = productType;
-            return Conflict(_response);
-        }
-
-        try
-        {
-            await _productTypeService.Update(productType, id);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Tipo de produto atualizado com sucesso!";
-            _response.Data = productType;
-            return Ok(_response);
-        }
-        catch
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar atualizar o tipo de produto.";
-            _response.Data = productType;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Ok(dto);
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductTypeDTO productType)
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            var productType = await _productTypeService.GetById(id);
-            if (productType == null)
-            {
-                _response.Code = ResponseEnum.NotFound;
-                _response.Message = "Tipo de produto não encontrado.";
-                _response.Data = null;
-                return NotFound(_response);
-            }
-
-            await _productTypeService.Remove(id);
-            _response.Code = ResponseEnum.Success;
-            _response.Message = "Tipo de produto removido com sucesso!";
-            _response.Data = null;
-            return Ok(_response);
-        }
-        catch
-        {
-            _response.Code = ResponseEnum.Error;
-            _response.Message = "Erro ao tentar remover o tipo de produto.";
-            _response.Data = null;
-            return StatusCode(StatusCodes.Status500InternalServerError, _response);
-        }
+        await _service.Remove(id);
+        return Ok($"Tipo de produto com id {id} removido com sucesso.");
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, [FromBody] ProductTypeDTO productType)
+    public async Task<IActionResult> Patch(int id, ProductTypeDTO dto)
     {
-        return await Put(id, productType);
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Ok(dto);
     }
 }
