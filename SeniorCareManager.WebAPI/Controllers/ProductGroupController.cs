@@ -1,173 +1,67 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Dtos;
-using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class ProductGroupController : ControllerBase
+public class ProductGroupController : Controller
 {
-    private readonly IProductGroupService _productGroupService;
+    private readonly IProductGroupService _service;
 
     public ProductGroupController(IProductGroupService service)
     {
-        _productGroupService = service;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var groups = await _productGroupService.GetAll();
-
-        return Ok(new Response
-        {
-            Code = ResponseEnum.Success,
-            Message = "Lista de grupos de produto!",
-            Data = groups
-        });
+        var groups = await _service.GetAll();
+        return Response<IEnumerable<ProductGroupDTO>>.Ok(groups, "Lista de grupos de produto obtida com sucesso!");
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        try
-        {
-            var group = await _productGroupService.GetById(id);
-
-            if (group is null)
-            {
-                return NotFound(new Response
-                {
-                    Code = ResponseEnum.NotFound,
-                    Message = "Grupo de produto não encontrado.",
-                    Data = null
-                });
-            }
-
-            return Ok(new Response
-            {
-                Code = ResponseEnum.Success,
-                Message = $"Grupo de produto \"{group.Name}\" obtido com sucesso!",
-                Data = group
-            });
-        }
-        catch
-        {
-            return StatusCode(500, new Response
-            {
-                Code = ResponseEnum.Error,
-                Message = "Não foi possível adquirir o grupo de produto.",
-                Data = null
-            });
-        }
+        var group = await _service.GetById(id);
+        return Response<ProductGroupDTO>.Ok(group, "Grupo de produto obtido com sucesso!");
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(ProductGroupDTO productGroup)
+    public async Task<IActionResult> Post(ProductGroupDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(productGroup.Name))
-        {
-            return BadRequest(new Response
-            {
-                Code = ResponseEnum.Invalid,
-                Message = "Nome inválido.",
-                Data = null
-            });
-        }
-
-        if (await _productGroupService.IsDuplicateNameAsync(productGroup.Name))
-        {
-            return Conflict(new Response
-            {
-                Code = ResponseEnum.Conflict,
-                Message = "Nome duplicado.",
-                Data = productGroup
-            });
-        }
-
-        try
-        {
-            productGroup.Id = 0;
-            await _productGroupService.Create(productGroup);
-
-            return Ok(new Response
-            {
-                Code = ResponseEnum.Success,
-                Message = "Grupo de produto cadastrado com sucesso!",
-                Data = productGroup
-            });
-        }
-        catch
-        {
-            return StatusCode(500, new Response
-            {
-                Code = ResponseEnum.Error,
-                Message = "Erro ao cadastrar grupo de produto.",
-                Data = productGroup
-            });
-        }
+        Execute.Executar(dto);
+        dto.Id = 0;
+        await _service.Create(dto);
+        return Response<ProductGroupDTO>.Created(dto, "Grupo de produto cadastrado com sucesso!");
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
+    public async Task<IActionResult> Put(int id, ProductGroupDTO dto)
     {
-        try
-        {
-            await _productGroupService.Update(productGroup, id);
-
-            return Ok(new Response
-            {
-                Code = ResponseEnum.Success,
-                Message = "Grupo de produto alterado com sucesso!",
-                Data = productGroup
-            });
-        }
-        catch
-        {
-            return StatusCode(500, new Response
-            {
-                Code = ResponseEnum.Error,
-                Message = "Erro ao atualizar grupo de produto.",
-                Data = productGroup
-            });
-        }
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductGroupDTO>.Ok(dto, "Grupo de produto atualizado com sucesso!");
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            var group = await _productGroupService.GetById(id);
-            if (group is null)
-            {
-                return NotFound(new Response
-                {
-                    Code = ResponseEnum.NotFound,
-                    Message = "Grupo de produto não encontrado.",
-                    Data = null
-                });
-            }
+        await _service.Remove(id);
 
-            await _productGroupService.Remove(id);
+        return Response<object>.Ok(new { Id = id }, "Grupo de produto excluído com sucesso!");
+    }
+
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroupDTO productGroup)
+    public async Task<IActionResult> Patch(int id, ProductGroupDTO dto)
     {
-        try
-        {
-            await _productGroupService.Update(productGroup, id);
-        }
-        catch
-        {
-            return StatusCode(500, new Response
-            {
-                Code = ResponseEnum.Error,
-                Message = "Erro ao tentar remover grupo de produto.",
-                Data = null
-            });
-        }
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductGroupDTO>.Ok(dto, "Grupo de produto atualizado com sucesso!");
     }
 }
