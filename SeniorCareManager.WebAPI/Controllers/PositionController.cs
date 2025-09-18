@@ -49,7 +49,7 @@ public class PositionController: Controller
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
         Execute.Executar(positionDto);
-        await _positionService.Update(positionDto, id); ;
+        await _positionService.Update(positionDto, id); 
 
         return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!"); 
     }

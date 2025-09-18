@@ -10,6 +10,8 @@ namespace SeniorCareManager.WebAPI.Objects.Models;
         [Column("name")]
         public string Name { get; set; }
 
+    public ICollection<TechnicalResponsibility> TechnicalResponsibilities { get; set; }
+
     public Position(int id, string name)
     {
         Id = id;
