@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class SupplierService : GenericService<Supplier,SupplierDTO>, ISupplierService
+    public class SupplierService : GenericService<Supplier, SupplierDTO>, ISupplierService
     {
         private readonly ISupplierRepository _supplierRepository;
         private readonly IMapper _mapper;

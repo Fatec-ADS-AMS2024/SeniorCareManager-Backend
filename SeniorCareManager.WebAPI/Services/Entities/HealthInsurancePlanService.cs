@@ -6,7 +6,7 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class HealthInsurancePlanService : GenericService<HealthInsurancePlan,HealthInsurancePlanDTO>, IHealthInsurancePlanService
+public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, HealthInsurancePlanDTO>, IHealthInsurancePlanService
 {
     private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
     private readonly IMapper _mapper;

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Contracts;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Dtos;
+using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -66,7 +65,7 @@ public class ProductGroupController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ProductGroupDTO productGroup)
+    public async Task<IActionResult> Post(ProductGroupDTO productGroup)
     {
         if (string.IsNullOrWhiteSpace(productGroup.Name))
         {
@@ -112,28 +111,8 @@ public class ProductGroupController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, [FromBody] ProductGroupDTO productGroup)
+    public async Task<IActionResult> Put(int id, ProductGroupDTO productGroup)
     {
-        if (string.IsNullOrWhiteSpace(productGroup.Name))
-        {
-            return BadRequest(new Response
-            {
-                Code = ResponseEnum.Invalid,
-                Message = "Nome inválido.",
-                Data = productGroup
-            });
-        }
-
-        if (await _productGroupService.IsDuplicateNameAsync(productGroup.Name, id))
-        {
-            return Conflict(new Response
-            {
-                Code = ResponseEnum.Conflict,
-                Message = "Nome duplicado.",
-                Data = productGroup
-            });
-        }
-
         try
         {
             await _productGroupService.Update(productGroup, id);
@@ -174,12 +153,12 @@ public class ProductGroupController : ControllerBase
 
             await _productGroupService.Remove(id);
 
-            return Ok(new Response
-            {
-                Code = ResponseEnum.Success,
-                Message = "Grupo de produto apagado com sucesso!",
-                Data = null
-            });
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch(int id, ProductGroupDTO productGroup)
+    {
+        try
+        {
+            await _productGroupService.Update(productGroup, id);
         }
         catch
         {

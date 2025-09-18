@@ -7,7 +7,7 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class UnitOfMeasureService : GenericService<UnitOfMeasure,UnitOfMeasureDTO>, IUnitOfMeasureService
+    public class UnitOfMeasureService : GenericService<UnitOfMeasure, UnitOfMeasureDTO>, IUnitOfMeasureService
     {
         private readonly IUnitOfMeasureRepository _unitOfMeasureRepository;
         private readonly IMapper _mapper;

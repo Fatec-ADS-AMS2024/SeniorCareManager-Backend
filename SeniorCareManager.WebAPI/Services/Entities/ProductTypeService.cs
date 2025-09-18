@@ -6,7 +6,7 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class ProductTypeService : GenericService<ProductType,ProductTypeDTO>, IProductTypeService
+public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, IProductTypeService
 {
     private readonly IProductTypeRepository _productTypeRepository;
     private readonly IMapper _mapper;
