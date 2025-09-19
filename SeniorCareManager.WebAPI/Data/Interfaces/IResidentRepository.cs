@@ -1,6 +1,7 @@
 ﻿namespace SeniorCareManager.WebAPI.Data.Interfaces
 {
-    public class IResidentRepository
+    public interface IResidentRepository : IGenericRepository<Resident> 
     {
+
     }
 }
