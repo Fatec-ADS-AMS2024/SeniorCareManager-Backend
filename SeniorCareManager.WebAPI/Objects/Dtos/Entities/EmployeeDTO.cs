@@ -1,4 +1,6 @@
-﻿using SeniorCareManager.WebAPI.Objects.Enums;
+﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
@@ -6,36 +8,56 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
     public class EmployeeDTO
     {
         public int Id { get; set; }
-		
+
         [NullOrEmpty]
+        [RemoveSpaces]
         public string Name { get; set; }
 
-		[NullOrEmpty]
-		public string Cpf { get; set; }
-
-		public string Phone { get; set; }
-		
+        [RemoveSpaces]
         [NullOrEmpty]
-		public string Email { get; set; }
+        [CpfCnpjFormat]
+        public string Cpf { get; set; }
 
+        [NullOrEmpty]
+        [RemoveSpaces]
+        [PhoneFormat]
+        public string Phone { get; set; }
+
+        [NullOrEmpty]
+        [EmailValidator]
+        [RemoveSpaces]
+        public string Email { get; set; }
+
+        [NullOrEmpty]
         public DateTime HireDate { get; set; }
-		[NullOrEmpty]
-		public string State { get; set; }
+
+        [NullOrEmpty]
+        [RemoveSpaces]
+        public string State { get; set; }
+
+        [NullOrEmpty]
+        [RemoveSpaces]
+        public string City { get; set; }
 
 		[NullOrEmpty]
-		public string City { get; set; }
+        [RemoveSpaces]
+        public string Street { get; set; }
 
-		[NullOrEmpty]
-		public string Street { get; set; }
-
+        [NullOrEmpty]
+        [RemoveSpaces]
         public string Cep { get; set; }
-
+       
+        [NullOrEmpty]
         public int Number { get; set; }
-
+        
+        [NullOrEmpty]
+        [RemoveSpaces]
         public string Neighborhood { get; set; }
-
-		public StatusEmployee StatusEmployee { get; set; }
-
+     
+        [NullOrEmpty]
+        public StatusEmployee StatusEmployee { get; set; }
+        
+        [NullOrEmpty]
         public int PositionId { get; set; }
     }
 }
