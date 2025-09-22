@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.Design;
 using System.Text.Json.Serialization;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {

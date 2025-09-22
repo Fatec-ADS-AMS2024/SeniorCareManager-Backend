@@ -24,7 +24,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public DateTime StartDate { get; set; }
 
         [NullOrEmpty("A Data Final não é válida.")]
-        [DateValidator("01/01/2000", "31/12/2030")]
+        [DateValidator("01/01/2000")]
         public DateTime EndDate { get; set; }
     }
 }
