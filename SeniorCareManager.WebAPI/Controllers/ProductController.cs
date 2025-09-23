@@ -60,6 +60,6 @@ public class ProductController: Controller
 
         await _productService.Remove(id);
 
-        return Response<object>.NoContent("Grupo de produto apagado com sucesso!");
+        return Response<object>.NoContent();
     }
 }
