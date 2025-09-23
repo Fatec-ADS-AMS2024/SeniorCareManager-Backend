@@ -2,6 +2,7 @@
 using SeniorCareManager.WebAPI.Data; 
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -26,7 +27,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var allergy = await _allergyRepository.GetById(id);
 
             if (allergy is null)
-                throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
+                throw new ExceptionBadRequest($"Alergia com o id {id} não foi encontrada.");
 
             return _mapper.Map<AllergyDTO>(allergy);
         }
@@ -36,10 +37,10 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var errors = new List<FieldError>();
 
             if (allergyDTO is null)
-                throw new ArgumentNullException("Os dados da Alergia não podem ser nulos.");
+                throw new ExceptionBadRequest("Os dados da Alergia não podem ser nulos.");
 
             if (await _allergyRepository.ExistsByNameAsync(allergyDTO.Name))
-                throw new InvalidOperationException("Uma alergia com este nome já existe.");
+                throw new ExceptionConflict("Uma alergia com este nome já existe.");
 
             await base.Create(allergyDTO);
         }
@@ -51,12 +52,12 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             if (existingEntity == null)
             {
-                throw new KeyNotFoundException($"Alergia com id: {id} não encontrada para atualização.");
+                throw new ExceptionBadRequest($"Alergia com id: {id} não encontrada para atualização.");
             }
 
             if (await _allergyRepository.ExistsByNameAsync(allergyDTO.Name, id))
             {
-                throw new InvalidOperationException("O nome informado já pertence a outra alergia.");
+                throw new ExceptionConflict("O nome informado já pertence a outra alergia.");
             }
 
             _mapper.Map(allergyDTO, existingEntity);
@@ -68,7 +69,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var allergy = await _allergyRepository.GetById(id);
 
             if (allergy is null)
-                throw new KeyNotFoundException($"Alergia com o id {id} não foi encontrada.");
+                throw new ExceptionConflict($"Alergia com o id {id} não foi encontrada.");
 
             /* Validação de regra de negócio: verifica se a alergia está em uso. - Classe a ser implementada ResidentAllergy
             var isAllergyInUse = await _context.Set<ResidentAllergy>().AnyAsync(ra => ra.AllergyId == id);
