@@ -53,7 +53,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
 
                 await _carrierService.Remove(id);
-                return Response<object>.NoContent("Transportadora apagada com sucesso!");
+                return Response<object>.NoContent();
         }
     }
 }
