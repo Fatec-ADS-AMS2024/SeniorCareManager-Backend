@@ -43,9 +43,11 @@ public class Product
     [Column("expiration_controlled")]
     public YesNo ExpirationControlled { get; set; }
 
+        public ICollection<ProductBatch> ProductBatches { get; set; }
+
     public Product()
     {
-        
+        ProductBatches = new List<ProductBatch>();
     }
 
     public Product(long id, string description, string genericName, decimal minimumStock, decimal currentStock, decimal stockValue, decimal unitPrice, decimal averageCost, decimal lastPurchasePrice, YesNo highCost, YesNo expirationControlled)

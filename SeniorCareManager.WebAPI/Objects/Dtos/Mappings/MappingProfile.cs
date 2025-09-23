@@ -28,6 +28,8 @@ public class MappingProfile : Profile
         CreateMap<Religion, ReligionDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
+        CreateMap<ProductBatchDTO, ProductBatch>().ReverseMap();
+        CreateMap<ProductBatch, ProductBatchDTO>();
 
     }
 }
