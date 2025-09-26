@@ -8,11 +8,9 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("id")]
         public int Id { get; set; }
 
-        // FK para Resident
         [Column("residentId")]
         public int ResidentId { get; set; }
 
-        // Propriedade de navegação
         public Resident Resident { get; set; }
 
         [Column("relationship")]
