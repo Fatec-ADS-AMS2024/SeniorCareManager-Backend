@@ -50,6 +50,10 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("weight")]
         public decimal Weight { get; set; }
 
+        // Navegações para relacionamentos 1:N
+        public ICollection<ResidentRelative> Relatives { get; set; } = new List<ResidentRelative>();
+        public ICollection<ResidentAllergy> Allergies { get; set; } = new List<ResidentAllergy>();
+
         public Resident() { }
 
         public Resident(int id, string registeredName, string socialName, DateTime dateOfBirth, string age, string cpf, string rg, string issuingBody, string issuingState, string pisPasep, Sex sex, MaritalStatus maritalStatus, Ethnicity ethnicity, string fatherName, string motherName, string spouseName, string nationalHealthCardNumber, string privateHealthCardNumber, string mobileNumber, string homePhoneNumber, decimal height, decimal weight)
