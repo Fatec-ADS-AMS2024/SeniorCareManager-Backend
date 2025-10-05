@@ -17,6 +17,9 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .Property(r => r.SocialName)
                 .HasMaxLength(100);
             modelBuilder.Entity<Resident>()
+                .Property(r => r.DateOfBirth)
+                .IsRequired();
+            modelBuilder.Entity<Resident>()
                 .Property(r => r.Cpf)
                 .IsRequired()
                 .HasMaxLength(11);
@@ -62,7 +65,6 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .Property(r => r.Weight)
                 .HasColumnType("decimal(5,2)");
 
-            // Inserção de dados iniciais
             modelBuilder.Entity<Resident>()
                 .HasData(new List<Resident>
                 {

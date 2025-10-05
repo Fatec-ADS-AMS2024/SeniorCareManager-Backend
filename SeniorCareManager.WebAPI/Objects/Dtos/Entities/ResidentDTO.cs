@@ -16,6 +16,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [RemoveSpaces]
         public string SocialName { get; set; }
 
+        [DateValidator("1900-01-01", "now", ErrorMessage = "Data de nascimento inválida.")]
         public DateTime DateOfBirth { get; set; }
 
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
@@ -24,6 +25,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
+        [CpfCnpjFormat]
         public string Cpf { get; set; }
 
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
@@ -41,7 +43,6 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
         public string PisPasep { get; set; }
-
         public Sex Sex { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public Ethnicity Ethnicity { get; set; }

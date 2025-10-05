@@ -4,11 +4,12 @@ using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Services.Interfaces;
 
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class ResidentRelativeService : GenericService<ResidentRelative, ResidentRelativeDTO>   
+    public class ResidentRelativeService : GenericService<ResidentRelative, ResidentRelativeDTO>,  IResidentRelativeService
     {
         private readonly IResidentRelativeRepository _residentRelativeRepository;
         private readonly IMapper _mapper;

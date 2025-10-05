@@ -38,7 +38,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         public string Number { get; set; }
 
         [Column("addressComplement")]
-        public string AddressComplement { get; set; }
+        public string? AddressComplement { get; set; }
 
         [Column("city")]
         public string City { get; set; }

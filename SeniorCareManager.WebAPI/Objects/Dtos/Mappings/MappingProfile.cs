@@ -28,6 +28,12 @@ public class MappingProfile : Profile
         CreateMap<Religion, ReligionDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
+        CreateMap<ResidentDTO, Resident>();
+        CreateMap<Resident, ResidentDTO>();
+        CreateMap<ResidentAllergyDTO, ResidentAllergy>();
+        CreateMap<ResidentAllergy, ResidentAllergyDTO>();
+        CreateMap<ResidentRelativeDTO, ResidentRelative>();
+        CreateMap<ResidentRelative, ResidentRelativeDTO>();
 
     }
 }

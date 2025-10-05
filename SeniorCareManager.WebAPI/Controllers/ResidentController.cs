@@ -3,6 +3,7 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -34,6 +35,8 @@ public class ResidentController : Controller
     [HttpPost]
     public async Task<IActionResult> Post(ResidentDTO residentDto)
     {
+        residentDto.DateOfBirth = DateTime.SpecifyKind(residentDto.DateOfBirth, DateTimeKind.Utc);
+
         Execute.Executar(residentDto);
         residentDto.Id = 0;
         await _residentService.Create(residentDto);
@@ -44,6 +47,8 @@ public class ResidentController : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, ResidentDTO residentDto)
     {
+        residentDto.DateOfBirth = DateTime.SpecifyKind(residentDto.DateOfBirth, DateTimeKind.Utc);
+
         Execute.Executar(residentDto);
         await _residentService.Update(residentDto, id);
 

@@ -5,55 +5,35 @@ namespace SeniorCareManager.WebAPI.Data.Builders
 {
     public class ResidentRelativeBuilder
     {
-        public static void Build(ModelBuilder modelBuilder)
-        {
-            // Configura a chave primária
-            modelBuilder.Entity<ResidentRelative>().HasKey(rr => rr.Id);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.Citizenship)
-                .HasMaxLength(50);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.MobileNumber)
-                .HasMaxLength(20);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.HomePhoneNumber)
-                .HasMaxLength(20);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.Email)
-                .HasMaxLength(100);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.Street)
-                .HasMaxLength(100);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.Number)
-                .HasMaxLength(10);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.AddressComplement)
-                .HasMaxLength(50);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.City)
-                .HasMaxLength(50);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.State)
-                .HasMaxLength(50);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.PostalCode)
-                .HasMaxLength(20);
-            modelBuilder.Entity<ResidentRelative>()
-                .Property(rr => rr.IssuingBody)
-                .HasMaxLength(50);
-            // Configura o relacionamento com Resident
-            modelBuilder.Entity<ResidentRelative>()
-                .HasOne(rr => rr.Resident)
-                .WithMany(r => r.Relatives)
-                .HasForeignKey(rr => rr.ResidentId)
-                .OnDelete(DeleteBehavior.Cascade);
+            public static void Build(ModelBuilder modelBuilder)
+            {
+                var entity = modelBuilder.Entity<ResidentRelative>();
+                entity.ToTable("residentrelative");
+                entity.HasKey(x => x.Id);
 
-            modelBuilder.Entity<ResidentRelative>()
+                entity.Property(x => x.Id).HasColumnName("id");
+                entity.Property(x => x.ResidentId).HasColumnName("residentId").IsRequired();
+                entity.Property(x => x.Name).HasColumnName("name").IsRequired().HasMaxLength(100);
+                entity.Property(x => x.Relationship).HasColumnName("relationship").IsRequired();
+                entity.Property(x => x.Citizenship).HasColumnName("citizenship").IsRequired().HasMaxLength(50);
+                entity.Property(x => x.MobileNumber).HasColumnName("mobileNumber").IsRequired().HasMaxLength(20);
+                entity.Property(x => x.HomePhoneNumber).HasColumnName("homePhoneNumber").IsRequired(false).HasMaxLength(20);
+                entity.Property(x => x.Email).HasColumnName("email").IsRequired().HasMaxLength(100);
+                entity.Property(x => x.Street).HasColumnName("street").IsRequired().HasMaxLength(100);
+                entity.Property(x => x.Number).HasColumnName("number").IsRequired().HasMaxLength(10);
+                entity.Property(x => x.City).HasColumnName("city").IsRequired().HasMaxLength(50);
+                entity.Property(x => x.State).HasColumnName("state").IsRequired().HasMaxLength(50);
+                entity.Property(x => x.PostalCode).HasColumnName("postalCode").IsRequired().HasMaxLength(20);
+                entity.Property(x => x.IssuingBody).HasColumnName("issuingBody").IsRequired().HasMaxLength(50);
+
+            entity.Property(x => x.AddressComplement).HasColumnName("addresscomplement").IsRequired(false);
+
+                entity.HasOne(x => x.Resident)
+                      .WithMany(r => r.Relatives)
+                      .HasForeignKey(x => x.ResidentId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<ResidentRelative>()
                 .HasData(new List<ResidentRelative>
                 {
                     new ResidentRelative
@@ -104,6 +84,6 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                         IssuingBody = "SSP-RJ"
                     }
                 });
-        }
+            }
     }
 }

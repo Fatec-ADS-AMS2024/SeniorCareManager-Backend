@@ -1,12 +1,16 @@
 ﻿using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Models;
 
-namespace SeniorCareManager.WebAPI.Data.Repositories;
-
-public class ResidentRepository : GenericRepository<Resident>, IResidentRepository
+namespace SeniorCareManager.WebAPI.Data.Repositories
 {
-    private readonly AppDbContext _context;
-    public ResidentRepository(AppDbContext context) : base(context)
+    public class ResidentRepository : GenericRepository<Resident>, IResidentRepository
     {
-        this._context = context;
+        private readonly AppDbContext _context;
+
+        public ResidentRepository(AppDbContext context) : base(context)
+        {
+            this._context = context;
+        }
+
     }
 }
