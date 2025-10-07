@@ -57,7 +57,7 @@ public class HealthInsurancePlanController : Controller
     {
         await _healthInsurancePlanService.Remove(id);
 
-        return Response<object>.NoContent("");
+        return Response<object>.NoContent();
 
     }
 
