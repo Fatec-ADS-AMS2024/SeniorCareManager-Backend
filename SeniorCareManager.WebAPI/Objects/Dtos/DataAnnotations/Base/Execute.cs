@@ -1,9 +1,9 @@
-﻿    using System.Reflection;
-using Npgsql.Internal.Postgres;
+﻿using System.Reflection;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+
 public static class Execute
 {
     public static void Executar(object obj)
