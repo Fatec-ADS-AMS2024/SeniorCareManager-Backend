@@ -36,42 +36,31 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(EmployeeDTO employeeDto)
         {
-           
+
             Execute.Executar(employeeDto);
             employeeDto.Id = 0;
             await _employeeService.Create(employeeDto);
 
-            return Response<EmployeeDTO>.Created(employeeDto, "Cargo Cadastrado com sucesso!");
-
-            return Ok(employeeDto);
+            return Response<EmployeeDTO>.Created(employeeDto, "Funcionario Cadastrado com sucesso!");
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, EmployeeDTO employee)
+        public async Task<IActionResult> Put(int id, EmployeeDTO employeeDto)
         {
-            try
-            {
-                await _employeeService.Update(employee, id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados do funcionário: " + ex.Message);
-            }
-            return Ok(employee);
+            Execute.Executar(employeeDto);
+            await _employeeService.Update(employeeDto, id); ;
+
+            return Response<EmployeeDTO>.Ok(employeeDto, "Produto atualizado com sucesso!");
+
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _employeeService.Remove(id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar remover o funcionário.");
-            }
-            return Ok("Funcionário removido com sucesso");
+
+            await _employeeService.Remove(id);
+
+            return Response<object>.NoContent();
         }
     }
 }
