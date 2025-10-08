@@ -1,7 +1,9 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
-using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
@@ -58,6 +60,6 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public StatusEmployee StatusEmployee { get; set; }
         
         [NullOrEmpty]
-        public int PositionId { get; set; }
+        public Position Position { get; set; }
     }
 }

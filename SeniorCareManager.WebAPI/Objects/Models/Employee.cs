@@ -1,13 +1,15 @@
 using SeniorCareManager.WebAPI.Objects.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {
 	[Table("employee")]
 	public class Employee
 	{
-		[Column("id")]
+		[Key]
 		public int Id { get; set; }
 
 		[Column("name")]
@@ -49,8 +51,9 @@ namespace SeniorCareManager.WebAPI.Objects.Models
 		[Column("position_id")]
 		public int PositionId { get; set; }
 
-		[ForeignKey("PositionId")]
-		public Position Position { get; set; }
+		[JsonIgnore]
+		public virtual Position? Position { get; set; }
+
 
 		public Employee() { }
 
