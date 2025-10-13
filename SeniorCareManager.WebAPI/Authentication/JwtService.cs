@@ -20,7 +20,7 @@ public class JwtService : Controller
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string GenerateJwtToken(List<InfoToken> infoToken)
+    public string GenerateJwtToken(List<InfoToken>? infoToken)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var keyString = jwtSettings["Key"];
@@ -37,11 +37,9 @@ public class JwtService : Controller
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>();
-
-        foreach (InfoToken item in infoToken)
-        {
-            claims.Add(new Claim(item.Name, item.Value));
-        }
+        if (infoToken != null && infoToken.Count > 0)
+            foreach (InfoToken item in infoToken)
+                claims.Add(new Claim(item.Name, item.Value));
 
         var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],

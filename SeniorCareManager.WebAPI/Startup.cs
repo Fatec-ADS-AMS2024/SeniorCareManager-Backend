@@ -139,7 +139,7 @@ public class Startup
 
         // Scopecd Token
 
-        //Scoped Repositories and Interfaces repo
+        //Scoped Repositories and Interfaces services
         services.AddScoped<IProductGroupService, ProductGroupService>();
         services.AddScoped<IProductTypeService, ProductTypeService>();
         services.AddScoped<ISupplierService, SupplierService>();
@@ -150,6 +150,7 @@ public class Startup
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IAdmService, AdmService>();
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
