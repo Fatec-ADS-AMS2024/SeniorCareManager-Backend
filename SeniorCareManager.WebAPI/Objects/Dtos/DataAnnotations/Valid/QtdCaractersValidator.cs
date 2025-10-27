@@ -1,5 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
@@ -14,6 +15,9 @@ public class QtdCaractersValidator : BaseAnnotation
 
     public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         var qtdValor = Value?.ToString()?.Length;
         if (Parameters != null)
         {

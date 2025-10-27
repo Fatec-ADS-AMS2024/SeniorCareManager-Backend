@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1")]
+[Authorize]
 public class PositionController : Controller
 {
     private readonly IPositionService _positionService;
@@ -18,43 +21,43 @@ public class PositionController : Controller
         this._positionService = service;
     }
 
-    [HttpGet]
+    [HttpGet, MapToApiVersion("1")]
     public async Task<IActionResult> Get()
     {
         var positions = await _positionService.GetAll();
         return Response<IEnumerable<PositionDTO>>.Ok(positions, "Lista de Position obtidas com sucesso!");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
         var position = await _positionService.GetById(id);
-        
+
         return Response<PositionDTO>.Ok(position, "Position obtido com sucesso!");
-    
+
     }
 
-    [HttpPost]
+    [HttpPost, MapToApiVersion("1")]
     public async Task<IActionResult> Post(PositionDTO positionDto)
     {
         Execute.Executar(positionDto);
         positionDto.Id = 0;
         await _positionService.Create(positionDto);
 
-        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!"); 
+        return Response<PositionDTO>.Created(positionDto, "Cargo Cadastrado com sucesso!");
 
     }
 
-    [HttpPut("{id}")] 
+    [HttpPut("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
     {
         Execute.Executar(positionDto);
-        await _positionService.Update(positionDto, id); ;
+        await _positionService.Update(positionDto, id); 
 
-        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!"); 
+        return Response<PositionDTO>.Ok(positionDto, "Cargo atualizado com sucesso!");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Delete(int id)
     {
 
