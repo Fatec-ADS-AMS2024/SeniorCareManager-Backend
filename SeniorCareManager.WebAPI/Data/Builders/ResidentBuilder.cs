@@ -1,6 +1,7 @@
-﻿using SeniorCareManager.WebAPI.Objects.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Objects.Enums;
 using SeniorCareManager.WebAPI.Objects.Models;
-using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace SeniorCareManager.WebAPI.Data.Builders
 {
@@ -68,9 +69,9 @@ namespace SeniorCareManager.WebAPI.Data.Builders
             modelBuilder.Entity<Resident>()
                 .HasData(new List<Resident>
                 {
-                    new Resident(1, "João da Silva", "João", new DateTime(1940, 5, 20), "83", "12345678901", "MG1234567", "SSP", "MG", "12345678901", Sex.FEMALE, MaritalStatus.MARRIED, Ethnicity.WHITE, "Carlos da Silva", "Maria de Souza", "Ana Silva", "123456789012345", "9876543210", "31999999999", "3133333333", 1.75m, 80.5m),
-                    new Resident(2, "Maria de Souza", "Maria", new DateTime(1935, 8, 15), "88", "10987654321", "SP7654321", "SSP", "SP", "1098765654", Sex.MALE, MaritalStatus.DIVORCED, Ethnicity.WHITE, "José de Souza", "Ana Pereira", "Carlos Souza", "543216789012345", "1234567890", "21988888888", "2133333333", 1.60m, 65.0m),
-                    new Resident(3, "Ana Pereira", "Ana", new DateTime(1945, 12, 30), "77", "11223344556", "RJ1122334", "SSP", "RJ", "1122334451", Sex.FEMALE, MaritalStatus.SEPARATED, Ethnicity.WHITE, "Pedro Pereira", "Clara Lima", "João Pereira", "678905432109876", "5678901234", "31977777777", "3132222222", 1.68m, 70.0m)
+                    new Resident(1, "João da Silva", "João", new DateTime(1940, 5, 20, 0, 0, 0, DateTimeKind.Utc), "83", "12345678901", "MG1234567", "SSP", "MG", "12345678901", Sex.FEMALE, MaritalStatus.MARRIED, Ethnicity.WHITE, "Carlos da Silva", "Maria de Souza", "Ana Silva", "123456789012345", "9876543210", "31999999999", "3133333333", 1.75m, 80.5m),
+                    new Resident(2, "Maria de Souza", "Maria", new DateTime(1935, 8, 15, 0, 0, 0, DateTimeKind.Utc), "88", "10987654321", "SP7654321", "SSP", "SP", "1098765654", Sex.MALE, MaritalStatus.DIVORCED, Ethnicity.WHITE, "José de Souza", "Ana Pereira", "Carlos Souza", "543216789012345", "1234567890", "21988888888", "2133333333", 1.60m, 65.0m),
+                    new Resident(3, "Ana Pereira", "Ana", new DateTime(1945, 12, 30, 0, 0, 0, DateTimeKind.Utc), "77", "11223344556", "RJ1122334", "SSP", "RJ", "1122334451", Sex.FEMALE, MaritalStatus.SEPARATED, Ethnicity.WHITE, "Pedro Pereira", "Clara Lima", "João Pereira", "678905432109876", "5678901234", "31977777777", "3132222222", 1.68m, 70.0m)
                 });
         }
     }

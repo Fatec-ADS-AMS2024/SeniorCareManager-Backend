@@ -1,16 +1,14 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
     public class ResidentAllergyDTO
     {
-
         public int Id { get; set; }
 
-        [RemoveSpaces]
         public int ResidentId { get; set; }
 
-        [RemoveSpaces]
-        public string Description { get; set; }
+        public int AllergyId { get; set; }
     }
 }

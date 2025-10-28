@@ -39,6 +39,7 @@ namespace SeniorCareManager.WebAPI.Data
             ResidentBuilder.Build(modelBuilder);
             ResidentAllergyBuilder.Build(modelBuilder);
             ResidentRelativeBuilder.Build(modelBuilder);
+ 
 
         }
     }

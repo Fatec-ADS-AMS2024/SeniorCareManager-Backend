@@ -33,10 +33,19 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         if (residentAllergyDto is null)
             throw new ExceptionBadRequest("A alergia do residente não pode ser nula.");
 
-        if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.Description))
+        if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.AllergyId))
             throw new ExceptionConflict("Alergia já cadastrada para este residente.");
 
         await base.Create(residentAllergyDto);
+    }
+
+    private async Task<bool> CheckDuplicates(int residentId, int allergyId)
+    {
+        var allergies = await _residentAllergyRepository.Get();
+        return allergies.Any(a =>
+            a.ResidentId == residentId &&
+            a.AllergyId == allergyId
+        );
     }
 
     public override async Task Update(ResidentAllergyDTO residentAllergyDto, int id)
@@ -47,7 +56,7 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         if (residentAllergyDto.Id != id)
             throw new ExceptionBadRequest("O id da alergia do residente deve ser o mesmo.");
 
-        if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.Description))
+        if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.AllergyId))
             throw new ExceptionConflict("Alergia já cadastrada para este residente.");
 
         await base.Update(residentAllergyDto, id);
@@ -60,14 +69,5 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
             throw new ExceptionBadRequest("Alergia do residente com o id " + id + " informado não foi encontrada.");
 
         await base.Remove(id);
-    }
-
-    public async Task<bool> CheckDuplicates(int residentId, string description)
-    {
-        var allergies = await _residentAllergyRepository.Get();
-        return allergies.Any(a =>
-            a.ResidentId == residentId &&
-            StringUtils.CompareString(a.Description, description)
-        );
     }
 }

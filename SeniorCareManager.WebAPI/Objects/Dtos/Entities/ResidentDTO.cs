@@ -59,9 +59,11 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public string SpouseName { get; set; }
 
         [RemoveSpaces]
+        [QtdCaractersValidator(15, ErrorMessage = "O número do cartão nacional de saúde deve ter 15 caracteres.")]
         public string NationalHealthCardNumber { get; set; }
 
         [RemoveSpaces]
+        [QtdCaractersValidator(15, ErrorMessage = "O número do cartão de saúde privado deve ter 15 caracteres.")]
         public string PrivateHealthCardNumber { get; set; }
 
         [RemoveSpaces]
