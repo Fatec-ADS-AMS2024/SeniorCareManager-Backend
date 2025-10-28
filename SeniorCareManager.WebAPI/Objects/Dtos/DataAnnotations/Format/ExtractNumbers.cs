@@ -1,4 +1,6 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 public class ExtractNumbers : BaseAnnotation
@@ -9,12 +11,16 @@ public class ExtractNumbers : BaseAnnotation
             throw new ArgumentNullException("Essa funcão precisa de parâmetros");
     }
 
-    public override void Execute()
+    public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         string valor = new string(Value.ToString()?.Where(char.IsDigit).ToArray());
 
         if (string.IsNullOrWhiteSpace(valor))
-            ReturnError("O campo não pode ser nulo ou vazio.");
+            return ReturnError(NameProperty, "O campo não pode ser nulo ou vazio.");
         SetValue(valor);
+        return null;
     }
 }

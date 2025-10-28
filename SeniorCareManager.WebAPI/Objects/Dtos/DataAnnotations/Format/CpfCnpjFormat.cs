@@ -1,4 +1,7 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 
@@ -6,28 +9,33 @@ public class CpfCnpjFormat : BaseAnnotation
 {
     public CpfCnpjFormat(params object[]? parameters) : base(parameters) { }
 
-    public override void Execute()
+    public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         string cpfCnpj = new string(Value.ToString().Where(char.IsDigit).ToArray());
 
         if (cpfCnpj.Length == 11)
         {
             if (!ValidarCpf(cpfCnpj))
-                ReturnError("CPF inválido.");
+                return ReturnError(NameProperty, "CPF inválido.");
             else
                 SetValue(cpfCnpj);
         }
         else if (cpfCnpj.Length == 14)
         {
             if (!ValidarCnpj(cpfCnpj))
-                ReturnError("CNPJ inválido.");
+                return ReturnError(NameProperty, "CNPJ inválido.");
             else
                 SetValue(cpfCnpj);
         }
         else
         {
-            ReturnError("O campo deve conter um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.");
+            return ReturnError(NameProperty, "O campo deve conter um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.");
         }
+
+        return null;
     }
 
     private bool ValidarCpf(string cpf)

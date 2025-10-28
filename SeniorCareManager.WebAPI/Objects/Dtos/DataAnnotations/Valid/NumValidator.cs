@@ -1,4 +1,6 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
@@ -10,24 +12,27 @@ public class NumValidator : BaseAnnotation
             throw new ArgumentNullException("Essa função precisa de parâmetros.");
     }
 
-    public override void Execute()
+    public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         if (!decimal.TryParse(Value.ToString(), out var valor))
         {
-            ReturnError("O valor informado não é numérico.");
-            return;
+            return ReturnError(NameProperty, "O valor informado não é numérico.");
         }
 
         if (!decimal.TryParse(Parameters[0].ToString(), out var minValue))
         {
-            ReturnError("O parâmetro mínimo é inválido.");
-            return;
+            return ReturnError(NameProperty, "O parâmetro mínimo é inválido.");
         }
 
         if (valor < minValue)
         {
-            ReturnError($"O valor {valor} é menor que o mínimo permitido ({minValue}).");
+            return ReturnError(NameProperty, $"O valor {valor} é menor que o mínimo permitido ({minValue}).");
         }
+
+        return null;
 
     }
 }

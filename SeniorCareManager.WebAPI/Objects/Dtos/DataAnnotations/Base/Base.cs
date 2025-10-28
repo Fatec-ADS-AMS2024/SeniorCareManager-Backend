@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
 [AttributeUsage(AttributeTargets.Property)]
@@ -17,6 +18,8 @@ public abstract class BaseAnnotation : Attribute
         set => SetValue(value);
     }
 
+    protected string NameProperty;
+
     public BaseAnnotation(params object[]? parameters)
     {
         Parameters = parameters;
@@ -25,10 +28,11 @@ public abstract class BaseAnnotation : Attribute
     public void Initialize(PropertyInfo property, object value)
     {
         _property = property;
+        NameProperty = property.Name;
         _value = value;
     }
 
-    public abstract void Execute();
+    public abstract FieldError? Execute();
 
     protected object GetValue()
     {
@@ -40,14 +44,14 @@ public abstract class BaseAnnotation : Attribute
         _property.SetValue(_value, newValue);
     }
 
-    protected void ReturnError(string? mensage = null)
+    protected FieldError ReturnError(string field, string? mensage = null)
     {
         if (ErrorMessage is not null)
-            throw new ArgumentException(ErrorMessage);
+            return new FieldError{Field = char.ToLower(field[0]) + field.Substring(1), Message = ErrorMessage};
 
         if (mensage is not null)
-            throw new ArgumentException(mensage);
+            return new FieldError{Field = char.ToLower(field[0]) + field.Substring(1), Message = mensage};
 
-        throw new ArgumentException("Erro padrão de anotação.");
+        return new FieldError{Field = char.ToLower(field[0]) + field.Substring(1), Message = "Erro padrão de anotação."};
     }
 }

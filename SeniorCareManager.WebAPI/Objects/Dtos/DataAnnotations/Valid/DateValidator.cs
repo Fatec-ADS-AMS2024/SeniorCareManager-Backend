@@ -1,4 +1,6 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
@@ -10,12 +12,14 @@ public class DateValidator : BaseAnnotation
             throw new ArgumentNullException("Essa função precisa de parâmetros: mínimo e/ou máximo.");
     }
 
-    public override void Execute()
+    public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         if (Value is not DateTime date)
         {
-            ReturnError("Valor informado não é uma data válida.");
-            return;
+            return ReturnError(NameProperty, "Valor informado não é uma data válida.");
         }
 
         DateTime? minDate = null;
@@ -25,7 +29,7 @@ public class DateValidator : BaseAnnotation
             if (param is DateTime dt)
             {
                 minDate = dt;
-                break; 
+                break;
             }
             else if (param is string str && DateTime.TryParse(str, out var parsed))
             {
@@ -34,14 +38,14 @@ public class DateValidator : BaseAnnotation
             }
             else
             {
-                ReturnError("Parâmetro inválido para data mínima.");
-                return;
+                return ReturnError(NameProperty, "Parâmetro inválido para data mínima.");
             }
         }
 
         if (minDate.HasValue && date < minDate.Value)
         {
-            ReturnError($"A data não pode ser anterior a {minDate:dd/MM/yyyy}.");
+            return ReturnError(NameProperty, $"A data não pode ser anterior a {minDate:dd/MM/yyyy}.");
         }
+        return null;
     }
 }

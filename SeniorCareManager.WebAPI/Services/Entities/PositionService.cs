@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
@@ -19,43 +21,51 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public override async Task<PositionDTO> GetById(int id)
         {
+            var errors = new List<FieldError>();
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionBadRequest("Cargo com o id " + id + " informado não foi encontrado.");
 
             return _mapper.Map<PositionDTO>(position);
         }
 
         public override async Task Create(PositionDTO positionDto)
         {
+            var errors = new List<FieldError>();
+
             if (positionDto is null)
-                throw new ArgumentNullException("O Cargo não pode ser nulo.");
+                throw new ExceptionBadRequest("O Cargo não pode ser nulo.");
 
 
 
             if (await CheckDuplicates(positionDto.Name))
-                throw new InvalidOperationException("Nome duplicado.");
+                throw new ExceptionConflict("Nome duplicado.");
 
             await base.Create(positionDto);
         }
         public override async Task Update(PositionDTO positionDto, int id)
         {
+            var errors = new List<FieldError>();
             if (positionDto is null)
-                throw new ArgumentNullException("O Cargo não pode ser nulo.");
+                throw new ExceptionBadRequest("O Cargo não pode ser nulo.");
 
-            //if (PositionDTO.IsFilledString(positionDto.Name))
-                //throw new ArgumentException("Nome Inválido.");
+            if (positionDto.Id != id)
+                throw new ExceptionBadRequest("O id de Cargo dever ser o mesmo.");
 
             if (await CheckDuplicates(positionDto.Name))
-                throw new InvalidOperationException("Nome duplicado.");
+                errors.Add(new FieldError{Field = "Nome", Message = "Nome duplicado."});
+
+            if (errors.Count() > 0)
+                throw new ExceptionBadRequest("Erros na requisição", errors);
 
             await base.Update(positionDto, id);
         }
         public override async Task Remove(int id)
         {
+
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new ArgumentNullException("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionConflict("Cargo com o id " + id + " informado não foi encontrado.");
 
             await base.Remove(id);
         }
