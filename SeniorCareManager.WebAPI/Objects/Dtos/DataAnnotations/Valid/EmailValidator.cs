@@ -1,5 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 using System.Text.RegularExpressions;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
@@ -16,6 +17,9 @@ public class EmailValidator : BaseAnnotation
 
     public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         string valor = Value?.ToString();
 
         if (!_emailRegex.IsMatch(valor))
