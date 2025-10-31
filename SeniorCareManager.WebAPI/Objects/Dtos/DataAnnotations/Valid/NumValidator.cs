@@ -1,5 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
@@ -13,6 +14,9 @@ public class NumValidator : BaseAnnotation
 
     public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         if (!decimal.TryParse(Value.ToString(), out var valor))
         {
             return ReturnError(NameProperty, "O valor informado não é numérico.");

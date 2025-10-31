@@ -10,12 +10,16 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 namespace SeniorCareManager.WebAPI;
 
 using System;
-using System.Collections.Generic;
+using System.Text;
+using SeniorCareManager.WebAPI.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 
 
@@ -51,11 +55,12 @@ public class Startup
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = @"Enter 'Bearer' [space] your token",
+                Description = "Autenticação via Token JWT. Insira 'Bearer' [espaço] e o seu token. Exemplo: 'Bearer 12345abcdef'",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
+                Scheme = "Bearer",
+                BearerFormat = "JWT"
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -67,14 +72,19 @@ public class Startup
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
-                        },
-                        Scheme = "oauth2",
-                        Name = "Bearer",
-                        In = ParameterLocation.Header
+                        }
                     },
-                    new List<string>()
+                    new string[] {}
                 }
             });
+        });
+
+        // VERSÃO DA API
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
         });
 
         //adiciona controllers e trata a serialização Json
@@ -95,17 +105,41 @@ public class Startup
                 .AllowCredentials();
         }));
 
-        /*
-         //exemplo de correção da serialização Json com NewtonSoft.
-        services.AddControllers()
-            .AddNewtonsoftJson(opt =>
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            var jwtSettings = Configuration.GetSection("JwtSettings");
+            var jwtKey = jwtSettings["Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new InvalidOperationException("JWT Key is not configured.");
+            }
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
 
-        */
+        // Serviços essenciais e específicos da sua aplicação
+        services.AddHttpContextAccessor();
+        services.AddScoped<JwtService>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-      
-        //Scoped Repositories and Interfaces repo
+
+        // Scopecd Token
+
+        //Scoped Repositories and Interfaces services
         services.AddScoped<IProductGroupService, ProductGroupService>();
         services.AddScoped<IProductTypeService, ProductTypeService>();
         services.AddScoped<ISupplierService, SupplierService>();
@@ -116,6 +150,7 @@ public class Startup
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IAdmService, AdmService>();
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
@@ -168,7 +203,9 @@ public class Startup
 
         app.UseCors("MyPolicy");
 
-        // app.UseAuthorization();
+        // Depois Autenticação e Autorização.
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
         {
