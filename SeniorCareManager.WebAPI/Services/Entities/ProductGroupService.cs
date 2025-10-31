@@ -1,5 +1,6 @@
 using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -8,7 +9,6 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
-
 public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>, IProductGroupService
 {
     private readonly IProductGroupRepository _repository;
@@ -25,13 +25,18 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
     {
         var entity = await _repository.GetById(id);
         if (entity is null)
-            throw new ExceptionNotFound($"Grupo de produto com id {id} não encontrado.");
+            throw new ExceptionBadRequest($"Grupo de produto com id {id} não encontrado.");
 
         return _mapper.Map<ProductGroupDTO>(entity);
     }
 
     public override async Task Create(ProductGroupDTO dto)
     {
+        var errors = new List<FieldError>();
+
+        if (dto is null)
+            throw new ExceptionBadRequest("O Grupo de produto não pode ser nulo.");
+
         Execute.Executar(dto);
 
         if (await IsDuplicateNameAsync(dto.Name))
@@ -42,10 +47,21 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task Update(ProductGroupDTO dto, int id)
     {
+        var errors = new List<FieldError>();
+
+        if (dto is null)
+            throw new ExceptionBadRequest("O Grupo de produto não pode ser nulo.");
+
+        if (dto.Id != id)
+            throw new ExceptionBadRequest("O id do Grupo de produto deve ser o mesmo.");
+
         Execute.Executar(dto);
 
         if (await IsDuplicateNameAsync(dto.Name, id))
-            throw new ExceptionConflict("Já existe um grupo de produto com este nome.");
+            errors.Add(new FieldError { Field = "Name", Message = "Nome duplicado." });
+
+        if (errors.Count > 0)
+            throw new ExceptionBadRequest("Erros na requisição", errors);
 
         await base.Update(dto, id);
     }
@@ -54,7 +70,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
     {
         var entity = await _repository.GetById(id);
         if (entity is null)
-            throw new ExceptionNotFound($"Grupo de produto com id {id} não encontrado.");
+            throw new ExceptionConflict($"Grupo de produto com id {id} não encontrado.");
 
         await base.Remove(id);
     }
