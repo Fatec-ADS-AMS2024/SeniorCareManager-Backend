@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
@@ -48,6 +50,7 @@ public class ReligionController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _religionService.Remove(id);
-        return Response<object>.NoContent("A religião apagada com sucesso!");
+
+        return Response<object>.NoContent();
     }
 }

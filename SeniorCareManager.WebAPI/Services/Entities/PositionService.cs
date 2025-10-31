@@ -49,8 +49,8 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (positionDto is null)
                 throw new ExceptionBadRequest("O Cargo não pode ser nulo.");
 
-            //if (PositionDTO.IsFilledString(positionDto.Name))
-            //throw new ExceptionBadRequest("Nome Inválido.");
+            if (positionDto.Id != id)
+                throw new ExceptionBadRequest("O id de Cargo dever ser o mesmo.");
 
             if (await CheckDuplicates(positionDto.Name))
                 errors.Add(new FieldError{Field = "Nome", Message = "Nome duplicado."});
