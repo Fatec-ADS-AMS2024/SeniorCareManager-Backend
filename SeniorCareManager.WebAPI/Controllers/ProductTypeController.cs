@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1")]
 public class ProductTypeController : ControllerBase
 {
     private readonly IProductTypeService _service;
@@ -16,48 +18,49 @@ public class ProductTypeController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet, MapToApiVersion("1")]
     public async Task<IActionResult> GetAll()
     {
         var productTypes = await _service.GetAll();
-        return Ok(productTypes);
+        return Response<IEnumerable<ProductTypeDTO>>.Ok(productTypes, "Lista de tipos de produto obtida com sucesso!");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
         var productType = await _service.GetById(id);
-        return Ok(productType);
+        return Response<ProductTypeDTO>.Ok(productType, "Tipo de produto encontrado!");
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create(ProductTypeDTO dto)
+    [HttpPost, MapToApiVersion("1")]
+    public async Task<IActionResult> Create([FromBody] ProductTypeDTO dto)
     {
         Execute.Executar(dto);
+        dto.Id = 0;
         await _service.Create(dto);
-        return Ok(dto);
+        return Response<ProductTypeDTO>.Created(dto, "Tipo de produto cadastrado com sucesso!");
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, ProductTypeDTO dto)
+    [HttpPut("{id}"), MapToApiVersion("1")]
+    public async Task<IActionResult> Update(int id, [FromBody] ProductTypeDTO dto)
     {
         Execute.Executar(dto);
         await _service.Update(dto, id);
-        return Ok(dto);
+        return Response<ProductTypeDTO>.Ok(dto, "Tipo de produto atualizado com sucesso!");
     }
 
-    [HttpDelete("{id}")]
+    [HttpPatch("{id}"), MapToApiVersion("1")]
+    public async Task<IActionResult> Patch(int id, [FromBody] ProductTypeDTO dto)
+    {
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductTypeDTO>.Ok(dto, "Tipo de produto atualizado com sucesso!");
+    }
+
+    [HttpDelete("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Delete(int id)
     {
         await _service.Remove(id);
-        return Ok($"Tipo de produto com id {id} removido com sucesso.");
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductTypeDTO dto)
-    {
-        Execute.Executar(dto);
-        await _service.Update(dto, id);
-        return Ok(dto);
+        return Response<object>.NoContent();
     }
 }
