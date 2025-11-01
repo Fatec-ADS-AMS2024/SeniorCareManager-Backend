@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
 {
@@ -38,9 +39,5 @@ namespace SeniorCareManager.WebAPI.Services.Utils
         {
             return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
         }
-        // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
-
-
-
     }
 }
