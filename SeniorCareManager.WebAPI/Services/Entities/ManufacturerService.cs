@@ -6,7 +6,6 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
 public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>,IManufacturerService
-public class ManufacturerService : GenericService<Manufacturer, ManufacturerDTO>, IManufacturerService
 {
     private readonly IManufacturerRepository _manufacturerRepository;
     private readonly IMapper _mapper;

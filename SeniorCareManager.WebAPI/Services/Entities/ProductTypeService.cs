@@ -24,19 +24,19 @@ public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, I
     {
         var entity = await _repository.GetById(id);
         if (entity == null)
-            throw new ExceptionNotFound($"Tipo de produto com id {id} não encontrado.");
+            throw new ExceptionNotFound($"Tipo de produto com id {id} nï¿½o encontrado.");
 
         return _mapper.Map<ProductTypeDTO>(entity);
     }
 
-    public override async Task Create(ProductTypeDTO dto)
+    public override async Task<ProductTypeDTO> Create(ProductTypeDTO dto)
     {
         Execute.Executar(dto);
 
         if (await CheckDuplicateName(dto.Name))
-            throw new ExceptionConflict("Já existe um tipo de produto com este nome.");
+            throw new ExceptionConflict("Jï¿½ existe um tipo de produto com este nome.");
 
-        await base.Create(dto);
+        return await base.Create(dto);
     }
 
     public override async Task Update(ProductTypeDTO dto, int id)
@@ -44,7 +44,7 @@ public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, I
         Execute.Executar(dto);
 
         if (await CheckDuplicateName(dto.Name, id))
-            throw new ExceptionConflict("Já existe um tipo de produto com este nome.");
+            throw new ExceptionConflict("Jï¿½ existe um tipo de produto com este nome.");
 
         await base.Update(dto, id);
     }
@@ -53,7 +53,7 @@ public class ProductTypeService : GenericService<ProductType, ProductTypeDTO>, I
     {
         var entity = await _repository.GetById(id);
         if (entity == null)
-            throw new ExceptionNotFound($"Tipo de produto com id {id} não encontrado.");
+            throw new ExceptionNotFound($"Tipo de produto com id {id} nï¿½o encontrado.");
 
         await base.Remove(id);
     }

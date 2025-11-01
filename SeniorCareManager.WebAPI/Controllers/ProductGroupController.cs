@@ -3,7 +3,6 @@ using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -11,12 +10,12 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [Route("api/v1/[controller]")]
 public class ProductGroupController : Controller
 {
-    private readonly IProductGroupService _productGroupService;
+    private readonly IProductGroupService _service;
     private readonly Response _response;
 
     public ProductGroupController(IProductGroupService service)
     {
-        _productGroupService = service;
+        _service = service;
         _response = new Response();
     }
 

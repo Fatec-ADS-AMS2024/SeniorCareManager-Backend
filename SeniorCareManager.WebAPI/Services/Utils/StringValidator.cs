@@ -1,22 +1,19 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SeniorCareManager.WebAPI.Services.Utils
 {
-namespace SeniorCareManager.WebAPI.Services.Utils;
     public static class StringValidator
     {
-        //Deixa os nomes iguais para depois ver se tem duplicados
+        // Deixa os nomes iguais para depois ver se tem duplicados
         public static string RemoveDiacritics(this string text)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return text;
 
             var normalizedString = text.Normalize(NormalizationForm.FormD);
-            var stringBuilder = new System.Text.StringBuilder();
-        var stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             foreach (var c in normalizedString)
             {
@@ -37,30 +34,33 @@ namespace SeniorCareManager.WebAPI.Services.Utils;
 
             return new string(text.Where(char.IsDigit).ToArray());
         }
+
         public static bool CompareString(string str1, string str2)
         {
             return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
-        return string.Equals(str1.RemoveDiacritics(), str2.RemoveDiacritics(), StringComparison.OrdinalIgnoreCase);
         }
-        // verifique se o registro possui dependentes relacionados (relação um-para-muitos). A exclusão só deve ocorrer se não houver dependentes.
-    public static bool ContainsDuplicate<T>(
-        IEnumerable<T> list,
-        Func<T, string> nameSelector,
-        string currentName,
-        int currentId = 0,
-        Func<T, int>? idSelector = null)
-    {
-        foreach (var item in list)
+
+        // Verifique se o registro possui dependentes relacionados (relação um-para-muitos). 
+        // A exclusão só deve ocorrer se não houver dependentes.
+        public static bool ContainsDuplicate<T>(
+            IEnumerable<T> list,
+            Func<T, string> nameSelector,
+            string currentName,
+            int currentId = 0,
+            Func<T, int>? idSelector = null)
         {
-            var itemId = idSelector?.Invoke(item) ?? 0;
+            foreach (var item in list)
+            {
+                var itemId = idSelector?.Invoke(item) ?? 0;
 
-            if (itemId == currentId)
-                continue;
+                if (itemId == currentId)
+                    continue;
 
-            if (CompareString(nameSelector(item), currentName))
-                return true;
+                if (CompareString(nameSelector(item), currentName))
+                    return true;
+            }
+
+            return false;
         }
-
-        return false;
     }
 }

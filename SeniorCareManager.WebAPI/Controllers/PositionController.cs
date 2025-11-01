@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
@@ -47,23 +46,9 @@ public class PositionController : Controller
         return Response<PositionDTO>.Created(await _positionService.Create(positionDto), "Cargo Cadastrado com sucesso!");
 
     }
-    public async Task<IActionResult> Post(PositionDTO position)
-    {
-        try
-        {
-            await _positionService.Create(position);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo cargo.");
-        }
-        return Ok(position);
-    }
 
     [HttpPut("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Put(int id, PositionDTO positionDto)
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, PositionDTO position)
     {
         Execute.Executar(positionDto);
         await _positionService.Update(positionDto, id); 

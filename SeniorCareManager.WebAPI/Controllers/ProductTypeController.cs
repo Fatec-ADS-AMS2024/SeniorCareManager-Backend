@@ -37,8 +37,8 @@ public class ProductTypeController : ControllerBase
     {
         Execute.Executar(dto);
         dto.Id = 0;
-        await _service.Create(dto);
-        return Response<ProductTypeDTO>.Created(dto, "Tipo de produto cadastrado com sucesso!");
+        ;
+        return Response<ProductTypeDTO>.Created(await _service.Create(dto), "Tipo de produto cadastrado com sucesso!");
     }
 
     [HttpPut("{id}"), MapToApiVersion("1")]

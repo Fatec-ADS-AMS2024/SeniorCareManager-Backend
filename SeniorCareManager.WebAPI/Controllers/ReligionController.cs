@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
-using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
-using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -35,7 +31,6 @@ public class ReligionController : Controller
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] ReligionDTO religionDto)
-    public async Task<IActionResult> Post(ReligionDTO religion)
     {
         religionDto.id = 0;
         return Response<object>.Created(await _religionService.Create(religionDto), "Religião cadastrada com sucesso!");
@@ -46,18 +41,6 @@ public class ReligionController : Controller
     {
         await _religionService.Update(religionDto, id);
         return Response<object>.Ok(religionDto, "Religião alterada com sucesso!");
-    public async Task<IActionResult> Put(int id, ReligionDTO religion)
-    {
-        try
-        {
-            await _religionService.Update(religion, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar a religião: " + ex.Message);
-        }
-
-        return Ok(religion);
     }
 
     [HttpDelete("{id}")]
