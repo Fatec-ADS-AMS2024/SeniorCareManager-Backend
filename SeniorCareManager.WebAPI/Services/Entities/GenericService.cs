@@ -30,11 +30,10 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         return _mapper.Map<TDto>(entity);
     }
 
-    public virtual async Task Create(TDto entityDTO)
-    public async Task Create(TDto entityDTO)
+    public virtual async Task<TDto> Create(TDto entityDTO)
     {
         var entity = _mapper.Map<T>(entityDTO);
-        await _repository.Add(entity);
+        return _mapper.Map<TDto>( await _repository.Add(entity) );
     }
 
     public virtual async Task Update(TDto entityDTO, int id)

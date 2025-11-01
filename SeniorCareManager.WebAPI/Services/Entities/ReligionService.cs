@@ -28,7 +28,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 
         return _mapper.Map<ReligionDTO>(religion);
     }
-    public override async Task Create(ReligionDTO religionDto)
+    public override async Task<ReligionDTO> Create(ReligionDTO religionDto)
     {
        
 
@@ -39,7 +39,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
             throw new ExceptionConflict("Nome já existente.");
 
 
-        await base.Create(religionDto);
+        return _mapper.Map<ReligionDTO>( await base.Create(religionDto) );
     }
     public override async Task Update(ReligionDTO religionDto, int id)
     {
