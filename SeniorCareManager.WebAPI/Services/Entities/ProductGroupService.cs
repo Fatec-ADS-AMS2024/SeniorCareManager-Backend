@@ -14,8 +14,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
     private readonly IProductGroupRepository _repository;
     private readonly IMapper _mapper;
 
-    public ProductGroupService(IProductGroupRepository repository, IMapper mapper)
-        : base(repository, mapper)
+    public ProductGroupService(IProductGroupRepository repository, IMapper mapper) : base(repository, mapper)
     {
         _repository = repository;
         _mapper = mapper;

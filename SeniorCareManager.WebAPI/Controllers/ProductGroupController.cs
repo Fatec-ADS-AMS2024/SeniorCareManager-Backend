@@ -11,10 +11,12 @@ namespace SeniorCareManager.WebAPI.Controllers;
 public class ProductGroupController : Controller
 {
     private readonly IProductGroupService _service;
+    private readonly Response _response;
 
     public ProductGroupController(IProductGroupService service)
     {
         _service = service;
+        _response = new Response();
     }
 
     [HttpGet]
