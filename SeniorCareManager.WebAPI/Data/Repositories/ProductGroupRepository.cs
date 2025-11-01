@@ -5,7 +5,7 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data.Repositories;
 
-public class ProductGroupRepository : GenericRepository<ProductGroup>,  IProductGroupRepository
+public class ProductGroupRepository : GenericRepository<ProductGroup>, IProductGroupRepository
 {
     private readonly AppDbContext _context;
 

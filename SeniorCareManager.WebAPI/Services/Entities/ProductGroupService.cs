@@ -25,24 +25,22 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
     {
         var entity = await _repository.GetById(id);
         if (entity is null)
-            throw new ExceptionBadRequest($"Grupo de produto com id {id} não encontrado.");
+            throw new ExceptionBadRequest($"Grupo de produto com id {id} nï¿½o encontrado.");
 
         return _mapper.Map<ProductGroupDTO>(entity);
     }
 
-    public override async Task Create(ProductGroupDTO dto)
+    public override async Task<ProductGroupDTO> Create(ProductGroupDTO dto)
     {
         var errors = new List<FieldError>();
 
         if (dto is null)
-            throw new ExceptionBadRequest("O Grupo de produto não pode ser nulo.");
-
-        Execute.Executar(dto);
+            throw new ExceptionBadRequest("O Grupo de produto nÃ£o pode ser nulo.");
 
         if (await IsDuplicateNameAsync(dto.Name))
-            throw new ExceptionConflict("Já existe um grupo de produto com este nome.");
+            throw new ExceptionConflict("Jï¿½ existe um grupo de produto com este nome.");
 
-        await base.Create(dto);
+        return _mapper.Map<ProductGroupDTO>(await base.Create(dto));
     }
 
     public override async Task Update(ProductGroupDTO dto, int id)
@@ -50,7 +48,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
         var errors = new List<FieldError>();
 
         if (dto is null)
-            throw new ExceptionBadRequest("O Grupo de produto não pode ser nulo.");
+            throw new ExceptionBadRequest("O Grupo de produto nï¿½o pode ser nulo.");
 
         if (dto.Id != id)
             throw new ExceptionBadRequest("O id do Grupo de produto deve ser o mesmo.");
@@ -61,7 +59,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
             errors.Add(new FieldError { Field = "Name", Message = "Nome duplicado." });
 
         if (errors.Count > 0)
-            throw new ExceptionBadRequest("Erros na requisição", errors);
+            throw new ExceptionBadRequest("Erros na requisiï¿½ï¿½o", errors);
 
         await base.Update(dto, id);
     }
@@ -70,7 +68,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
     {
         var entity = await _repository.GetById(id);
         if (entity is null)
-            throw new ExceptionConflict($"Grupo de produto com id {id} não encontrado.");
+            throw new ExceptionConflict($"Grupo de produto com id {id} nï¿½o encontrado.");
 
         await base.Remove(id);
     }

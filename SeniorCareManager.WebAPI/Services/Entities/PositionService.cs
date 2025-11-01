@@ -29,7 +29,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<PositionDTO>(position);
         }
 
-        public override async Task Create(PositionDTO positionDto)
+        public override async Task<PositionDTO> Create(PositionDTO positionDto)
         {
             var errors = new List<FieldError>();
 
@@ -41,7 +41,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (await CheckDuplicates(positionDto.Name))
                 throw new ExceptionConflict("Nome duplicado.");
 
-            await base.Create(positionDto);
+            return _mapper.Map<PositionDTO>( await base.Create(positionDto) );
         }
         public override async Task Update(PositionDTO positionDto, int id)
         {

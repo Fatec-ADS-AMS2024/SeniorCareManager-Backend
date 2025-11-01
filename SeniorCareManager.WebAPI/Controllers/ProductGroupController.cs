@@ -35,9 +35,7 @@ public class ProductGroupController : Controller
     public async Task<IActionResult> Post(ProductGroupDTO dto)
     {
         Execute.Executar(dto);
-        dto.Id = 0;
-        await _service.Create(dto);
-        return Response<ProductGroupDTO>.Created(dto, "Grupo de produto cadastrado com sucesso!");
+        return Response<ProductGroupDTO>.Created(await _service.Create(dto), "Grupo de produto cadastrado com sucesso!");
     }
 
     [HttpPut("{id}")]
@@ -58,7 +56,7 @@ public class ProductGroupController : Controller
 
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroupDTO dto)
+    public async Task<IActionResult> Patch([FromRoute] int id, ProductGroupDTO dto)
     {
         Execute.Executar(dto);
         await _service.Update(dto, id);
