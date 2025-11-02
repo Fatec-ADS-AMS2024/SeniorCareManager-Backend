@@ -23,17 +23,17 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
         {
             var product = await _productRepository.GetById(id);
             if (product is null)
-                throw new ExceptionNotFound("Produto com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Produto com o id " + id + " informado nï¿½o foi encontrado.");
 
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public override async Task Create(ProductDTO productDto)
+        public override async Task<ProductDTO> Create(ProductDTO productDto)
         {
             if (await CheckDuplicates(productDto.GenericName))
                 throw new ExceptionConflict("Nome duplicados.");
 
-            await base.Create(productDto);
+            return _mapper.Map<ProductDTO>( await base.Create(productDto) );
         }
 
         public async Task Update(ProductDTO productDTO, long id)
@@ -43,7 +43,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
 
             if (existingproduct == null)
             {
-                throw new ExceptionNotFound($"Produto com id {id} não encontrado!");
+                throw new ExceptionNotFound($"Produto com id {id} nï¿½o encontrado!");
             }
 
             if (await CheckDuplicates(productDTO.GenericName))
@@ -58,7 +58,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
             var product = await _productRepository.GetById(id);
             if (product == null)
             {
-                throw new ExceptionNotFound($"Entidade com id: {id} não encontrado");
+                throw new ExceptionNotFound($"Entidade com id: {id} nï¿½o encontrado");
             }
 
             await _productRepository.Remove(product);
