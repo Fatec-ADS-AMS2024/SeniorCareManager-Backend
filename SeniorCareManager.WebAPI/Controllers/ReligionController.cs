@@ -35,8 +35,7 @@ public class ReligionController : Controller
     public async Task<IActionResult> Post([FromBody] ReligionDTO religionDto)
     {
         religionDto.id = 0;
-        await _religionService.Create(religionDto);
-        return Response<object>.Created(religionDto, "Religião cadastrada com sucesso!");
+        return Response<object>.Created(await _religionService.Create(religionDto), "Religião cadastrada com sucesso!");
     }
 
     [HttpPut("{id}")]
@@ -50,6 +49,7 @@ public class ReligionController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _religionService.Remove(id);
-        return Response<object>.Ok(null, "A religião foi apagada com sucesso!");
+
+        return Response<object>.NoContent();
     }
 }
