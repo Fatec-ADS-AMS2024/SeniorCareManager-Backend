@@ -9,7 +9,7 @@ public class Manufacturer
     public int Id { get; set; }
     [Column("corporate_name")]
     public string CorporateName { get; set; }
-    [Column("tradename")]
+    [Column("trade_name")]
     public string TradeName { get; set; }
     [Column("cpf_cnpj")]
     public string CpfCnpj { get; set; }

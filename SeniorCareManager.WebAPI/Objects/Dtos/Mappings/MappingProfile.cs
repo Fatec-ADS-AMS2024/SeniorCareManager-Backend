@@ -9,7 +9,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ProductGroupDTO, ProductGroup>().ReverseMap();
-        CreateMap<ProductGroup, ProductGroupDTO>(); 
+        CreateMap<ProductGroup, ProductGroupDTO>();
         CreateMap<ProductTypeDTO, ProductType>().ReverseMap();
         CreateMap<ProductType, ProductTypeDTO>();
         CreateMap<PositionDTO, Position>().ReverseMap();
@@ -30,6 +30,11 @@ public class MappingProfile : Profile
         CreateMap<Allergy, AllergyDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
-
+        CreateMap<ResidentDTO, Resident>().ReverseMap();
+        CreateMap<Resident, ResidentDTO>();
+        CreateMap<ResidentAllergyDTO, ResidentAllergy>().ReverseMap();
+        CreateMap<ResidentAllergy, ResidentAllergyDTO>();
+        CreateMap<ResidentRelativeDTO, ResidentRelative>().ReverseMap();
+        CreateMap<ResidentRelative, ResidentRelativeDTO>();
     }
 }

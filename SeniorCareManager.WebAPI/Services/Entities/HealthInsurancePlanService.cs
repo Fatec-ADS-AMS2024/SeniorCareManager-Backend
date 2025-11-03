@@ -28,7 +28,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
 
         return _mapper.Map<HealthInsurancePlanDTO>(healthInsurancePlan);
     }
-    public override async Task Create(HealthInsurancePlanDTO healthInsurancePlanDto)
+    public override async Task<HealthInsurancePlanDTO> Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         var errors = new List<FieldError>();
         if (healthInsurancePlanDto is null)
@@ -37,7 +37,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Nome duplicado.");
 
-        await base.Create(healthInsurancePlanDto);
+        return _mapper.Map<HealthInsurancePlanDTO>( await base.Create(healthInsurancePlanDto) );
     }
     public override async Task Update(HealthInsurancePlanDTO healthInsurancePlanDto, int id)
     {

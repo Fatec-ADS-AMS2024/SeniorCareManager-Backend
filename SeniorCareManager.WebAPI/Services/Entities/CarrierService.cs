@@ -6,7 +6,7 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
-    public class CarrierService : GenericService<Carrier, CarrierDTO>, ICarrierService
+    public class CarrierService : GenericService<Carrier,CarrierDTO>, ICarrierService
     {
         private readonly ICarrierRepository _carrierRepository;
         private readonly IMapper _mapper;
