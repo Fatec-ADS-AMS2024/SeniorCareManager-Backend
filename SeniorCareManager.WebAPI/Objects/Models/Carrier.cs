@@ -8,13 +8,13 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("corporatename")]
+        [Column("corporate_name")]
         public string CorporateName { get; set; }
 
-        [Column("tradename")]
+        [Column("trade_name")]
         public string TradeName { get; set; }
 
-        [Column("cpfcnpj")]
+        [Column("cpf_cnpj")]
         public string CpfCnpj { get; set; }
 
         [Column("street")]
@@ -26,7 +26,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("district")]
         public string District { get; set; }
 
-        [Column("addresscomplement")]
+        [Column("address_complement")]
         public string AddressComplement { get; set; }
 
         [Column("city")]
@@ -35,7 +35,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("state")]
         public string State { get; set; }
 
-        [Column("postalcode")]
+        [Column("postal_code")]
         public string PostalCode { get; set; }
 
         [Column("phone")]

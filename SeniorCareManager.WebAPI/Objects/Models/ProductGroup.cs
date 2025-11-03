@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
-[Table("productgroup")]
+[Table("product_group")]
 public class ProductGroup
 {
     [Column("id")]

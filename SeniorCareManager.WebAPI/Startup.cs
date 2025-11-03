@@ -150,6 +150,9 @@ public class Startup
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IResidentService, ResidentService>();
+        services.AddScoped<IResidentAllergyService, ResidentAllergyService>();
+        services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
         services.AddScoped<IAdmService, AdmService>();
 
         //Scoped Repositories and Interfaces repo
@@ -163,6 +166,9 @@ public class Startup
         services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IResidentRepository, ResidentRepository>();
+        services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
+        services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
 
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
