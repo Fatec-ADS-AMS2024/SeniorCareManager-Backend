@@ -34,9 +34,8 @@ public class Response<T>
         return new ObjectResult(new Response<T>(201, message, data)) { StatusCode = StatusCodes.Status201Created };
     }
 
-    public static ObjectResult NoContent(string message)
+    public static ObjectResult NoContent()
     {
-        return new ObjectResult(new Response<object>(204, message)) { StatusCode = StatusCodes.Status204NoContent };
-    } 
-
+        return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
+    }
 }

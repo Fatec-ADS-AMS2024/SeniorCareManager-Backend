@@ -1,5 +1,6 @@
 using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
@@ -27,10 +28,10 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         return _mapper.Map<TDto>(entity);
     }
 
-    public virtual async Task Create(TDto entityDTO)
+    public virtual async Task<TDto> Create(TDto entityDTO)
     {
         var entity = _mapper.Map<T>(entityDTO);
-        await _repository.Add(entity);
+        return _mapper.Map<TDto>( await _repository.Add(entity) );
     }
 
     public virtual async Task Update(TDto entityDTO, int id)
@@ -40,7 +41,7 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
 
         if (existingEntity == null)
         {
-            throw new KeyNotFoundException($"Entidade com id: {id} n�o encontrado.");
+            throw new ExceptionBadRequest($"Entidade com id: {id} n�o encontrado.");
         }
 
         await _repository.Update(entity);
@@ -51,7 +52,7 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
         var entity = await _repository.GetById(id);
         if (entity == null)
         {
-            throw new KeyNotFoundException($"Entidade com id: {id} n�o encontrado.");
+            throw new ExceptionBadRequest($"Entidade com id: {id} n�o encontrado.");
         }
 
         await _repository.Remove(entity);

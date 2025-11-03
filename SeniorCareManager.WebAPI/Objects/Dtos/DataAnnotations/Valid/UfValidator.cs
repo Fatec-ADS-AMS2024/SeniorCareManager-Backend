@@ -1,5 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 public class UfValidator : BaseAnnotation
@@ -11,6 +12,9 @@ public class UfValidator : BaseAnnotation
     }
     public override FieldError? Execute()
     {
+        if (Value.IsNull())
+            return null;
+
         string uf = Value?.ToString().ToUpper();
 
         string[] ufs = {
