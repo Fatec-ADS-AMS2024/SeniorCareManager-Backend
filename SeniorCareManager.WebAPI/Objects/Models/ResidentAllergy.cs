@@ -9,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
 
         [Column("residentId")]
         public int ResidentId { get; set; }
-        public Resident Resident { get; set; }
+        public Resident Resident { get; set; } = null;
 
         [Column("allergyId")]
         public int AllergyId { get; set; }

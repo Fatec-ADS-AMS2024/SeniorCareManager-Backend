@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data; 
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
@@ -15,10 +16,13 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         private readonly IAllergyRepository _allergyRepository;
         private readonly IMapper _mapper;
 
+        private readonly AppDbContext _context;
+
         public AllergyService(IAllergyRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
         {
             _allergyRepository = repository;
             _mapper = mapper;
+            _context = context;
         }
 
         public override async Task<AllergyDTO> GetById(int id)
@@ -32,7 +36,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<AllergyDTO>(allergy);
         }
 
-        public override async Task Create(AllergyDTO allergyDTO)
+        public override async Task<AllergyDTO> Create(AllergyDTO allergyDTO)
         {
             var errors = new List<FieldError>();
 
@@ -42,7 +46,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (await _allergyRepository.ExistsByNameAsync(allergyDTO.Name))
                 throw new ExceptionConflict("Uma alergia com este nome já existe.");
 
-            await base.Create(allergyDTO);
+            return await base.Create(allergyDTO);
         }
 
         public override async Task Update(AllergyDTO allergyDTO, int id)
@@ -66,19 +70,19 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Remove(int id)
         {
-            var allergy = await _allergyRepository.GetById(id);
+            var allergy =  _allergyRepository.GetById(id);
 
             if (allergy is null)
                 throw new ExceptionConflict($"Alergia com o id {id} não foi encontrada.");
 
-            /* Validação de regra de negócio: verifica se a alergia está em uso. - Classe a ser implementada ResidentAllergy
+            // Validação de regra de negócio: verifica se a alergia está em uso. - Classe a ser implementada ResidentAllergy
             var isAllergyInUse = await _context.Set<ResidentAllergy>().AnyAsync(ra => ra.AllergyId == id);
             if (isAllergyInUse)
             {
                 throw new InvalidOperationException("Esta alergia não pode ser removida pois está vinculada a um ou mais residentes.");
-            }*/
+            }
 
-            await base.Remove(id);
+             base.Remove(id);
         }
     }
 }

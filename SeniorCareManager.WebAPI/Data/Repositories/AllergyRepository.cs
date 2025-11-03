@@ -16,7 +16,7 @@ namespace SeniorCareManager.WebAPI.Data.Repositories
         {
             // Compara ignorando maiúsculas/minúsculas diretamente no banco de dados.
             // Isso garante que "Glúten" e "glúten" sejam considerados duplicatas.
-            return await _context.Allergies
+            return await _context.Set<Allergy>()
                 .AnyAsync(a => a.Name.ToLower() == name.ToLower());
         }
 
@@ -24,7 +24,7 @@ namespace SeniorCareManager.WebAPI.Data.Repositories
         // Verifica se OUTRA alergia com o mesmo nome já existe. Usado no UPDATE.
         public async Task<bool> ExistsByNameAsync(string name, int currentId)
         {
-            return await _context.Allergies
+            return await _context.Set<Allergy>()
                 .AnyAsync(a => a.Name.ToLower() == name.ToLower() && a.Id != currentId);
         }
     }

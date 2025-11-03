@@ -54,7 +54,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
                 await _allergyService.Remove(id);
-                return Response<object>.NoContent("Alergia removida com sucesso!");
+                return Response<object>.NoContent();
         }
     }
 }
