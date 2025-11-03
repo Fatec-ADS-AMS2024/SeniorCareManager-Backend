@@ -17,6 +17,9 @@ public class UserDTO
     [NullOrEmpty(ErrorMessage = "Senha obrigatória.")]
     public string Password { get; set; }
 
+    [NullOrEmpty(ErrorMessage = "O campo 'Tipo de usuário' não pode ser nulo ou vazio.")]
     public UserType UserType { get; set; }
+
+    [NullOrEmpty(ErrorMessage = "O campo 'Status do usuário' não pode ser nulo ou vazio.")]
     public UserStatus UserStatus { get; set; }
 }

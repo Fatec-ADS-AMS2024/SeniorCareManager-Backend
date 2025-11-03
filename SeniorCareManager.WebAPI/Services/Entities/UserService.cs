@@ -7,7 +7,7 @@ using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class UserService : GenericService<User, UserDTO>, IUserService
+public class UserService : GenericService<User, UserDTO>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -18,31 +18,29 @@ public class UserService : GenericService<User, UserDTO>, IUserService
         _mapper = mapper;
     }
 
-    public async Task<User?> GetByEmailInternal(string email)
+    public override async Task<UserDTO> Create(UserDTO entityDTO)
     {
-        return await _userRepository.GetByEmail(email);
-    }
-
-    public override async Task Create(UserDTO entityDTO)
-    {
-        var existing = await GetByEmailInternal(entityDTO.Email);
+        var existing = await _userRepository.GetByEmail(entityDTO.Email);
         if (existing != null)
         {
             throw new ExceptionConflict("Já existe um usuário cadastrado com este e-mail.");
         }
 
-        await base.Create(entityDTO);
+        return await base.Create(entityDTO);
     }
 
     public override async Task Update(UserDTO entityDTO, int id)
     {
+        if (entityDTO.Id != id)
+            throw new ExceptionBadRequest("O id de Usuário dever ser o mesmo.");
+
         var existingEntity = await _userRepository.GetById(id);
         if (existingEntity == null)
         {
-            throw new ExceptionBadRequest($"Usuário com id {id} não encontrado.");
+            throw new KeyNotFoundException($"Usuário com id {id} não encontrado.");
         }
 
-        var emailOwner = await GetByEmailInternal(entityDTO.Email);
+        var emailOwner = await _userRepository.GetByEmail(entityDTO.Email);
         if (emailOwner != null && emailOwner.Id != id)
         {
             throw new ExceptionConflict("E-mail já está em uso por outro usuário.");
