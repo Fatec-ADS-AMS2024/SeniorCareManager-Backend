@@ -52,6 +52,6 @@ public class ResidentAllergyController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _residentAllergyService.Remove(id);
-        return Response<object>.NoContent("Alergia de residente apagada com sucesso!");
+        return Response<object>.NoContent();
     }
 }

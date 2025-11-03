@@ -59,6 +59,6 @@ public class ResidentController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _residentService.Remove(id);
-        return Response<object>.NoContent("Residente apagado com sucesso!");
+        return Response<object>.NoContent();
     }
 }

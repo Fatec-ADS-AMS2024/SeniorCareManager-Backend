@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
-[Table("healthinsuranceplan")]
+[Table("health_insurance_plan")]
 public class HealthInsurancePlan
 {
     [Column("id")]
