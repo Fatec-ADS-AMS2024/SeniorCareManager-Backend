@@ -49,7 +49,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<IEnumerable<ProductBatchDTO>>(expiredBatches);
         }
 
-        public override async Task Create(ProductBatchDTO entityDTO)
+        public override async Task<ProductBatchDTO> Create(ProductBatchDTO entityDTO)
         {
             if (entityDTO.CurrentQuantity <= 0)
             {
@@ -57,7 +57,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             }
 
             await ValidateProductBatch(entityDTO);
-            await base.Create(entityDTO);
+            return await base.Create(entityDTO);
         }
 
         public async Task Update(ProductBatchDTO entityDTO, long id)
