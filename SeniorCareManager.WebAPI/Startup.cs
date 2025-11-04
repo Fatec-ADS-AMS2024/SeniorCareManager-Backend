@@ -150,6 +150,7 @@ public class Startup
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IResidentService, ResidentService>();
         services.AddScoped<IResidentAllergyService, ResidentAllergyService>();
         services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
@@ -166,6 +167,7 @@ public class Startup
         services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IResidentRepository, ResidentRepository>();
         services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
         services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
