@@ -4,14 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
-[Table("producttype")]
+[Table("product_type")]
 public class ProductType
 {
     [Column("id")]
     public int Id { get; set; }
     [Column("name")]
     public string Name { get; set; }
-    [Column("productgroupid")][ForeignKey("productgroup")]
+    [Column("product_group_id")][ForeignKey("product_group")]
     public int ProductGroupId { get; set; }
 
     [JsonIgnore]

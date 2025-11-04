@@ -38,9 +38,7 @@ public class HealthInsurancePlanController : Controller
     {
         Execute.Executar(healthInsurancePlanDto);
         healthInsurancePlanDto.Id = 0;
-        await _healthInsurancePlanService.Create(healthInsurancePlanDto);
-
-        return Response<HealthInsurancePlanDTO>.Created(healthInsurancePlanDto, "Plano de saúde Cadastrado com sucesso!");
+        return Response<HealthInsurancePlanDTO>.Created(await _healthInsurancePlanService.Create(healthInsurancePlanDto), "Plano de saúde Cadastrado com sucesso!");
     }
 
     [HttpPut("{id}")]

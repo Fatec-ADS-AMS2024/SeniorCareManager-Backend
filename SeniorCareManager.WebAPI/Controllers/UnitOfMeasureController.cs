@@ -40,9 +40,8 @@ namespace SeniorCareManager.WebAPI.Controllers
         {
             Execute.Executar(unitofmeasureDto);
             unitofmeasureDto.Id = 0;
-            await _unitOfMeasureService.Create(unitofmeasureDto);
 
-            return Response<UnitOfMeasureDTO>.Created(unitofmeasureDto, "Unidade de medida Cadastrada com sucesso!");
+            return Response<UnitOfMeasureDTO>.Created(await _unitOfMeasureService.Create(unitofmeasureDto), "Unidade de medida Cadastrada com sucesso!");
 
         }
 

@@ -6,5 +6,6 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces
     public interface IPositionService : IGenericService<Position, PositionDTO>
     {
         Task<bool> CheckDuplicates(string name);
+
     }
 }

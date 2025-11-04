@@ -30,6 +30,11 @@ public class MappingProfile : Profile
         CreateMap<Religion, ReligionDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
-
+        CreateMap<ResidentDTO, Resident>().ReverseMap();
+        CreateMap<Resident, ResidentDTO>();
+        CreateMap<ResidentAllergyDTO, ResidentAllergy>().ReverseMap();
+        CreateMap<ResidentAllergy, ResidentAllergyDTO>();
+        CreateMap<ResidentRelativeDTO, ResidentRelative>().ReverseMap();
+        CreateMap<ResidentRelative, ResidentRelativeDTO>();
     }
 }
