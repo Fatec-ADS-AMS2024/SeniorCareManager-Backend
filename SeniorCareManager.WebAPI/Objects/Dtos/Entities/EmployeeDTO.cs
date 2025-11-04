@@ -60,6 +60,6 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public StatusEmployee StatusEmployee { get; set; }
         
         [NullOrEmpty]
-        public Position Position { get; set; }
+        public int PositionId { get; set; }
     }
 }

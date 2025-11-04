@@ -30,7 +30,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var employee = await _employeeService.GetById(id);
-            return Response<EmployeeDTO>.Ok(employee, "Funcionário obtido com sucesso!");
+            return Response<EmployeeDTO>.Ok(employee, "Funcionï¿½rio obtido com sucesso!");
         }
 
         [HttpPost]
