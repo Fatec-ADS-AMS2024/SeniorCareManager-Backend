@@ -16,7 +16,7 @@ public class Product
     [Column("description")]
     public string Description { get; set; }
 
-    [Column("genericname")]
+    [Column("generic_name")]
     public string GenericName { get; set; }
 
     [Column("minimum_stock")]
