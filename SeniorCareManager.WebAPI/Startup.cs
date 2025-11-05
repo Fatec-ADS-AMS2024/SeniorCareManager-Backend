@@ -151,6 +151,8 @@ public class Startup
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IAllergyService, AllergyService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IProductBatchService, ProductBatchService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IResidentService, ResidentService>();
         services.AddScoped<IResidentAllergyService, ResidentAllergyService>();
         services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
@@ -168,10 +170,11 @@ public class Startup
         services.AddScoped<IReligionRepository, ReligionRepository>();
         services.AddScoped<IAllergyRepository, AllergyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductBatchRepository, ProductBatchRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IResidentRepository, ResidentRepository>();
         services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
         services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
-
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
