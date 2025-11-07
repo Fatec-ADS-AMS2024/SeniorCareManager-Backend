@@ -18,10 +18,12 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [RemoveSpaces]
         [NullOrEmpty]
         [CpfCnpjFormat]
+        [QtdCaractersValidator(14, "Inserir apenas 14 caracteres.")] 
         public string Cpf { get; set; }
 
         [NullOrEmpty]
         [RemoveSpaces]
+        [QtdCaractersValidator(11, "Inserir apenas 11 caracteres.")]
         [PhoneFormat]
         public string Phone { get; set; }
 
@@ -35,6 +37,8 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [NullOrEmpty]
         [RemoveSpaces]
+        [QtdCaractersValidator(2, "Inserir apenas 2 caracteres.")]
+        [UfValidator("Estado inválido")]
         public string State { get; set; }
 
         [NullOrEmpty]
