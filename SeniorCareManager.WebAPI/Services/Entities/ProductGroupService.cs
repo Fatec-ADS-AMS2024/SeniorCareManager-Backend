@@ -23,10 +23,12 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task<ProductGroupDTO> GetById(int id)
     {
+
         /*
          * Busca por id o registro de grupo de produto.
          * Se não encontrado lança ExceptionBadRequest informando que o grupo não existe.
          */
+
         var entity = await _repository.GetById(id);
         if (entity is null)
             throw new ExceptionBadRequest($"Grupo de produto com id {id} não encontrado.");
@@ -36,6 +38,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task<ProductGroupDTO> Create(ProductGroupDTO dto)
     {
+
         /*
          * Cria um novo grupo de produto.
          * Valida:
@@ -45,6 +48,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
          * Acumula erros em uma lista de FieldError e lança ExceptionBadRequest se houver.
          * Em caso de nome duplicado lança ExceptionConflict.
          */
+
         var errors = new List<FieldError>();
 
         if (dto is null)
@@ -65,6 +69,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task Update(ProductGroupDTO dto, int id)
     {
+
         /*
          * Atualiza um grupo de produto existente.
          * Valida:
@@ -75,6 +80,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
          *  - nome duplicado (excluindo o próprio registro)
          * Acumula erros em FieldError e lança ExceptionBadRequest caso existam.
          */
+
         var errors = new List<FieldError>();
 
         if (dto is null)
@@ -100,12 +106,14 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task Remove(int id)
     {
+
         /*
          * Remove um grupo de produto por id.
          * Verifica se o registro existe; se não existir lança ExceptionConflict.
          * Observação: se futuramente for necessário verificar relacionamentos (ex.: ProductType),
          * essa checagem deverá ser adicionada aqui antes de remover.
          */
+
         var entity = await _repository.GetById(id);
         if (entity is null)
             throw new ExceptionConflict($"Grupo de produto com id {id} não encontrado.");
@@ -115,11 +123,13 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public async Task<bool> IsDuplicateNameAsync(string name, int id = 0)
     {
+
         /*
          * Verifica se já existe outro grupo com o mesmo nome.
          * Exclui o registro com o id fornecido (quando id != 0) da verificação.
          * Usa StringUtils.CompareString para comparação normalizada.
          */
+
         var allGroups = await _repository.Get();
         return allGroups.Any(g =>
             g.Id != id &&
