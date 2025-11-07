@@ -84,7 +84,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
              * Se estiver sendo utilizado não apaga(na Employee e TechnicalResponsibility)
              */
             var position = await _positionRepository.GetById(id);
-            var isPositionInUse = await _context.Set<Employee>().AnyAsync(ra => ra.PositionId == id)/* || await _context.Set<TechnicalResponsibility>().AnyAsync(ra => ra.PositionId == id)*/;
+            var isPositionInUse = await _context.Set<Employee>().AnyAsync(ra => ra.PositionId == id)/* || await _context.Set<TechnicalResponsibility>().AnyAsync(ra => ra.PositionId == id)*/;//Mudar na task TechnicalResponsibility 
             if (isPositionInUse)
             {
                 throw new InvalidOperationException("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
