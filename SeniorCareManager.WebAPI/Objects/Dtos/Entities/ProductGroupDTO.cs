@@ -9,5 +9,6 @@ public class ProductGroupDTO
 
     [NullOrEmpty(ErrorMessage = "O campo 'Nome' não pode ser nulo ou vazio.")]
     [RemoveSpaces]
+    [QtdCaractersValidator(1, 50)]
     public string Name { get; set; }
 }
