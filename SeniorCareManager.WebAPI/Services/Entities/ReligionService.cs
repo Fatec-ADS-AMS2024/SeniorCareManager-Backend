@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
@@ -20,6 +21,10 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task<ReligionDTO> GetById(int id)
     {
+        /*
+         * Busca por id o registro
+         * Caso não for encontrado retorna badRequest 
+         */
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
             throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
@@ -28,19 +33,30 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task<ReligionDTO> Create(ReligionDTO religionDto)
     {
-       
+        /*
+        * Verifica se tem nomes duplicados
+        * Verifica se não é nulo
+        * Caso der erros retorna lista de erros
+        */
 
+        var errors = new List<FieldError>();
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new ExceptionConflict("Nome já existente.");
 
-
         return _mapper.Map<ReligionDTO>( await base.Create(religionDto) );
     }
     public override async Task Update(ReligionDTO religionDto, int id)
     {
+        /*
+         * Atualiza um cargo
+         * Verifica se tem nomes duplicados 
+         * Verifica se o id inserido está correto
+         * Caso der erros retorna lista de erros
+         */
+        var errors = new List<FieldError>();
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
@@ -50,18 +66,26 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (await CheckDuplicates(religionDto.Name))
             throw new ExceptionConflict("Nome já existente.");
 
+        if (errors.Count() > 0)
+            throw new ExceptionBadRequest("Erros na requisição", errors);
+
         await base.Update(religionDto, id);
     }
     public override async Task Remove(int id)
     {
+        /*
+         * Remove o religião
+         */
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
             throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
-
         await base.Remove(id);
     }
     public async Task<bool> CheckDuplicates(string nome)
     {
+        /*
+         * Verifica se tem algum nome igual de religião
+         */
         var religions = await _religionRepository.Get();
         return religions.Any(r => StringUtils.CompareString(r.Name, nome));
     }
