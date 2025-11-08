@@ -9,7 +9,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        [QtdCaractersValidator(1, 50)]
+        [QtdCaractersRangeValidator(1, 50, ErrorMessage = "Quantidade de letras inválidas")]
         public string Name { get; set; }
 
     }

@@ -96,6 +96,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         }
         public async Task<bool> CheckDuplicates(string name)
         {
+            /*
+             * Verifica se tem algum nome igual de cargo
+             */
             var positions = await _positionRepository.Get();
             return positions.Any(r =>
                 StringUtils.CompareString(r.Name, name)
