@@ -12,11 +12,11 @@ public class ProductGroup
     public string Name { get; set; }
 
     [JsonIgnore]
-    public ICollection<ProductType>? ProductType { get; set; }
+    public virtual ICollection<ProductType>? ProductTypes { get; set; } = new List<ProductType>();
 
     public ProductGroup()
     {
-        
+
     }
     public ProductGroup(int id, string name)
     {

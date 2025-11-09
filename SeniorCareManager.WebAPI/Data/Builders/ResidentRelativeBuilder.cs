@@ -5,37 +5,37 @@ namespace SeniorCareManager.WebAPI.Data.Builders
 {
     public class ResidentRelativeBuilder
     {
-            public static void Build(ModelBuilder modelBuilder)
+        public static void Build(ModelBuilder modelBuilder)
+        {
+            var entity = modelBuilder.Entity<ResidentRelative>();
+            entity.ToTable("residentrelative");
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Id);
+            entity.Property(x => x.ResidentId).IsRequired();
+            entity.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            entity.Property(x => x.Relationship).IsRequired();
+            entity.Property(x => x.Citizenship).IsRequired().HasMaxLength(50);
+            entity.Property(x => x.MobileNumber).IsRequired().HasMaxLength(20);
+            entity.Property(x => x.HomePhoneNumber).IsRequired(false).HasMaxLength(20);
+            entity.Property(x => x.Email).IsRequired().HasMaxLength(100);
+            entity.Property(x => x.Street).IsRequired().HasMaxLength(100);
+            entity.Property(x => x.Number).IsRequired().HasMaxLength(10);
+            entity.Property(x => x.City).IsRequired().HasMaxLength(50);
+            entity.Property(x => x.State).IsRequired().HasMaxLength(50);
+            entity.Property(x => x.PostalCode).IsRequired().HasMaxLength(20);
+            entity.Property(x => x.IssuingBody).IsRequired().HasMaxLength(50);
+
+            entity.Property(x => x.AddressComplement).IsRequired(false);
+
+            entity.HasOne(x => x.Resident)
+                  .WithMany(r => r.Relatives)
+                  .HasForeignKey(x => x.ResidentId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ResidentRelative>()
+            .HasData(new List<ResidentRelative>
             {
-                var entity = modelBuilder.Entity<ResidentRelative>();
-                entity.ToTable("residentrelative");
-                entity.HasKey(x => x.Id);
-
-                entity.Property(x => x.Id).HasColumnName("id");
-                entity.Property(x => x.ResidentId).HasColumnName("residentId").IsRequired();
-                entity.Property(x => x.Name).HasColumnName("name").IsRequired().HasMaxLength(100);
-                entity.Property(x => x.Relationship).HasColumnName("relationship").IsRequired();
-                entity.Property(x => x.Citizenship).HasColumnName("citizenship").IsRequired().HasMaxLength(50);
-                entity.Property(x => x.MobileNumber).HasColumnName("mobileNumber").IsRequired().HasMaxLength(20);
-                entity.Property(x => x.HomePhoneNumber).HasColumnName("homePhoneNumber").IsRequired(false).HasMaxLength(20);
-                entity.Property(x => x.Email).HasColumnName("email").IsRequired().HasMaxLength(100);
-                entity.Property(x => x.Street).HasColumnName("street").IsRequired().HasMaxLength(100);
-                entity.Property(x => x.Number).HasColumnName("number").IsRequired().HasMaxLength(10);
-                entity.Property(x => x.City).HasColumnName("city").IsRequired().HasMaxLength(50);
-                entity.Property(x => x.State).HasColumnName("state").IsRequired().HasMaxLength(50);
-                entity.Property(x => x.PostalCode).HasColumnName("postalCode").IsRequired().HasMaxLength(20);
-                entity.Property(x => x.IssuingBody).HasColumnName("issuingBody").IsRequired().HasMaxLength(50);
-
-            entity.Property(x => x.AddressComplement).HasColumnName("addresscomplement").IsRequired(false);
-
-                entity.HasOne(x => x.Resident)
-                      .WithMany(r => r.Relatives)
-                      .HasForeignKey(x => x.ResidentId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                modelBuilder.Entity<ResidentRelative>()
-                .HasData(new List<ResidentRelative>
-                {
                     new ResidentRelative
                     {
                         Id = 1,
@@ -83,7 +83,7 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                         PostalCode = "22010-000",
                         IssuingBody = "SSP-RJ"
                     }
-                });
-            }
+            });
+        }
     }
 }

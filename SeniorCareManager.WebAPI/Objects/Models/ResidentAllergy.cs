@@ -7,22 +7,23 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("residentId")]
+        [Column("resident_id")]
+        [ForeignKey("Resident")]
         public int ResidentId { get; set; }
-        public Resident Resident { get; set; }
+        public virtual Resident? Resident { get; set; }
 
-        [Column("allergyId")]
+        [Column("allergy_id")]
         public int AllergyId { get; set; }
 
-        [Column("detectionDate")]
+        [Column("detection_date")]
         public DateTime? DetectionDate { get; set; }
 
-        [Column("releasedDate")]
+        [Column("released_date")]
         public DateTime? ReleasedDate { get; set; }
 
         public ResidentAllergy() { }
 
-        public ResidentAllergy(int id, int residentId, int allergyId, DateTime? detectionDate, DateTime? releasedDate)
+        public ResidentAllergy(int id, int allergyId, DateTime? detectionDate, DateTime? releasedDate, int residentId)
         {
             Id = id;
             ResidentId = residentId;
