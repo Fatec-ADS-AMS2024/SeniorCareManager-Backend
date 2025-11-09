@@ -38,9 +38,13 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .HasOne(e => e.Position)              // 1 funcionário TEM 1 cargo
                 .WithMany(p => p.Employees)           // 1 cargo TEM MUITOS funcionários
                 .HasForeignKey(e => e.PositionId)     // FK na tabela Employee
-                .OnDelete(DeleteBehavior.Restrict);   
+                .OnDelete(DeleteBehavior.Restrict);
 
-                        modelBuilder.Entity<Employee>().HasData(new List<Employee>
+            // modelBuilder.< Employee > ().HasMany(e => e.CreatedRequests).WithOne(r => r.Requester).HasForeignKey(r => r.RequesterId).OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.< Employee > ().HasMany(e => e.ApprovedRequests).WithOne(r => r.RequestApprover).HasForeignKey(r => r.RequestApproverId).OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.< Employee >().HasMany(e => e.ApprovedPurchases).WithOne(r => r.PurchaseApprover).HasForeignKey(r => r.PurchaseApproverId).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Employee>().HasData(new List<Employee>
             {
                     new Employee(1, "João da Silva", "123.456.789-00", "(11) 91234-5678", "joao@email.com", new DateTime(2025, 9, 21, 10, 30, 0, DateTimeKind.Utc), "SP", "São Paulo", "Rua A", "01000-000", 123, "Centro", StatusEmployee.ACTIVE, 1),
                     new Employee(2, "Maria Oliveira", "987.654.321-00", "(21) 99876-5432", "maria.oliveira@email.com", new DateTime(2025, 9, 21, 10, 30, 0, DateTimeKind.Utc), "RJ", "Rio de Janeiro", "Avenida B", "20000-000", 456, "Copacabana", StatusEmployee.ACTIVE, 2),

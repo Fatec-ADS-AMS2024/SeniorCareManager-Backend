@@ -27,11 +27,22 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .HasForeignKey(pb => pb.ProductId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductBatch>()
+                .HasOne(pg => pg.Supplier)
+                .WithMany(s => s.ProductBatches)
+                .HasForeignKey(pg => pg.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductBatch>()
+                .HasOne(pg => pg.Manufacturer)
+                .WithMany(m => m.ProductBatches)
+                .HasForeignKey(pg => pg.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ProductBatch>().HasData(new List<ProductBatch>
             {
-                new ProductBatch(1, "L001-A", DateTime.SpecifyKind(DateTime.Parse("2026-12-31"), DateTimeKind.Utc), 100.00m, 1500.00m, 1),
-                new ProductBatch(2, "L001-B", DateTime.SpecifyKind(DateTime.Parse("2027-06-30"), DateTimeKind.Utc), 50.00m, 750.00m, 1),
-                new ProductBatch(3, "XPT-05", DateTime.SpecifyKind(DateTime.Parse("2025-10-20"), DateTimeKind.Utc), 200.00m, 500.00m, 2)
+                new ProductBatch(1, "L001-A", DateTime.SpecifyKind(DateTime.Parse("2026-12-31"), DateTimeKind.Utc), 100.00m, 1500.00m, 1, 1, 1),
+                new ProductBatch(2, "L001-B", DateTime.SpecifyKind(DateTime.Parse("2027-06-30"), DateTimeKind.Utc), 50.00m, 750.00m, 1, 1, 1),
+                new ProductBatch(3, "XPT-05", DateTime.SpecifyKind(DateTime.Parse("2025-10-20"), DateTimeKind.Utc), 200.00m, 500.00m, 2, 1, 2)
             });
         }
     }

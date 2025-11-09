@@ -33,6 +33,12 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .Property(m => m.Email)
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<Manufacturer>()
+                .HasMany(m => m.ProductBatches)
+                .WithOne(pb => pb.Manufacturer)
+                .HasForeignKey(pb => pb.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Inserção de dados iniciais
             modelBuilder.Entity<Manufacturer>()
                 .HasData(new List<Manufacturer>

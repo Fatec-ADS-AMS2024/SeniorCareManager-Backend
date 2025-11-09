@@ -13,6 +13,11 @@ public class ReligionBuilder
         modelBuilder.Entity<Religion>().Property(pg => pg.Name)
             .IsRequired()
             .HasMaxLength(50);
+        modelBuilder.Entity<Religion>()
+            .HasMany(rl => rl.Residents)
+            .WithOne(re => re.Religion)
+            .HasForeignKey(re => re.ReligionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Inserção de dados iniciais (opcional)
         modelBuilder.Entity<Religion>()
