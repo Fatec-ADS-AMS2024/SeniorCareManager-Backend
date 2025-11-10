@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -44,7 +44,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
-        if (religionDto.id != id)
+        if (religionDto.Id != id)
             throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
