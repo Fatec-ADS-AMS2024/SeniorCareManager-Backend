@@ -1,9 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
-using SeniorCareManager.WebAPI.Objects.Models;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
@@ -11,55 +8,65 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
     {
         public int Id { get; set; }
 
-        [NullOrEmpty]
+        [StringLengthValidator(150, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 150 caracteres.")]
+        [RequiredValidator(ErrorMessage = "O nome é obrigatório.")]
         [RemoveSpaces]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
+        [ExtractNumbers]
+        [CpfCnpjValidator(ValidationType.Cpf, ErrorMessage = "CPF inválido.")]
+        [RequiredValidator(ErrorMessage = "O CPF é obrigatório.")]
         [RemoveSpaces]
-        [NullOrEmpty]
-        [CpfCnpjFormat]
-        public string Cpf { get; set; }
+        public string? Cpf { get; set; }
 
-        [NullOrEmpty]
+        [ExtractNumbers]
         [RemoveSpaces]
         [PhoneFormat]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
-        [NullOrEmpty]
         [EmailValidator]
         [RemoveSpaces]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        [NullOrEmpty]
+        [DateRangeValidator(minDate:"01/01/1900")]
+        [RequiredValidator(ErrorMessage = "A data de contratação é obrigatória.")]
         public DateTime HireDate { get; set; }
 
-        [NullOrEmpty]
+        [UpperCaracters]
+        [UfValidator]
+        [RequiredValidator(ErrorMessage = "O estado (UF) é obrigatório.")]
         [RemoveSpaces]
-        public string State { get; set; }
+        public string? State { get; set; }
 
-        [NullOrEmpty]
+        [StringLengthValidator(100, Minimum = 2, ErrorMessage = "A cidade deve ter entre 2 e 100 caracteres.")]
+        [RequiredValidator(ErrorMessage = "A cidade é obrigatória.")]
         [RemoveSpaces]
-        public string City { get; set; }
+        public string? City { get; set; }
 
-		[NullOrEmpty]
+        [StringLengthValidator(150, ErrorMessage = "A rua não pode exceder 150 caracteres.")]
+        [RequiredValidator(ErrorMessage = "A rua é obrigatória.")]
         [RemoveSpaces]
-        public string Street { get; set; }
+        public string? Street { get; set; }
 
-        [NullOrEmpty]
+        [ExtractNumbers]
+        [CepValidator(ErrorMessage = "CEP inválido. Deve conter 8 dígitos.")]
+        [RequiredValidator(ErrorMessage = "O CEP é obrigatório.")]
         [RemoveSpaces]
-        public string Cep { get; set; }
-       
-        [NullOrEmpty]
-        public int Number { get; set; }
-        
-        [NullOrEmpty]
+        public string? Cep { get; set; }
+
+        [StringLengthValidator(10, ErrorMessage = "O número não pode exceder 10 caracteres.")]
+        [RequiredValidator(ErrorMessage = "O número é obrigatório.")]
+        public string? Number { get; set; }
+
+        [StringLengthValidator(100, ErrorMessage = "O bairro não pode exceder 100 caracteres.")]
+        [RequiredValidator(ErrorMessage = "O bairro é obrigatório.")]
         [RemoveSpaces]
-        public string Neighborhood { get; set; }
-     
-        [NullOrEmpty]
+        public string? Neighborhood { get; set; }
+
+        [EnumValidator(typeof(StatusEmployee), ErrorMessage = "Status inválido.")]
         public StatusEmployee StatusEmployee { get; set; }
-        
-        [NullOrEmpty]
+        [RengeValidator(1, ErrorMessage = "O cargo é obrigatório.")]
+        [RequiredValidator(ErrorMessage = "O cargo é obrigatório.")]
         public int PositionId { get; set; }
     }
 }

@@ -15,6 +15,8 @@ public class Position
     [JsonIgnore]
     public virtual ICollection<Employee>? Employees { get; set; }
 
+    public Position() { }
+
     public Position(int id, string name)
     {
         Id = id;

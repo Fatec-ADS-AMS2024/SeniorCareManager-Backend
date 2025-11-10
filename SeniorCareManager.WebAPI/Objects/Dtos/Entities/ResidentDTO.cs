@@ -8,74 +8,74 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
     {
         public int Id { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string RegisteredName { get; set; }
+        public string? RegisteredName { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string SocialName { get; set; }
+        public string? SocialName { get; set; }
 
-        [DateValidator("1900-01-01", "now", ErrorMessage = "Data de nascimento inválida.")]
+        [DateRangeValidator("1900-01-01", ErrorMessage = "Data de nascimento inválida.")]
         public DateTime DateOfBirth { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string Age { get; set; }
+        public string? Age { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        [CpfCnpjFormat]
-        public string Cpf { get; set; }
+        [CpfCnpjValidator]
+        public string? Cpf { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string Rg { get; set; }
+        public string? Rg { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string IssuingBody { get; set; }
+        public string? IssuingBody { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string IssuingState { get; set; }
+        public string? IssuingState { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string PisPasep { get; set; }
+        public string? PisPasep { get; set; }
         public Sex Sex { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public Ethnicity Ethnicity { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string FatherName { get; set; }
+        public string? FatherName { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+        [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-        public string MotherName { get; set; }
-
-        [RemoveSpaces]
-        public string SpouseName { get; set; }
+        public string? MotherName { get; set; }
 
         [RemoveSpaces]
-        [QtdCaractersValidator(15, ErrorMessage = "O número do cartão nacional de saúde deve ter 15 caracteres.")]
-        public string NationalHealthCardNumber { get; set; }
+        public string? SpouseName { get; set; }
 
         [RemoveSpaces]
-        [QtdCaractersValidator(15, ErrorMessage = "O número do cartão de saúde privado deve ter 15 caracteres.")]
-        public string PrivateHealthCardNumber { get; set; }
+        [StringLengthValidator(15, ErrorMessage = "O número do cartão nacional de saúde deve ter 15 caracteres.")]
+        public string? NationalHealthCardNumber { get; set; }
 
         [RemoveSpaces]
-        public string MobileNumber { get; set; }
+        [StringLengthValidator(15, ErrorMessage = "O número do cartão de saúde privado deve ter 15 caracteres.")]
+        public string? PrivateHealthCardNumber { get; set; }
 
         [RemoveSpaces]
-        public string HomePhoneNumber { get; set; }
+        public string? MobileNumber { get; set; }
 
-        [NumValidator(0.0, ErrorMessage ="O tamannho não pode ser negativo.")]
+        [RemoveSpaces]
+        public string? HomePhoneNumber { get; set; }
+
+        [RengeValidator(0.0, ErrorMessage = "O tamannho não pode ser negativo.")]
         public decimal Height { get; set; }
 
-        [NumValidator(0.0, ErrorMessage = "O peso não pode ser negativo.")]
+        [RengeValidator(0.0, ErrorMessage = "O peso não pode ser negativo.")]
         public decimal Weight { get; set; }
     }
 }

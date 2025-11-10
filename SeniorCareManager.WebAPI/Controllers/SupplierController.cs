@@ -2,7 +2,6 @@
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers

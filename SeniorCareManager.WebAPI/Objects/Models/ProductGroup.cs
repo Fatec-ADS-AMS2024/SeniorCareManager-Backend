@@ -18,6 +18,7 @@ public class ProductGroup
     {
 
     }
+
     public ProductGroup(int id, string name)
     {
         Id = id;

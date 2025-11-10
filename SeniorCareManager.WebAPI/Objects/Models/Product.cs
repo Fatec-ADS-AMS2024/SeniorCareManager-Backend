@@ -63,7 +63,7 @@ public class Product
     [JsonIgnore]
     public virtual ICollection<ProductBatch>? ProductBatches { get; set; }
 
-    public Product() {}
+    public Product() { }
 
     public Product(long id, string description, string genericName, decimal minimumStock, decimal currentStock, decimal stockValue, decimal unitPrice, decimal averageCost, decimal lastPurchasePrice, YesNo highCost, YesNo expirationControlled, int unitOfMeasureId, int productTypeId)
     {
