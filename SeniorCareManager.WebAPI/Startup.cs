@@ -149,6 +149,7 @@ public class Startup
         services.AddScoped<ICarrierService, CarrierService>();
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
+        services.AddScoped<IAllergyService, AllergyService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IProductBatchService, ProductBatchService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
@@ -167,6 +168,7 @@ public class Startup
         services.AddScoped<ICarrierRepository, CarrierRepository>();
         services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
+        services.AddScoped<IAllergyRepository, AllergyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductBatchRepository, ProductBatchRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
