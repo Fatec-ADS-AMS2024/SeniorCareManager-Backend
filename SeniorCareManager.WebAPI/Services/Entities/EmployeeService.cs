@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
@@ -14,7 +16,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
-        public EmployeeService(IEmployeeRepository repository, IMapper mapper) : base(repository, mapper)
+        private readonly AppDbContext _context;
+
+        public EmployeeService(IEmployeeRepository repository, AppDbContext context, IMapper mapper) : base(repository, mapper)
         {
             _employeeRepository = repository;
             _mapper = mapper;
@@ -29,11 +33,40 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<EmployeeDTO>(employee);
         }
 
+        public async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO, int id)
+        {
+            var employee = _mapper.Map<Employee>(employeeDTO);
+            var errors = new List<FieldError>();
+            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == id);
+
+            if (isPositionExist)
+            {
+                throw new InvalidOperationException("Esse cargo não existe.");
+            }
+   
+
+            if (await CheckDuplicates(p => p.Cpf, employeeDTO.Cpf, employeeDTO.Id))
+                errors.Add(new FieldError { Field = "Cpf", Message = "Cpf já cadastrado" });
+
+            if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, employeeDTO.Id))
+                errors.Add(new FieldError { Field = "Email", Message = "Telefone duplicado" });
+
+            return _mapper.Map<EmployeeDTO>(await base.Create(employeeDTO));
+        }
+
         public async Task Update(EmployeeDTO employeeDTO, int id)
         {
             var employee = _mapper.Map<Employee>(employeeDTO);
             var existinemployee = await _employeeRepository.GetById(id); // Supondo que sua entidade tenha um campo Id
             var errors = new List<FieldError>();
+            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == id);
+
+            if (isPositionExist)
+                throw new InvalidOperationException("Esse cargo não existe.");
+
+            if (employee.Id != id)
+                throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
+
             if (employee == null)
             {
                 throw new ExceptionNotFound($"Funcionario com id {id} n�o encontrado!");

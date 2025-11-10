@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -13,6 +14,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
 {
     private readonly IHealthInsurancePlanRepository _healthInsurancePlanRepository;
     private readonly IMapper _mapper;
+
 
     public HealthInsurancePlanService(IHealthInsurancePlanRepository repository, IMapper mapper) : base(repository, mapper)
     {
@@ -31,11 +33,13 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public override async Task<HealthInsurancePlanDTO> Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         var errors = new List<FieldError>();
+     
         if (healthInsurancePlanDto is null)
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Nome duplicado.");
+       
 
         return _mapper.Map<HealthInsurancePlanDTO>( await base.Create(healthInsurancePlanDto) );
     }
