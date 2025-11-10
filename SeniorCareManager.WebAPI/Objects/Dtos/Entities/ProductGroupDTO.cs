@@ -7,7 +7,8 @@ public class ProductGroupDTO
 {
     public int Id { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "O campo 'Nome' n�o pode ser nulo ou vazio.")]
+    [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 100 caracteres.")]
+    [RequiredValidator(ErrorMessage = "O nome do grupo de produtos é obrigatório.")]
     [RemoveSpaces]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }

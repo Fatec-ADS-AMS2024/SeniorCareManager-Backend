@@ -9,11 +9,6 @@ namespace SeniorCareManager.WebAPI.Data.Builders
         {
             modelBuilder.Entity<ResidentAllergy>().HasKey(ra => ra.Id);
 
-            modelBuilder.Entity<ResidentAllergy>()
-                .HasOne(ra => ra.Resident)
-                .WithMany(r => r.Allergies)
-                .HasForeignKey(ra => ra.ResidentId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ResidentAllergy>()
                 .HasIndex(ra => new { ra.ResidentId, ra.AllergyId })
@@ -26,6 +21,12 @@ namespace SeniorCareManager.WebAPI.Data.Builders
             modelBuilder.Entity<ResidentAllergy>()
                 .Property(ra => ra.ReleasedDate)
                 .HasColumnType("date");
+            
+            modelBuilder.Entity<ResidentAllergy>()
+                .HasOne(ra => ra.Resident)
+                .WithMany(r => r.Allergies)
+                .HasForeignKey(ra => ra.ResidentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ResidentAllergy>().HasData(
                 new ResidentAllergy

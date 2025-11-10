@@ -33,6 +33,7 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .IsRequired().HasMaxLength(11);
             modelBuilder.Entity<Carrier>().Property(pg => pg.Email)
                 .IsRequired().HasMaxLength(50);
+            // modelBuilder.Entity<Carrier>().HasMany(c => c.Invoices).WithOne(i => i.Carrier).HasForeignKey(i => i.CarrierId).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Carrier>().HasData(new List<Carrier>
             {
