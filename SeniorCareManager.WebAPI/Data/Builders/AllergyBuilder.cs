@@ -1,4 +1,8 @@
-﻿namespace SeniorCareManager.WebAPI.Data.Builders
+﻿using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Models;
+
+namespace SeniorCareManager.WebAPI.Data.Builders
 {
     public class AllergyBuilder
     {

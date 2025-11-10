@@ -28,7 +28,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task<ReligionDTO> Create(ReligionDTO religionDto)
     {
-       
+
 
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
