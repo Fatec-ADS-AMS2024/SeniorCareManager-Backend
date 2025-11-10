@@ -40,7 +40,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         public string Cep { get; set; }
 
         [Column("number")]
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         [Column("neighborhood")]
         public string Neighborhood { get; set; }
@@ -74,7 +74,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
             string city,
             string street,
             string cep,
-            int number,
+            string number,
             string neighborhood,
             StatusEmployee statusEmployee,
             int positionId
