@@ -10,12 +10,6 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 100 caracteres.")] // <-- ADIÇÃO
         [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
         [RemoveSpaces]
-<<<<<<< HEAD
-        [QtdCaractersValidator(1, 50)]
-        public string Name { get; set; }
-
-=======
         public string? Name { get; set; }
->>>>>>> f06efe46ded84f0d697379464830fd67df50ad3d
     }
 }
