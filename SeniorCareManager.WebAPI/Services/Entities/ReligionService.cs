@@ -1,5 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -13,11 +16,13 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 {
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _context;
 
-    public ReligionService(IReligionRepository repository, IMapper mapper) : base(repository, mapper)
+    public ReligionService(IReligionRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
     {
         _religionRepository = repository;
         _mapper = mapper;
+        _context = context;
     }
     public override async Task<ReligionDTO> GetById(int id)
     {
@@ -74,9 +79,15 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     public override async Task Remove(int id)
     {
         /*
-         * Remove o religião
+         * Remove o cargo
+         * Se estiver sendo utilizado não apaga(na Resident)
          */
         var religion = await _religionRepository.GetById(id);
+        var isReligionnInUse = await _context.Set<Resident>().AnyAsync(ra => ra.ReligionId == id);
+        if (isReligionnInUse)
+        {
+            throw new InvalidOperationException("Essea religião não pode ser removida pois está vinculada a um ou mais registros.");
+        }
         if (religion is null)
             throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
         await base.Remove(id);
