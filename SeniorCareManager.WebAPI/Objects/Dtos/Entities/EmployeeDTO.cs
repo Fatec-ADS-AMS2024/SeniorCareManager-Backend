@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
 
@@ -22,7 +22,6 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [ExtractNumbers]
         [RemoveSpaces]
-        [QtdCaractersValidator(11, "Inserir apenas 11 caracteres.")]
         [PhoneFormat]
         public string? Phone { get; set; }
 
