@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SeniorCareManager.WebAPI.Data; 
+using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
@@ -54,6 +54,9 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var errors = new List<FieldError>();
             var existingEntity = await _allergyRepository.GetById(id);
 
+            if (allergyDTO.Id != id)
+                throw new ExceptionBadRequest("O id informado deve ser diferente do id da alergia.");
+
             if (existingEntity == null)
             {
                 throw new ExceptionBadRequest($"Alergia com id: {id} não encontrada para atualização.");
@@ -70,19 +73,22 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public override async Task Remove(int id)
         {
-            var allergy =  _allergyRepository.GetById(id);
+            // ADICIONE AWAIT se GetById for assíncrono
+            var allergy = await _allergyRepository.GetById(id);
 
             if (allergy is null)
-                throw new ExceptionConflict($"Alergia com o id {id} não foi encontrada.");
+                throw new ExceptionNotFound($"Alergia com o id {id} não foi encontrada.");
 
-            // Validação de regra de negócio: verifica se a alergia está em uso. - Classe a ser implementada ResidentAllergy
-            var isAllergyInUse = await _context.Set<ResidentAllergy>().AnyAsync(ra => ra.AllergyId == id);
+            // Validação de regra de negócio: verifica se a alergia está em uso.
+            var isAllergyInUse = await _context.Set<ResidentAllergy>()
+                .AnyAsync(ra => ra.AllergyId == id);
+
             if (isAllergyInUse)
             {
                 throw new InvalidOperationException("Esta alergia não pode ser removida pois está vinculada a um ou mais residentes.");
             }
 
-             base.Remove(id);
+            await base.Remove(id);
         }
     }
 }

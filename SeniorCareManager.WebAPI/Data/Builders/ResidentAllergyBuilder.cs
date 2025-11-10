@@ -9,10 +9,8 @@ namespace SeniorCareManager.WebAPI.Data.Builders
         {
             modelBuilder.Entity<ResidentAllergy>().HasKey(ra => ra.Id);
 
-
             modelBuilder.Entity<ResidentAllergy>()
-                .HasIndex(ra => new { ra.ResidentId, ra.AllergyId })
-                .IsUnique();
+                .Property(ra => ra.Description);
 
             modelBuilder.Entity<ResidentAllergy>()
                 .Property(ra => ra.DetectionDate)
@@ -21,11 +19,17 @@ namespace SeniorCareManager.WebAPI.Data.Builders
             modelBuilder.Entity<ResidentAllergy>()
                 .Property(ra => ra.ReleasedDate)
                 .HasColumnType("date");
-            
+
             modelBuilder.Entity<ResidentAllergy>()
                 .HasOne(ra => ra.Resident)
                 .WithMany(r => r.Allergies)
                 .HasForeignKey(ra => ra.ResidentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ResidentAllergy>()
+                .HasOne(ra => ra.Allergy)
+                .WithMany(a => a.Residents)
+                .HasForeignKey(ra => ra.AllergyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ResidentAllergy>().HasData(
@@ -34,6 +38,7 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                     Id = 1,
                     ResidentId = 1,
                     AllergyId = 1,
+                    Description = "Teste 01",
                     DetectionDate = new DateTime(2020, 5, 15),
                     ReleasedDate = null
                 },
@@ -41,6 +46,7 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 {
                     Id = 2,
                     ResidentId = 1,
+                    Description = "Teste 02",
                     AllergyId = 2,
                     DetectionDate = new DateTime(2019, 8, 22),
                     ReleasedDate = null
@@ -50,6 +56,7 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                     Id = 3,
                     ResidentId = 2,
                     AllergyId = 6,
+                    Description = "Teste 03",
                     DetectionDate = new DateTime(2021, 3, 10),
                     ReleasedDate = null
                 }

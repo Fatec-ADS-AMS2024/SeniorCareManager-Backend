@@ -28,7 +28,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     }
     public override async Task<ReligionDTO> Create(ReligionDTO religionDto)
     {
-       
+
 
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
@@ -44,7 +44,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
-        if (religionDto.id != id)
+        if (religionDto.Id != id)
             throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))

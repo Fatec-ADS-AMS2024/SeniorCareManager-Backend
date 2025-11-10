@@ -1,5 +1,6 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {
@@ -15,6 +16,9 @@ namespace SeniorCareManager.WebAPI.Objects.Models
 
         [Column("type")]
         public AllergyType Type { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<ResidentAllergy> Residents { get; set; } = new List<ResidentAllergy>();
 
         public Allergy()
         {
