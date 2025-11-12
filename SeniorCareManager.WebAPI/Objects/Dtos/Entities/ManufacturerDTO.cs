@@ -8,10 +8,12 @@ public class ManufacturerDTO
 
     [StringLengthValidator(150, Minimum = 5, ErrorMessage = "A Razão Social deve ter entre 5 e 150 caracteres.")] // <-- ADIÇÃO
     [RequiredValidator(ErrorMessage = "Nome corporativo obrigatório.")]
+    [RemoveSpaces]
     public string? CorporateName { get; set; }
 
     [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O Nome Fantasia deve ter entre 2 e 100 caracteres.")] // <-- ADIÇÃO
     [RequiredValidator(ErrorMessage = "Nome comercial obrigatório.")]
+    [RemoveSpaces]
     public string? TradeName { get; set; }
 
     [CpfCnpjValidator(ErrorMessage = "CPF ou CNPJ inválido.")] // <-- ADIÇÃO
