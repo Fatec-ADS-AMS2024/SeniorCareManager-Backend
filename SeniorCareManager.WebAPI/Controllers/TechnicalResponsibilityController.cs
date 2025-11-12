@@ -3,11 +3,14 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1")]
+[Authorize]
 public class TechnicalResponsibilityController : Controller
 {
     private readonly ITechnicalResponsibilityService _technicalResponsibilityService;
@@ -17,14 +20,14 @@ public class TechnicalResponsibilityController : Controller
         this._technicalResponsibilityService = service;
     }
 
-    [HttpGet]
+    [HttpGet, MapToApiVersion("1")]
     public async Task<IActionResult> Get()
     {
         var technicalResponsibilities = await _technicalResponsibilityService.GetAll();
         return Response<IEnumerable<TechnicalResponsibilityDTO>>.Ok(technicalResponsibilities, "Lista de Responsabilidades Técnicas obtidas com sucesso!");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
         var positechnicalResponsibility = await _technicalResponsibilityService.GetById(id);
@@ -33,7 +36,7 @@ public class TechnicalResponsibilityController : Controller
 
     }
 
-    [HttpPost]
+    [HttpPost, MapToApiVersion("1")]
     public async Task<IActionResult> Post(TechnicalResponsibilityDTO technicalResponsibilityDto)
     {
         Execute.Executar(technicalResponsibilityDto);
@@ -44,7 +47,7 @@ public class TechnicalResponsibilityController : Controller
 
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Put(int id, TechnicalResponsibilityDTO technicalResponsibilityDto)
     {
         Execute.Executar(technicalResponsibilityDto);
@@ -53,7 +56,7 @@ public class TechnicalResponsibilityController : Controller
         return Response<TechnicalResponsibilityDTO>.Ok(technicalResponsibilityDto, "Responsabilidade Técnica atualizado com sucesso!");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Delete(int id)
     {
 
