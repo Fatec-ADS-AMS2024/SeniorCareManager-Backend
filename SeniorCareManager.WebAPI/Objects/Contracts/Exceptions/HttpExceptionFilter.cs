@@ -21,7 +21,19 @@ public class HttpExceptionFilter : IExceptionFilter
         }
         else
         {
-            response = new Response<object>(500, "Ocorreu um erro inesperado no servidor.");
+            var errorDetails = new
+            {
+                ERRO_REAL = context.Exception.Message,
+                ERRO_INTERNO = context.Exception.InnerException?.Message, // O '?' evita erro se InnerException for nulo
+                STACK_TRACE = context.Exception.StackTrace
+            };
+
+            // 2. Passe esse objeto para o parâmetro 'data' do seu Response
+            response = new Response<object>(
+                status: 500,
+                message: "Ocorreu um erro inesperado no servidor.",
+                data: errorDetails // <-- Aqui está a correção
+            );
 
             // Ex: _logger.LogError(context.Exception, "An unhandled exception has occurred.");
         }

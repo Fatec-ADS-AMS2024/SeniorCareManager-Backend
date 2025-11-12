@@ -36,7 +36,6 @@ public class Response<T>
 
     public static ObjectResult NoContent()
     {
-        return new ObjectResult(204) { StatusCode = StatusCodes.Status204NoContent };
-    } 
-
+        return new ObjectResult(null) { StatusCode = StatusCodes.Status204NoContent };
+    }
 }

@@ -3,7 +3,6 @@ using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
-using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
@@ -39,10 +38,8 @@ public class ProductController: Controller
     {
         Execute.Executar(productDto);
         productDto.Id = 0;
-        await _productService.Create(productDto);
 
-        return Response<ProductDTO>.Created(productDto, "Produto Cadastrado com sucesso!"); 
-
+        return Response<ProductDTO>.Created(await _productService.Create(productDto), "Produto Cadastrado com sucesso!"); 
     }
 
     [HttpPut("{id}")] 

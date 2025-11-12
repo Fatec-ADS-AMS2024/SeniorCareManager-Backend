@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
-using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Services.Utils;
 
@@ -27,9 +26,9 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 
         return _mapper.Map<ReligionDTO>(religion);
     }
-    public override async Task Create(ReligionDTO religionDto)
+    public override async Task<ReligionDTO> Create(ReligionDTO religionDto)
     {
-        ReligionDTO.IsFilledString(religionDto.Name);
+
 
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
@@ -38,15 +37,15 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
             throw new ExceptionConflict("Nome já existente.");
 
 
-        await base.Create(religionDto);
+        return _mapper.Map<ReligionDTO>( await base.Create(religionDto) );
     }
     public override async Task Update(ReligionDTO religionDto, int id)
     {
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
-        if (religionDto.id != id)
-            throw new ("O id da religião dever ser o mesmo.");
+        if (religionDto.Id != id)
+            throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new ExceptionConflict("Nome já existente.");

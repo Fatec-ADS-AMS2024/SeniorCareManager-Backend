@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Services.Entities
 {
@@ -28,20 +30,25 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<TechnicalResponsibilityDTO>(technicalResponsibility);
         }
 
-        public override async Task Create(TechnicalResponsibilityDTO technicalResponsibilityDto)
+        public override async Task<TechnicalResponsibilityDTO> Create(TechnicalResponsibilityDTO technicalResponsibilityDto)
         {
             var errors = new List<FieldError>();
+            if (await CheckDuplicates(t => t.ResponsibleName, technicalResponsibilityDto.ResponsibleName, technicalResponsibilityDto.Id))
+                throw new ExceptionConflict("Nome duplicado.");
 
             if (technicalResponsibilityDto is null)
                 throw new ExceptionBadRequest("A Responsabilidade técnica não pode ser nula.");
 
-            await base.Create(technicalResponsibilityDto);
+            return _mapper.Map<TechnicalResponsibilityDTO>(await base.Create(technicalResponsibilityDto));
         }
         public override async Task Update(TechnicalResponsibilityDTO technicalResponsibilityDto, int id)
         {
             var errors = new List<FieldError>();
             if (technicalResponsibilityDto is null)
                 throw new ExceptionBadRequest("A Responsabilidade técnica não pode ser nula.");
+
+            if (await CheckDuplicates(t => t.ResponsibleName, technicalResponsibilityDto.ResponsibleName, technicalResponsibilityDto.Id))
+                throw new ExceptionConflict("Nome duplicado.");
 
             if (errors.Count() > 0)
                 throw new ExceptionBadRequest("Erros na requisição", errors);
@@ -56,6 +63,16 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionConflict("Responsabilidade técnica com o id " + id + " informado não foi encontrada.");
 
             await base.Remove(id);
+        }
+
+        public async Task<bool> CheckDuplicates(Func<TechnicalResponsibility, string?> selector, string? valor, int idIgnor)
+        {
+            var technical = await _technicalResponsibilityRepository.Get();
+            return technical.Any(t =>
+                t.Id != idIgnor &&
+                StringUtils.CompareString(selector(t)!, valor)
+            );
+
         }
     }
 }

@@ -6,44 +6,53 @@ using System.Xml.Linq;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
-
     public class ProductDTO
     {
         public long Id { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "DescriÁ„o obrigatÛria.")]
+        [StringLengthValidator(255, ErrorMessage = "A descri√ß√£o n√£o pode exceder 255 caracteres.")]
+        [RequiredValidator(ErrorMessage = "Descri√ß√£o obrigat√≥ria.")]
         [RemoveSpaces]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "Nome genÈrico obrigatÛrio.")]
+        [UpperCaracters]
+        [StringLengthValidator(150, Minimum = 2, ErrorMessage = "O nome gen√©rico deve ter entre 2 e 150 caracteres.")]
+        [RequiredValidator(ErrorMessage = "Nome gen√©rico obrigat√≥rio.")]
         [RemoveSpaces]
-        public string GenericName { get; set; }
+        public string? GenericName { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "Estoque mÌnimo obrigatÛrio.")]
-        [NumValidator(1, ErrorMessage = "Estoque mÌnimo tem que ser maior que zero")]
+        [RengeValidator(1, ErrorMessage = "Estoque m√≠nimo tem que ser maior que zero")]
+        [RequiredValidator(ErrorMessage = "Estoque m√≠nimo obrigat√≥rio.")]
         public decimal MinimumStock { get; set; }
- 
-        [NullOrEmpty(ErrorMessage = "Quantidade atual do estoque obrigatÛrio.")]
-		[NumValidator(0, ErrorMessage = "PreÁo unit·rio n„o pode ser negativo")]
-		public decimal CurrentStock { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "Valor do estoque obrigatÛrio.")]
-		[NumValidator(0, ErrorMessage = "Valor do estoque n„o pode ser negativo")]
-		public decimal StockValue { get; set; }
+        [RengeValidator(0, ErrorMessage = "Quantidade atual n√£o pode ser negativo")]
+        [RequiredValidator(ErrorMessage = "Quantidade atual do estoque obrigat√≥rio.")]
+        public decimal CurrentStock { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "PreÁo unit·rio obrigatÛrio.")]
-		[NumValidator(0, ErrorMessage = "PreÁo unit·rio n„o pode ser negativo")]
-		public decimal UnitPrice { get; set; }
+        [RengeValidator(0, ErrorMessage = "Valor do estoque n√£o pode ser negativo")]
+        [RequiredValidator(ErrorMessage = "Valor do estoque obrigat√≥rio.")]
+        public decimal StockValue { get; set; }
 
+        [RengeValidator(0, ErrorMessage = "Pre√ßo unit√°rio n√£o pode ser negativo")]
+        [RequiredValidator(ErrorMessage = "Pre√ßo unit√°rio obrigat√≥rio.")]
+        public decimal UnitPrice { get; set; }
+
+        [RengeValidator(0, ErrorMessage = "Custo m√©dio n√£o pode ser negativo")]
         public decimal AverageCost { get; set; }
 
-        [NullOrEmpty(ErrorMessage = "PreÁo da ˙ltima compra obrigatÛrio.")]
-		[NumValidator(0, ErrorMessage = "PreÁo da ultima compra n„o pode ser negativo")]
-		public decimal LastPurchasePrice { get; set; }
+        [RengeValidator(0, ErrorMessage = "Pre√ßo da ultima compra n√£o pode ser negativo")]
+        [RequiredValidator(ErrorMessage = "Pre√ßo da √∫ltima compra obrigat√≥rio.")]
+        public decimal LastPurchasePrice { get; set; }
 
+        [EnumValidator(typeof(YesNo), ErrorMessage = "Valor inv√°lido para 'Alto Custo'.")]
         public YesNo HighCost { get; set; }
 
+        [EnumValidator(typeof(YesNo), ErrorMessage = "Valor inv√°lido para 'Controla Expira√ß√£o'.")]
         public YesNo ExpirationControlled { get; set; }
 
+        [RengeValidator(1, ErrorMessage = "Unidade de medida tem que ser maior que zero")]
+        public int UnitOfMeasureId { get; set; }
+        [RengeValidator(1, ErrorMessage = "Tipo de produto tem que ser maior que zero")]
+        public int ProductTypeId { get; set; }
     }
 }

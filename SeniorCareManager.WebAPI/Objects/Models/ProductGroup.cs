@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
-[Table("productgroup")]
+[Table("product_group")]
 public class ProductGroup
 {
     [Column("id")]
@@ -12,11 +12,11 @@ public class ProductGroup
     public string Name { get; set; }
 
     [JsonIgnore]
-    public ICollection<ProductType>? ProductType { get; set; }
+    public virtual ICollection<ProductType>? ProductTypes { get; set; } = new List<ProductType>();
 
     public ProductGroup()
     {
-        
+
     }
 
     public ProductGroup(int id, string name)

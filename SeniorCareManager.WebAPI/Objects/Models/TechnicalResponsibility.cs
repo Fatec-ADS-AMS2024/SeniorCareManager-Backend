@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
@@ -23,21 +23,27 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [Column("endDate")]
         public DateTime EndDate { get; set; }
         /*
+        [Column("company_Id"), ForeignKey("Company")]
         public int? CompanyId { get; set; }
         [JsonIgnore]
-        public Company? Company { get; set; }
-
-        public int? EmployeeId { get; set; }
-        [JsonIgnore]
-        public Employee? Employee { get; set; }
+        public virtual Company? Company { get; set; }
         */
-        public int? PositionId { get; set; }
+        [Column("employee_Id"), ForeignKey("Employee")]
+        public int? EmployeeId { get; set; }
+
         [JsonIgnore]
-        public Position? Position { get; set; }
+        public virtual Employee? Employee { get; set; }
+
+
+        [Column("position_id"), ForeignKey("Position")]
+        public int PositionId { get; set; }
+
+        [JsonIgnore]
+        public virtual Position? Position { get; set; }
 
         public TechnicalResponsibility () { }
 
-        public TechnicalResponsibility (int id, string responsibleName, string professionalRegistration, string servicesResponsibility, DateTime startDate, DateTime endDate, int positionId /* , int companyId, int employeeId */ ) 
+        public TechnicalResponsibility (int id, string responsibleName, string professionalRegistration, string servicesResponsibility, DateTime startDate, DateTime endDate, int positionId, int employeeId /*,int companyId*/) 
         {
             Id = id;
             ResponsibleName = responsibleName;
@@ -46,7 +52,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
             StartDate = startDate;
             EndDate = endDate;
             PositionId = positionId;
-            //EmployeeId = employeeId;
+            EmployeeId = employeeId;
             //CompanyId = companyId;
         }
     }

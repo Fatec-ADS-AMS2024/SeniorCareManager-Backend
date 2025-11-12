@@ -1,27 +1,14 @@
-﻿namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
+
+namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 public class ReligionDTO
 {
-    public int id { get; set; }
-    private string _name;
-    public string Name
-    {
-        get => _name;
-        set 
-        {
-            _name = value.Trim();
-        }
-    }
+    public int Id { get; set; }
 
-    public static bool IsFilledString(params string[] parametros)
-    {
-        foreach (var parametro in parametros)
-        {
-            if (string.IsNullOrWhiteSpace(parametro))
-            {
-                throw new ArgumentException("O campo não pode ser nulo.");
-            }
-        }
-        return true;
-    }
+    [StringLengthValidator(2, Maximum = 50, ErrorMessage = "O campo deve conter entre 2 e 50 caracteres.")]
+    [RequiredValidator(ErrorMessage = "O campo não pode ser nulo ou vazio.")]
+    [RemoveSpaces]
+    public string Name { get; set; }
 }

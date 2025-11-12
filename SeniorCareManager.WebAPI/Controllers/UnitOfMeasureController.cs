@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
-using SeniorCareManager.WebAPI.Services.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers
@@ -11,7 +10,7 @@ namespace SeniorCareManager.WebAPI.Controllers
     [Route("api/v1/[controller]")]
     public class UnitOfMeasureController : Controller
     {
-       private readonly IUnitOfMeasureService _unitOfMeasureService;
+        private readonly IUnitOfMeasureService _unitOfMeasureService;
 
         public UnitOfMeasureController(IUnitOfMeasureService service)
         {
@@ -20,72 +19,45 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var unitOfMeasure = await _unitOfMeasureService.GetAll();
-
-            if (unitOfMeasure == null) {
-                return StatusCode(500, $"Nenhuma unidade de medida encontrada!");
-            }
-
-            else
-            {
-                return Ok(unitOfMeasure);
-            }
+            var unitofmeasures = await _unitOfMeasureService.GetAll();
+            return Response<IEnumerable<UnitOfMeasureDTO>>.Ok(unitofmeasures, "Lista de unidade de medidas obtidas com sucesso!");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var unitOfMeasureId = await _unitOfMeasureService.GetById(id);
-                if (unitOfMeasureId == null) return NotFound("Unidade de medida não encontrada!");
-                return Ok(unitOfMeasureId);
+            var unitofmeasure = await _unitOfMeasureService.GetById(id);
+
+            return Response<UnitOfMeasureDTO>.Ok(unitofmeasure, "Unidade de media obtida com sucesso!");
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UnitOfMeasureDTO unitOfMeasure)
+        public async Task<IActionResult> Post(UnitOfMeasureDTO unitofmeasureDto)
         {
-            if (unitOfMeasure.Description == String.Empty) return BadRequest("Unidade de medida não pode ser vazia.");
-         
-            if (unitOfMeasure.Abbreviation == String.Empty) return BadRequest("Abreviação não pode ser vazia.");
+            Execute.Executar(unitofmeasureDto);
+            unitofmeasureDto.Id = 0;
 
-            try
-            {
-                await _unitOfMeasureService.Create(unitOfMeasure);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Ocorreu um erro ao tentar inserir uma nova unidade de medida! {ex}");
-            }
-            return Ok(unitOfMeasure);
+            return Response<UnitOfMeasureDTO>.Created(await _unitOfMeasureService.Create(unitofmeasureDto), "Unidade de medida Cadastrada com sucesso!");
+
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, UnitOfMeasureDTO unitOfMeasure)
+        public async Task<IActionResult> Put(int id, UnitOfMeasureDTO unitofmeasureDto)
         {
-            try
-            {
-                await _unitOfMeasureService.Update(unitOfMeasure, id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar a unidade de medida: " + ex.Message);
-            }
+            Execute.Executar(unitofmeasureDto);
+            await _unitOfMeasureService.Update(unitofmeasureDto, id);
 
-            return Ok(unitOfMeasure);
+            return Response<UnitOfMeasureDTO>.Ok(unitofmeasureDto, "Unidade de mediada atualizada com sucesso!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _unitOfMeasureService.Remove(id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Ocorreu um erro ao tentar remover a unidade de medida! {ex}");
-            }
 
-            return Ok("Unidade de medida apagada com sucesso");
+            await _unitOfMeasureService.Remove(id);
+
+            return Response<object>.NoContent();
         }
     }
 }

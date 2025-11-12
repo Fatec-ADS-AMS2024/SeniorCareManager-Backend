@@ -9,7 +9,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ProductGroupDTO, ProductGroup>().ReverseMap();
-        CreateMap<ProductGroup, ProductGroupDTO>(); 
+        CreateMap<ProductGroup, ProductGroupDTO>();
+        CreateMap<EmployeeDTO, Employee >().ReverseMap();
+        CreateMap<Employee, EmployeeDTO>(); 
         CreateMap<ProductTypeDTO, ProductType>().ReverseMap();
         CreateMap<ProductType, ProductTypeDTO>();
         CreateMap<PositionDTO, Position>().ReverseMap();
@@ -26,9 +28,18 @@ public class MappingProfile : Profile
         CreateMap<Carrier, CarrierDTO>();
         CreateMap<ReligionDTO, Religion>().ReverseMap();
         CreateMap<Religion, ReligionDTO>();
+        CreateMap<AllergyDTO, Allergy>().ReverseMap();
+        CreateMap<Allergy, AllergyDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
         CreateMap<TechnicalResponsibility, TechnicalResponsibilityDTO>().ReverseMap();
-
+        CreateMap<ProductBatchDTO, ProductBatch>().ReverseMap();
+        CreateMap<ProductBatch, ProductBatchDTO>();
+        CreateMap<ResidentDTO, Resident>().ReverseMap();
+        CreateMap<Resident, ResidentDTO>();
+        CreateMap<ResidentAllergyDTO, ResidentAllergy>().ReverseMap();
+        CreateMap<ResidentAllergy, ResidentAllergyDTO>();
+        CreateMap<ResidentRelativeDTO, ResidentRelative>().ReverseMap();
+        CreateMap<ResidentRelative, ResidentRelativeDTO>();
     }
 }
