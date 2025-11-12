@@ -5,12 +5,10 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 [AttributeUsage(AttributeTargets.Property)]
 public abstract class BaseAnnotation : Attribute
 {
-    private PropertyInfo _property;
-    private object _value;
+    private PropertyInfo? _property;
+    private object? _value;
 
     public string ErrorMessage { get; set; } = null!;
-
-    public object[]? Parameters { get; set; }
 
     protected object Value
     {
@@ -18,31 +16,25 @@ public abstract class BaseAnnotation : Attribute
         set => SetValue(value);
     }
 
-    protected string NameProperty;
-
-    public BaseAnnotation(params object[]? parameters)
+    private object GetValue()
     {
-        Parameters = parameters;
+        return _property?.GetValue(_value) ?? string.Empty;
     }
+
+    private void SetValue(object newValue)
+    {
+        _property?.SetValue(_value, newValue);
+    }
+
+    protected string NameProperty => _property?.Name ?? string.Empty;
 
     public void Initialize(PropertyInfo property, object value)
     {
         _property = property;
-        NameProperty = property.Name;
         _value = value;
     }
 
     public abstract FieldError? Execute();
-
-    protected object GetValue()
-    {
-        return _property.GetValue(_value);
-    }
-
-    protected void SetValue(object newValue)
-    {
-        _property.SetValue(_value, newValue);
-    }
 
     protected FieldError ReturnError(string field, string? mensage = null)
     {

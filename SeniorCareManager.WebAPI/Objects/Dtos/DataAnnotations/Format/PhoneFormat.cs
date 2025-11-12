@@ -5,11 +5,6 @@ using SeniorCareManager.WebAPI.Services.Utils;
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 public class PhoneFormat : BaseAnnotation
 {
-    public PhoneFormat(params object[]? parameters) : base(parameters)
-    {
-        if (parameters is null)
-            throw new ArgumentNullException("Essa funcão precisa de parâmetros");
-    }
     public override FieldError? Execute()
     {
         if (Value.IsNull())
@@ -17,11 +12,13 @@ public class PhoneFormat : BaseAnnotation
 
         string valor = new string(Value.ToString()?.Where(char.IsDigit).ToArray());
 
+        Console.WriteLine($"Telefone: {valor}");
+
         if (valor.Length != 10 && valor.Length != 11)
             return ReturnError(NameProperty, "Telefone inválido.");
-        if (valor.Length == 11 && valor[2] != '9')
-            return ReturnError(NameProperty, "Número de celular inválido.");
-        SetValue(valor);
+        Console.WriteLine($"Telefone sem formatação: {Value}");
+        Value = valor;
+        Console.WriteLine($"Telefone formatado: {Value}");
         return null;
     }
 }

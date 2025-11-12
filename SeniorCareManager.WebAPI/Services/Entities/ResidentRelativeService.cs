@@ -26,14 +26,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionBadRequest("Parente do residente com o id " + id + " informado não foi encontrado.");
             return _mapper.Map<ResidentRelativeDTO>(residentRelative);
         }
-        public override async Task Create(ResidentRelativeDTO residentRelativeDto)
+        public override async Task<ResidentRelativeDTO> Create(ResidentRelativeDTO residentRelativeDto)
         {
             var errors = new List<FieldError>();
             if (residentRelativeDto is null)
                 throw new ExceptionBadRequest("O Parente do Residente não pode ser nulo.");
             if (errors.Count() > 0)
                 throw new ExceptionBadRequest("Erros na requisição", errors);
-            await base.Create(residentRelativeDto);
+            return await base.Create(residentRelativeDto);
         }
         public override async Task Update(ResidentRelativeDTO residentRelativeDto, int id)
         {

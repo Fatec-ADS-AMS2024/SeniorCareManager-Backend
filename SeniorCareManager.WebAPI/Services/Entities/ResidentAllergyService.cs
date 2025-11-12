@@ -28,7 +28,7 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         return _mapper.Map<ResidentAllergyDTO>(allergy);
     }
 
-    public override async Task Create(ResidentAllergyDTO residentAllergyDto)
+    public override async Task<ResidentAllergyDTO> Create(ResidentAllergyDTO residentAllergyDto)
     {
         if (residentAllergyDto is null)
             throw new ExceptionBadRequest("A alergia do residente não pode ser nula.");
@@ -36,7 +36,7 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.AllergyId))
             throw new ExceptionConflict("Alergia já cadastrada para este residente.");
 
-        await base.Create(residentAllergyDto);
+        return await base.Create(residentAllergyDto);
     }
 
     private async Task<bool> CheckDuplicates(int residentId, int allergyId)

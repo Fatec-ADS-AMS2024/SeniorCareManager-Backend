@@ -24,7 +24,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionBadRequest("Residente com o id " + id + " informado não foi encontrado.");
             return _mapper.Map<ResidentDTO>(resident);
         }
-        public override async Task Create(ResidentDTO residentDto)
+        public override async Task<ResidentDTO> Create(ResidentDTO residentDto)
         {
             if (residentDto is null)
                 throw new ExceptionBadRequest("O Residente não pode ser nulo.");
@@ -32,7 +32,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (await CheckDuplicates(residentDto.Cpf))
                 throw new ExceptionConflict("CPF duplicado.");
 
-            await base.Create(residentDto);
+            return await base.Create(residentDto);
         }
         public override async Task Update(ResidentDTO residentDto, int id)
         {
