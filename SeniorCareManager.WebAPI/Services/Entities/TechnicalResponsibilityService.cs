@@ -33,9 +33,6 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         public override async Task<TechnicalResponsibilityDTO> Create(TechnicalResponsibilityDTO technicalResponsibilityDto)
         {
             var errors = new List<FieldError>();
-            if (await CheckDuplicates(t => t.ResponsibleName, technicalResponsibilityDto.ResponsibleName, technicalResponsibilityDto.Id))
-                throw new ExceptionConflict("Nome duplicado.");
-
             if (technicalResponsibilityDto is null)
                 throw new ExceptionBadRequest("A Responsabilidade técnica não pode ser nula.");
 
@@ -46,9 +43,6 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var errors = new List<FieldError>();
             if (technicalResponsibilityDto is null)
                 throw new ExceptionBadRequest("A Responsabilidade técnica não pode ser nula.");
-
-            if (await CheckDuplicates(t => t.ResponsibleName, technicalResponsibilityDto.ResponsibleName, technicalResponsibilityDto.Id))
-                throw new ExceptionConflict("Nome duplicado.");
 
             if (errors.Count() > 0)
                 throw new ExceptionBadRequest("Erros na requisição", errors);
@@ -65,14 +59,5 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             await base.Remove(id);
         }
 
-        public async Task<bool> CheckDuplicates(Func<TechnicalResponsibility, string?> selector, string? valor, int idIgnor)
-        {
-            var technical = await _technicalResponsibilityRepository.Get();
-            return technical.Any(t =>
-                t.Id != idIgnor &&
-                StringUtils.CompareString(selector(t)!, valor)
-            );
-
-        }
     }
 }
