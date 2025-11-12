@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
@@ -21,7 +21,7 @@ public class TechnicalResponsibilityController : Controller
     public async Task<IActionResult> Get()
     {
         var technicalResponsibilities = await _technicalResponsibilityService.GetAll();
-        return Response<IEnumerable<TechnicalResponsibilityDTO>>.Ok(technicalResponsibilities, "Lista de Position obtidas com sucesso!");
+        return Response<IEnumerable<TechnicalResponsibilityDTO>>.Ok(technicalResponsibilities, "Lista de Responsabilidades Técnicas obtidas com sucesso!");
     }
 
     [HttpGet("{id}")]
@@ -29,7 +29,7 @@ public class TechnicalResponsibilityController : Controller
     {
         var positechnicalResponsibility = await _technicalResponsibilityService.GetById(id);
 
-        return Response<TechnicalResponsibilityDTO>.Ok(positechnicalResponsibility, "Position obtido com sucesso!");
+        return Response<TechnicalResponsibilityDTO>.Ok(positechnicalResponsibility, "Responsabilidade Técnica obtido com sucesso!");
 
     }
 
@@ -40,7 +40,7 @@ public class TechnicalResponsibilityController : Controller
         technicalResponsibilityDto.Id = 0;
         await _technicalResponsibilityService.Create(technicalResponsibilityDto);
 
-        return Response<TechnicalResponsibilityDTO>.Created(technicalResponsibilityDto, "Cargo Cadastrado com sucesso!");
+        return Response<TechnicalResponsibilityDTO>.Created(technicalResponsibilityDto, "Responsabilidade Técnica Cadastrado com sucesso!");
 
     }
 
@@ -50,7 +50,7 @@ public class TechnicalResponsibilityController : Controller
         Execute.Executar(technicalResponsibilityDto);
         await _technicalResponsibilityService.Update(technicalResponsibilityDto, id); ;
 
-        return Response<TechnicalResponsibilityDTO>.Ok(technicalResponsibilityDto, "Cargo atualizado com sucesso!");
+        return Response<TechnicalResponsibilityDTO>.Ok(technicalResponsibilityDto, "Responsabilidade Técnica atualizado com sucesso!");
     }
 
     [HttpDelete("{id}")]
