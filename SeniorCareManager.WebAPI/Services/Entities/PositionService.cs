@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
@@ -27,12 +27,12 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             /*
              * Busca por id o registro
-             * Caso não for encontrado retorna badRequest 
+             * Caso não for encontrado retorna nNotFound 
              */
             var errors = new List<FieldError>();
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new ExceptionBadRequest("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Cargo com o id " + id + " informado não foi encontrado.");
 
             return _mapper.Map<PositionDTO>(position);
         }
@@ -90,7 +90,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new InvalidOperationException("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
             }
             if (position is null)
-                throw new ExceptionConflict("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Cargo com o id " + id + " informado não foi encontrado.");
 
             await base.Remove(id);
         }
