@@ -67,7 +67,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionBadRequest("O Cargo não pode ser nulo.");
 
             if (positionDto.Id != id)
-                throw new ExceptionBadRequest("O id de Cargo dever ser o mesmo.");
+                throw new ExceptionNotFound("O id de Cargo dever ser o mesmo.");
 
             if (await CheckDuplicates(positionDto.Name))
                 errors.Add(new FieldError{Field = "Nome", Message = "Nome duplicado."});
@@ -87,7 +87,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var isPositionInUse = await _context.Set<Employee>().AnyAsync(ra => ra.PositionId == id)/* || await _context.Set<TechnicalResponsibility>().AnyAsync(ra => ra.PositionId == id)*/;//Mudar na task TechnicalResponsibility 
             if (isPositionInUse)
             {
-                throw new InvalidOperationException("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
+                throw new ExceptionConflict("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
             }
             if (position is null)
                 throw new ExceptionNotFound("Cargo com o id " + id + " informado não foi encontrado.");
