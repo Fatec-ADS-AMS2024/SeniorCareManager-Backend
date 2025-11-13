@@ -67,7 +67,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
         if (religionDto.Id != id)
-            throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
+            throw new ExceptionNotFound("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new ExceptionConflict("Nome já existente.");
@@ -77,6 +77,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 
         await base.Update(religionDto, id);
     }
+
     public override async Task Remove(int id)
     {
         /*
@@ -87,7 +88,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         var isReligionnInUse = await _context.Set<Resident>().AnyAsync(ra => ra.ReligionId == id);
         if (isReligionnInUse)
         {
-            throw new InvalidOperationException("Essea religião não pode ser removida pois está vinculada a um ou mais registros.");
+            throw new ExceptionConflict("Essea religião não pode ser removida pois está vinculada a um ou mais registros.");
         }
         if (religion is null)
             throw new ExceptionNotFound("Religião com o id " + id + " informado não foi encontrada.");
