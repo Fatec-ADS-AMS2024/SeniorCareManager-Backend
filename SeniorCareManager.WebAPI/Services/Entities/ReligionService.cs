@@ -29,7 +29,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
     {
         /*
          * Busca por id o registro
-         * Caso não for encontrado retorna badRequest 
+         * Caso não for encontrado retorna notFound 
          */
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
