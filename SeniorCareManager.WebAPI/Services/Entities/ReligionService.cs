@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
@@ -32,7 +33,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
          */
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
-            throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Religião com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<ReligionDTO>(religion);
     }
@@ -65,7 +66,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
         if (religionDto is null)
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
-        if (religionDto.id != id)
+        if (religionDto.Id != id)
             throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
@@ -89,7 +90,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
             throw new InvalidOperationException("Essea religião não pode ser removida pois está vinculada a um ou mais registros.");
         }
         if (religion is null)
-            throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Religião com o id " + id + " informado não foi encontrada.");
         await base.Remove(id);
     }
     public async Task<bool> CheckDuplicates(string nome)
