@@ -10,10 +10,12 @@ public class ProductTypeBuilder
         // Configura a chave primária
         modelBuilder.Entity<ProductType>().HasKey(pg => pg.Id);
         modelBuilder.Entity<ProductType>().Property(pg => pg.Name).IsRequired().HasMaxLength(50);
-        modelBuilder.Entity<ProductType>().HasOne(pg => pg.ProductGroup)
-        .WithMany(pg => pg.ProductType)
-        .HasForeignKey(pg => pg.ProductGroupId);
-        
+        modelBuilder.Entity<ProductType>()
+            .HasOne(pg => pg.ProductGroup)
+            .WithMany(pg => pg.ProductTypes)
+            .HasForeignKey(pg => pg.ProductGroupId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Inserção de dados iniciais (opcional)
         modelBuilder.Entity<ProductType>()
             .HasData(new List<ProductType>

@@ -1,93 +1,66 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using SeniorCareManager.WebAPI.Objects.Contracts;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
-public class ProductTypeController : Controller
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1")]
+public class ProductTypeController : ControllerBase
 {
-    private readonly IProductTypeService _productTypeService;
+    private readonly IProductTypeService _service;
 
     public ProductTypeController(IProductTypeService service)
     {
-        this._productTypeService = service;
+        _service = service;
     }
-    
-    [HttpGet]
-    public async Task<IActionResult> Get()
+
+    [HttpGet, MapToApiVersion("1")]
+    public async Task<IActionResult> GetAll()
     {
-        var productTypes = await _productTypeService.GetAll();
-        return Ok(productTypes);
+        var productTypes = await _service.GetAll();
+        return Response<IEnumerable<ProductTypeDTO>>.Ok(productTypes, "Lista de tipos de produto obtida com sucesso!");
     }
-    
-    [HttpGet("{id}")]
+
+    [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
-        var productType = await _productTypeService.GetById(id);
-        if (productType == null) return NotFound("Tipo Produto não encontrado!");
-        return Ok(productType);
+        var productType = await _service.GetById(id);
+        return Response<ProductTypeDTO>.Ok(productType, "Tipo de produto encontrado!");
     }
-    
-    [HttpPost]
-    public async Task<IActionResult> Post(ProductType productType)
+
+    [HttpPost, MapToApiVersion("1")]
+    public async Task<IActionResult> Create([FromBody] ProductTypeDTO dto)
     {
-        try{
-            await _productTypeService.Create(productType);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo tipo de produto.");
-        }
-        return Ok(productType);
+        Execute.Executar(dto);
+        dto.Id = 0;
+        ;
+        return Response<ProductTypeDTO>.Created(await _service.Create(dto), "Tipo de produto cadastrado com sucesso!");
     }
-    
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductType productType)
+
+    [HttpPut("{id}"), MapToApiVersion("1")]
+    public async Task<IActionResult> Update(int id, [FromBody] ProductTypeDTO dto)
     {
-        try
-        {
-            await _productTypeService.Update(productType, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o tipo de produto: "+ex.Message);
-        }
-        
-        return Ok(productType);
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductTypeDTO>.Ok(dto, "Tipo de produto atualizado com sucesso!");
     }
-    
-    [HttpDelete("{id}")]
+
+    [HttpPatch("{id}"), MapToApiVersion("1")]
+    public async Task<IActionResult> Patch(int id, [FromBody] ProductTypeDTO dto)
+    {
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductTypeDTO>.Ok(dto, "Tipo de produto atualizado com sucesso!");
+    }
+
+    [HttpDelete("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _productTypeService.Remove(id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo de produto.");
-        }
-
-        return Ok("Tipo de produto apagado com sucesso");
+        await _service.Remove(id);
+        return Response<object>.NoContent();
     }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductType productType)
-    {
-        try
-        {
-            await _productTypeService.Update(productType, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o tipo do produto.");
-        }
-        
-        return Ok(productType);
-    }
-
 }

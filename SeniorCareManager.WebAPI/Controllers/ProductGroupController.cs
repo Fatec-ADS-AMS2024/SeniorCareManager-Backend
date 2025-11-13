@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Models;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 
 namespace SeniorCareManager.WebAPI.Controllers;
@@ -9,84 +10,58 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [Route("api/v1/[controller]")]
 public class ProductGroupController : Controller
 {
-    private readonly IProductGroupService _productGroupService;
+    private readonly IProductGroupService _service;
+    private readonly Response _response;
 
     public ProductGroupController(IProductGroupService service)
     {
-        this._productGroupService = service;
+        _service = service;
+        _response = new Response();
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var productGroups = await _productGroupService.GetAll();
-        return Ok(productGroups);
+        var groups = await _service.GetAll();
+        return Response<IEnumerable<ProductGroupDTO>>.Ok(groups, "Lista de grupos de produto obtida com sucesso!");
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var productGroup = await _productGroupService.GetById(id);
-        if (productGroup == null) return NotFound("Grupo Produto não encontrado!");
-        return Ok(productGroup);
+        var group = await _service.GetById(id);
+        return Response<ProductGroupDTO>.Ok(group, "Grupo de produto obtido com sucesso!");
     }
-    
+
     [HttpPost]
-    public async Task<IActionResult> Post(ProductGroup productGroup)
+    public async Task<IActionResult> Post(ProductGroupDTO dto)
     {
-        try{
-            await _productGroupService.Create(productGroup);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar inserir um novo grupo de produto.");
-        }
-        return Ok(productGroup);
+        Execute.Executar(dto);
+        return Response<ProductGroupDTO>.Created(await _service.Create(dto), "Grupo de produto cadastrado com sucesso!");
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Put(int id, ProductGroupDTO dto)
     {
-        try
-        {
-            await _productGroupService.Update(productGroup, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar atualizar o grupo de produto: "+ex.Message);
-        }
-        
-        return Ok(productGroup);
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductGroupDTO>.Ok(dto, "Grupo de produto atualizado com sucesso!");
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _productGroupService.Remove(id);
-        }
-        catch (Exception ex)
-        {  
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo de produto.");
-        }
+        await _service.Remove(id);
 
-        return Ok("Grupo de produto apagado com sucesso");
+        return Response<object>.Ok(new { Id = id }, "Grupo de produto excluído com sucesso!");
     }
+
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> Patch(int id, ProductGroup productGroup)
+    public async Task<IActionResult> Patch([FromRoute] int id, ProductGroupDTO dto)
     {
-        try
-        {
-            await _productGroupService.Update(productGroup, id);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Ocorreu um erro ao tentar remover o grupo do produto.");
-        }
-        
-        return Ok(productGroup);
+        Execute.Executar(dto);
+        await _service.Update(dto, id);
+        return Response<ProductGroupDTO>.Ok(dto, "Grupo de produto atualizado com sucesso!");
     }
-
 }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SeniorCareManager.WebAPI.Objects.Models;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.RegularExpressions;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
+using SeniorCareManager.WebAPI.Objects.Contracts;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -22,58 +21,35 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             var carriers = await _carrierService.GetAll();
-            return Ok(carriers);
+            return Response<object>.Ok(carriers, "Lista de transportadoras obtida com sucesso!");
+            
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var carriers = await _carrierService.GetById(id);
-            if (carriers == null)
-                return NotFound("Transportadora não encontrada");
-            return Ok(carriers);
+            return Response<object>.Ok(carriers, "Transportadora obtida com sucesso!");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Carrier carrier)
+        public async Task<IActionResult> Post(CarrierDTO carrier)
         {
-            try
-            {
-                await _carrierService.Create(carrier);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar inserir uma nova transportadora");
-            }
-            return Ok(carrier);
+            return Response<object>.Created(await _carrierService.Create(carrier), "Transportadora cadastrada com sucesso!");
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Carrier carrier)
+        public async Task<IActionResult> Put(int id, CarrierDTO carrier)
         {
-            try
-            {
-                await _carrierService.Update(carrier, id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar atualizar os dados da transportadora" + ex.Message);
-            }
-            return Ok(carrier);
+            await _carrierService.Update(carrier, id);
+            return Response<object>.Ok(carrier, "Transportadora atualizada com sucesso!");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _carrierService.Remove(id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Ocorreu um erro ao tentar remover uma transportadora.");
-            }
-            return Ok("Transportadora removida com suceso");
+            await _carrierService.Remove(id);
+            return Response<object>.NoContent();
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
-[Table("healthinsuranceplan")]
+[Table("health_insurance_plan")]
 public class HealthInsurancePlan
 {
     [Column("id")]
@@ -16,14 +17,14 @@ public class HealthInsurancePlan
     public HealthPlanType Type { get; set; }
 
     [Column("abbreviation")]
-    public string Abbreviation { get; set; }
+    public string? Abbreviation { get; set; }
 
-    public HealthInsurancePlan()
-    {
+    [JsonIgnore]
+    public virtual ICollection<Resident>? Residents { get; set; } = new List<Resident>();
 
-    }
+    public HealthInsurancePlan() { }
 
-    public HealthInsurancePlan(int id, string name, HealthPlanType type, string abbreviation)
+    public HealthInsurancePlan(int id, string name, HealthPlanType type, string? abbreviation)
     {
         Id = id;
         Name = name;
@@ -31,4 +32,3 @@ public class HealthInsurancePlan
         Abbreviation = abbreviation;
     }
 }
-
