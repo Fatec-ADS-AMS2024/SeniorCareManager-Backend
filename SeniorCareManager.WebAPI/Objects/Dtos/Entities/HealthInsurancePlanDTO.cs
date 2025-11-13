@@ -16,7 +16,7 @@ public class HealthInsurancePlanDTO
     [RemoveSpaces]
     public string Name { get; set; }
 
-    [StringLengthValidator(20, Minimum = 2, ErrorMessage = "A abreviação deve ter entre 2 e 20 caracteres.")]
+    [StringLengthValidator(5, Minimum = 2, ErrorMessage = "A abreviação deve ter entre 2 e 5 caracteres.")]
     [RemoveSpaces]
     [UpperCaracters]
     public string Abbreviation { get; set; }
