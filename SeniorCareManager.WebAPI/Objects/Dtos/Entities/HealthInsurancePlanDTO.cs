@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
 
@@ -11,7 +11,6 @@ public class HealthInsurancePlanDTO
     [EnumValidator(typeof(HealthPlanType), ErrorMessage = "Tipo de plano inválido.")]
     public HealthPlanType Type { get; set; }
 
-    [UpperCaracters]
     [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 100 caracteres.")]
     [RequiredValidator(ErrorMessage = "O nome do plano de saúde é obrigatório.")]
     [RemoveSpaces]

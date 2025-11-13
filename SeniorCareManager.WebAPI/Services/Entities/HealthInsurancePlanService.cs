@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
@@ -24,7 +24,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         var errors = new List<FieldError>();
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new ExceptionBadRequest("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<HealthInsurancePlanDTO>(healthInsurancePlan);
     }
@@ -36,6 +36,9 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
 
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Nome duplicado.");
+
+        if (await CheckDuplicates(p => p.Abbreviation, healthInsurancePlanDto.Abbreviation, healthInsurancePlanDto.Id))
+            throw new ExceptionConflict("Abreviação duplicada.");
 
         return _mapper.Map<HealthInsurancePlanDTO>( await base.Create(healthInsurancePlanDto) );
     }
@@ -51,6 +54,9 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             errors.Add(new FieldError { Field = "Nome", Message = "Nome duplicado." });
 
+        if (await CheckDuplicates(p => p.Abbreviation, healthInsurancePlanDto.Abbreviation, healthInsurancePlanDto.Id))
+            errors.Add(new FieldError { Field = "Abreviação", Message = "Abreviação duplicada." });
+
         if (errors.Count() > 0)
             throw new ExceptionBadRequest("Erros na requisição", errors);
 
@@ -61,7 +67,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         var errors = new List<FieldError>();
         var healthInsurancePlan = await _healthInsurancePlanRepository.GetById(id);
         if (healthInsurancePlan is null)
-            throw new ExceptionBadRequest("Plano de saúde com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Plano de saúde com o id " + id + " informado não foi encontrada.");
 
         await base.Remove(id);
     }
