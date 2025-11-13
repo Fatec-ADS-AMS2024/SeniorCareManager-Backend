@@ -67,7 +67,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (healthInsurancePlanDto.Id != id)
-            throw new ExceptionBadRequest("O id de Plano de Saúde dever ser o mesmo.");
+            throw new ExceptionNotFound("O id de Plano de Saúde dever ser o mesmo.");
 
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             errors.Add(new FieldError { Field = "Nome", Message = "Nome duplicado." });
@@ -91,7 +91,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         var isReligionnInUse = await _context.Set<Resident>().AnyAsync(ra => ra.ReligionId == id);
         if (isReligionnInUse)
         {
-            throw new InvalidOperationException("Esse plano de saúde não pode ser removido pois está vinculada a um ou mais registros.");
+            throw new ExceptionConflict("Esse plano de saúde não pode ser removido pois está vinculada a um ou mais registros.");
         }
         if (healthInsurancePlan is null)
             throw new ExceptionNotFound("Plano de saúde com o id " + id + " informado não foi encontrada.");
