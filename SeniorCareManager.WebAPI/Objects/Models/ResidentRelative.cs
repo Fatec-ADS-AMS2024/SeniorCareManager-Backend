@@ -1,9 +1,10 @@
-﻿using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {
+    [Table("resident_relative")]
     public class ResidentRelative
     {
         [Column("id")]
@@ -44,7 +45,6 @@ namespace SeniorCareManager.WebAPI.Objects.Models
 
         [Column("issuing_body")]
         public string IssuingBody { get; set; }
-
 
         [Column("relationship")]
         public Relationship Relationship { get; set; }

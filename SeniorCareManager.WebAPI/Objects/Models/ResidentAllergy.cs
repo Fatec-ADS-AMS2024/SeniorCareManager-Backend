@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {
+    [Table("resident_allergy")]
     public class ResidentAllergy
     {
         [Column("id")]
