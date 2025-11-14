@@ -37,6 +37,7 @@ public class ReligionController : Controller
     [HttpPost, MapToApiVersion("1")]
     public async Task<IActionResult> Post([FromBody] ReligionDTO religionDto)
     {
+        Execute.Executar(religionDto);
         religionDto.Id = 0;
         return Response<object>.Created(await _religionService.Create(religionDto), "Religião cadastrada com sucesso!");
     }
