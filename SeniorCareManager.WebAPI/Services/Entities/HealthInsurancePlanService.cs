@@ -24,7 +24,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     }
     /*
      * Busca por id o registro
-     * Caso não for encontrado retorna notFound 
+     * Caso não for encontrado retorna notFound
      */
     public override async Task<HealthInsurancePlanDTO> GetById(int id)
     {
@@ -55,7 +55,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
         return _mapper.Map<HealthInsurancePlanDTO>( await base.Create(healthInsurancePlanDto) );
     }
     /*
-     * Atualiza um plano de saúde 
+     * Atualiza um plano de saúde
      * Verifica se tem nomes e abreviações duplicadas
      * Verifica se o id inserido está correto
      * Caso der erros retorna lista de erros
@@ -67,7 +67,7 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (healthInsurancePlanDto.Id != id)
-            throw new ExceptionNotFound("O id de Plano de Saúde dever ser o mesmo.");
+            throw new ExceptionBadRequest("O id de Plano de Saúde dever ser o mesmo.");
 
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             errors.Add(new FieldError { Field = "Nome", Message = "Nome duplicado." });
