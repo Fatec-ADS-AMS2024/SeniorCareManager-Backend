@@ -1,4 +1,3 @@
-﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
@@ -38,8 +37,7 @@ public class ReligionController : Controller
     [HttpPost, MapToApiVersion("1")]
     public async Task<IActionResult> Post([FromBody] ReligionDTO religionDto)
     {
-        Execute.Executar(religionDto);
-        religionDto.id = 0;
+        religionDto.Id = 0;
         return Response<object>.Created(await _religionService.Create(religionDto), "Religião cadastrada com sucesso!");
     }
 

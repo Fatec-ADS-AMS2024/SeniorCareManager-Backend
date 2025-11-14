@@ -21,6 +21,7 @@ public static class Execute
             if (!executions.Any())
                 continue;
 
+
             foreach (var action in executions)
             {
                 action.Initialize(property, obj);
