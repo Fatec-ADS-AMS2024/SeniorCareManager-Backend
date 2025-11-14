@@ -38,7 +38,7 @@ public class ReligionController : Controller
     public async Task<IActionResult> Post([FromBody] ReligionDTO religionDto)
     {
         Execute.Executar(religionDto);
-        religionDto.id = 0;
+        religionDto.Id = 0;
         return Response<object>.Created(await _religionService.Create(religionDto), "Religião cadastrada com sucesso!");
     }
 
