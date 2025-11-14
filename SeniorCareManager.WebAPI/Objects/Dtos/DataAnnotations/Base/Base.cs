@@ -12,8 +12,18 @@ public abstract class BaseAnnotation : Attribute
 
     protected object Value
     {
-        get => _value ?? null!;
-        set => _value = value;
+        get => GetValue();
+        set => SetValue(value);
+    }
+
+    private object GetValue()
+    {
+        return _property?.GetValue(_value) ?? string.Empty;
+    }
+
+    private void SetValue(object newValue)
+    {
+        _property?.SetValue(_value, newValue);
     }
 
     protected string NameProperty => _property?.Name ?? string.Empty;

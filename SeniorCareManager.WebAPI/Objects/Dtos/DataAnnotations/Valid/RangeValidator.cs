@@ -7,11 +7,12 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid
     public class RengeValidator : BaseAnnotation
     {
         public double minimum { get; }
-        public double maximum { get; }
+        public double maximum { get; set; }
 
         public RengeValidator(double Minimum)
         {
             this.minimum = Minimum;
+            this.maximum = double.MaxValue;
         }
 
         public override FieldError? Execute()
@@ -21,6 +22,8 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid
 
             try
             {
+                Console.WriteLine();
+
                 var number = Convert.ToDouble(Value);
 
                 if (number < minimum || number > maximum)
