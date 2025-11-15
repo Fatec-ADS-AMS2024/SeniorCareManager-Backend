@@ -17,6 +17,8 @@ public class Position
 
     public Position() { }
 
+    public ICollection<TechnicalResponsibility> TechnicalResponsibilities { get; set; }
+
     public Position(int id, string name)
     {
         Id = id;
