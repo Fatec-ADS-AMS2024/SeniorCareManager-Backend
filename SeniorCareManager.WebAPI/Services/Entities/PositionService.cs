@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
@@ -27,12 +27,12 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             /*
              * Busca por id o registro
-             * Caso não for encontrado retorna badRequest 
+             * Caso não for encontrado retorna nNotFound 
              */
             var errors = new List<FieldError>();
             var position = await _positionRepository.GetById(id);
             if (position is null)
-                throw new ExceptionBadRequest("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Cargo com o id " + id + " informado não foi encontrado.");
 
             return _mapper.Map<PositionDTO>(position);
         }
@@ -67,7 +67,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionBadRequest("O Cargo não pode ser nulo.");
 
             if (positionDto.Id != id)
-                throw new ExceptionBadRequest("O id de Cargo dever ser o mesmo.");
+                throw new ExceptionNotFound("O id de Cargo dever ser o mesmo.");
 
             if (await CheckDuplicates(positionDto.Name))
                 errors.Add(new FieldError{Field = "Nome", Message = "Nome duplicado."});
@@ -87,15 +87,18 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var isPositionInUse = await _context.Set<Employee>().AnyAsync(ra => ra.PositionId == id)/* || await _context.Set<TechnicalResponsibility>().AnyAsync(ra => ra.PositionId == id)*/;//Mudar na task TechnicalResponsibility 
             if (isPositionInUse)
             {
-                throw new InvalidOperationException("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
+                throw new ExceptionConflict("Esse cargo não pode ser removido pois está vinculada a um ou mais registros.");
             }
             if (position is null)
-                throw new ExceptionConflict("Cargo com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Cargo com o id " + id + " informado não foi encontrado.");
 
             await base.Remove(id);
         }
         public async Task<bool> CheckDuplicates(string name)
         {
+            /*
+             * Verifica se tem algum nome igual de cargo
+             */
             var positions = await _positionRepository.Get();
             return positions.Any(r =>
                 StringUtils.CompareString(r.Name, name)
