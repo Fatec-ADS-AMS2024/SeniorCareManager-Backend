@@ -52,10 +52,8 @@ public class ProductGroupController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _service.Remove(id);
-
-        return Response<object>.Ok(new { Id = id }, "Grupo de produto excluído com sucesso!");
+        return Response<object>.NoContent();
     }
-
 
     [HttpPatch("{id}")]
     public async Task<IActionResult> Patch(int id, ProductGroupDTO dto)

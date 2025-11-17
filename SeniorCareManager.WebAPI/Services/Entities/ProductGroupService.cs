@@ -12,12 +12,14 @@ namespace SeniorCareManager.WebAPI.Services.Entities;
 public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>, IProductGroupService
 {
     private readonly IProductGroupRepository _repository;
+    private readonly IProductTypeRepository _productTypeRepository;
     private readonly IMapper _mapper;
 
-    public ProductGroupService(IProductGroupRepository repository, IMapper mapper)
+    public ProductGroupService(IProductGroupRepository repository, IProductTypeRepository productTypeRepository, IMapper mapper)
         : base(repository, mapper)
     {
         _repository = repository;
+        _productTypeRepository = productTypeRepository;
         _mapper = mapper;
     }
 
@@ -32,8 +34,6 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
     public override async Task Create(ProductGroupDTO dto)
     {
-        var errors = new List<FieldError>();
-
         if (dto is null)
             throw new ExceptionBadRequest("O Grupo de produto não pode ser nulo.");
 
@@ -71,6 +71,11 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
         var entity = await _repository.GetById(id);
         if (entity is null)
             throw new ExceptionConflict($"Grupo de produto com id {id} não encontrado.");
+
+        // Validação de vínculo: não permitir remoção se existirem tipos vinculados
+        var types = await _productTypeRepository.Get();
+        if (types.Any(t => t.ProductGroupId == id))
+            throw new ExceptionConflict("Existem tipos de produto vinculados a este grupo. Remoção proibida.");
 
         await base.Remove(id);
     }
