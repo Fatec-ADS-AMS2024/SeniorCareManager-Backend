@@ -1,5 +1,8 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -13,21 +16,23 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 {
     private readonly IReligionRepository _religionRepository;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _context;
 
-    public ReligionService(IReligionRepository repository, IMapper mapper) : base(repository, mapper)
+    public ReligionService(IReligionRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
     {
         _religionRepository = repository;
         _mapper = mapper;
+        _context = context;
     }
     public override async Task<ReligionDTO> GetById(int id)
     {
         /*
          * Busca por id o registro
-         * Caso não for encontrado retorna badRequest 
+         * Caso não for encontrado retorna notFound 
          */
         var religion = await _religionRepository.GetById(id);
         if (religion is null)
-            throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Religião com o id " + id + " informado não foi encontrada.");
 
         return _mapper.Map<ReligionDTO>(religion);
     }
@@ -61,7 +66,7 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
             throw new ExceptionBadRequest("A Religião não pode ser nula.");
 
         if (religionDto.Id != id)
-            throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
+            throw new ExceptionNotFound("O id da religião dever ser o mesmo.");
 
         if (await CheckDuplicates(religionDto.Name))
             throw new ExceptionConflict("Nome já existente.");
@@ -71,14 +76,21 @@ public class ReligionService : GenericService<Religion, ReligionDTO>, IReligionS
 
         await base.Update(religionDto, id);
     }
+
     public override async Task Remove(int id)
     {
         /*
-         * Remove o religião
+         * Remove o cargo
+         * Se estiver sendo utilizado não apaga(na Resident)
          */
         var religion = await _religionRepository.GetById(id);
+        var isReligionnInUse = await _context.Set<Resident>().AnyAsync(ra => ra.ReligionId == id);
+        if (isReligionnInUse)
+        {
+            throw new ExceptionConflict("Essea religião não pode ser removida pois está vinculada a um ou mais registros.");
+        }
         if (religion is null)
-            throw new ExceptionBadRequest("Religião com o id " + id + " informado não foi encontrada.");
+            throw new ExceptionNotFound("Religião com o id " + id + " informado não foi encontrada.");
         await base.Remove(id);
     }
     public async Task<bool> CheckDuplicates(string nome)
