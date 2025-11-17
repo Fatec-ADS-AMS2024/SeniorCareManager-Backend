@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
@@ -33,11 +33,11 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<EmployeeDTO>(employee);
         }
 
-        public async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO, int id)
+        public async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO)
         {
             var employee = _mapper.Map<Employee>(employeeDTO);
             var errors = new List<FieldError>();
-            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == id);
+            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == employeeDTO.PositionId);
 
             if (isPositionExist)
             {
@@ -49,7 +49,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 errors.Add(new FieldError { Field = "Cpf", Message = "Cpf já cadastrado" });
 
             if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Email", Message = "Telefone duplicado" });
+                errors.Add(new FieldError { Field = "Phone", Message = "Telefone duplicado" });
 
             return _mapper.Map<EmployeeDTO>(await base.Create(employeeDTO));
         }
@@ -65,7 +65,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new InvalidOperationException("Esse cargo não existe.");
 
             if (employee.Id != id)
-                throw new ExceptionBadRequest("O id da religião dever ser o mesmo.");
+                throw new ExceptionBadRequest("O id do funcionario dever ser o mesmo.");
 
             if (employee == null)
             {
@@ -79,7 +79,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 errors.Add(new FieldError { Field = "Email", Message = "E-mail duplicado" });
 
             if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Email", Message = "Telefone duplicado" });
+                errors.Add(new FieldError { Field = "Phone", Message = "Telefone duplicado" });
 
             await _employeeRepository.Update(employee);
         }

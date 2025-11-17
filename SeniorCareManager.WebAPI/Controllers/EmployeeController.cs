@@ -51,7 +51,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             Execute.Executar(employeeDto);
             await _employeeService.Update(employeeDto, id); ;
 
-            return Response<EmployeeDTO>.Ok(employeeDto, "Produto atualizado com sucesso!");
+            return Response<EmployeeDTO>.Ok(employeeDto, "Funcionario atualizado com sucesso!");
 
         }
 
