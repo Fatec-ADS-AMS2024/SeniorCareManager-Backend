@@ -7,8 +7,7 @@ public class ProductTypeDTO
 {
     public int Id { get; set; }
 
-    [UpperCaracters]
-    [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 100 caracteres.")]
+    [StringLengthValidator(50, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 50 caracteres.")]
     [RequiredValidator(ErrorMessage = "O campo 'Nome' não pode ser nulo ou vazio.")]
     [RemoveSpaces]
     public string? Name { get; set; }
