@@ -3,8 +3,6 @@ using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Services.Interfaces;
-using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
-using System.ComponentModel.DataAnnotations;
 
 namespace SeniorCareManager.WebAPI.Controllers
 {
@@ -42,9 +40,9 @@ namespace SeniorCareManager.WebAPI.Controllers
         [HttpPut("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> Put(int id, [FromBody] SupplierDTO supplierDto)
         {
-            Execute.Executar(supplier);
-            await _supplierService.Update(supplier, id);
-            return Response<object>.Ok(supplier, "Fornecedor atualizado com sucesso!");
+            Execute.Executar(supplierDto);
+            await _supplierService.Update(supplierDto, id);
+            return Response<object>.Ok(supplierDto, "Fornecedor atualizado com sucesso!");
         }
 
         [HttpDelete("{id}"), MapToApiVersion("1")]
