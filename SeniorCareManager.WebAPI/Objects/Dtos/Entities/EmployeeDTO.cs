@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
 
@@ -17,6 +17,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [CpfCnpjValidator(ValidationType.Cpf, ErrorMessage = "CPF inválido.")]
         [RequiredValidator(ErrorMessage = "O CPF é obrigatório.")]
         [RemoveSpaces]
+
         public string? Cpf { get; set; }
 
         [ExtractNumbers]
@@ -36,6 +37,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [UfValidator]
         [RequiredValidator(ErrorMessage = "O estado (UF) é obrigatório.")]
         [RemoveSpaces]
+
         public string? State { get; set; }
 
         [StringLengthValidator(100, Minimum = 2, ErrorMessage = "A cidade deve ter entre 2 e 100 caracteres.")]
@@ -65,6 +67,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [EnumValidator(typeof(StatusEmployee), ErrorMessage = "Status inválido.")]
         public StatusEmployee StatusEmployee { get; set; }
+
         [RengeValidator(1, ErrorMessage = "O cargo é obrigatório.")]
         [RequiredValidator(ErrorMessage = "O cargo é obrigatório.")]
         public int PositionId { get; set; }
