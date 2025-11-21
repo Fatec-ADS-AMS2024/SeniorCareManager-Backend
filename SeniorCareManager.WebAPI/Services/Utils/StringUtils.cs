@@ -28,6 +28,5 @@ namespace SeniorCareManager.WebAPI.Services.Utils
         {
             return string.Equals(RemoveDiacritics(str1), RemoveDiacritics(str2), StringComparison.OrdinalIgnoreCase);
         }
-
     }
 }
