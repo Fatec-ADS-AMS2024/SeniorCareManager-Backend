@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
-using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -22,9 +21,10 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             _employeeRepository = repository;
             _mapper = mapper;
+            _context = context;
         }
 
-        public async Task<EmployeeDTO> GetById(int id)
+        public override async Task<EmployeeDTO> GetById(int id)
         {
             var employee = await _employeeRepository.GetById(id);
             if (employee is null)
@@ -33,59 +33,60 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             return _mapper.Map<EmployeeDTO>(employee);
         }
 
-        public async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO)
+        public override async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO)
         {
-            var employee = _mapper.Map<Employee>(employeeDTO);
             var errors = new List<FieldError>();
-            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == employeeDTO.PositionId);
 
-            if (isPositionExist)
+            var isPositionExist = await _context.Set<Position>().AnyAsync(p => p.Id == employeeDTO.PositionId);
+            if (!isPositionExist)
             {
-                throw new InvalidOperationException("Esse cargo não existe.");
+                errors.Add(new FieldError{ Field = "PositionId", Message = "Cargo não encontrado" });
             }
-   
 
-            if (await CheckDuplicates(p => p.Cpf, employeeDTO.Cpf, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Cpf", Message = "Cpf já cadastrado" });
+            if (await CheckDuplicates(p => p.Cpf, employeeDTO.Cpf, 0))
+                errors.Add(new FieldError{ Field = "Cpf", Message = "CPF já cadastrado" });
 
-            if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Phone", Message = "Telefone duplicado" });
+            if (await CheckDuplicates(p => p.Email, employeeDTO.Email, 0))
+                errors.Add(new FieldError{ Field = "Email", Message = "E-mail já cadastrado" });
+
+            if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, 0))
+                errors.Add(new FieldError{ Field = "Phone", Message = "Telefone já cadastrado" });
+
+            if (errors.Any())
+                throw new ExceptionBadRequest("Erros de validação", errors);
 
             return _mapper.Map<EmployeeDTO>(await base.Create(employeeDTO));
         }
 
-        public async Task Update(EmployeeDTO employeeDTO, int id)
+        public override async Task Update(EmployeeDTO employeeDTO, int id)
         {
-            var employee = _mapper.Map<Employee>(employeeDTO);
-            var existinemployee = await _employeeRepository.GetById(id); // Supondo que sua entidade tenha um campo Id
             var errors = new List<FieldError>();
-            var isPositionExist = await _context.Set<Position>().AnyAsync(ra => ra.Id == id);
 
-            if (isPositionExist)
-                throw new InvalidOperationException("Esse cargo não existe.");
+            var existingEmployee = await _employeeRepository.GetById(id);
+            if (existingEmployee == null)
+                throw new ExceptionNotFound($"Funcionário com id {id} não encontrado!");
 
-            if (employee.Id != id)
-                throw new ExceptionBadRequest("O id do funcionario dever ser o mesmo.");
+            var isPositionExist = await _context.Set<Position>().AnyAsync(p => p.Id == employeeDTO.PositionId);
+            if (!isPositionExist)
+                errors.Add(new FieldError{ Field = "PositionId", Message = "Cargo não encontrado" });
 
-            if (employee == null)
-            {
-                throw new ExceptionNotFound($"Funcionario com id {id} n�o encontrado!");
-            }
+            if (await CheckDuplicates(p => p.Cpf, employeeDTO.Cpf, id))
+                errors.Add(new FieldError { Field = "Cpf", Message = "CPF já cadastrado" });
 
-            if (await CheckDuplicates(p => p.Cpf, employeeDTO.Cpf, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Cpf", Message = "Cpf duplicado" });
+            if (await CheckDuplicates(p => p.Email, employeeDTO.Email, id))
+                errors.Add(new FieldError{ Field = "Email", Message = "E-mail já cadastrado" });
 
-            if (await CheckDuplicates(p => p.Email, employeeDTO.Email, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Email", Message = "E-mail duplicado" });
+            if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, id))
+                errors.Add(new FieldError{ Field = "Phone", Message = "Telefone já cadastrado" });
 
-            if (await CheckDuplicates(p => p.Phone, employeeDTO.Phone, employeeDTO.Id))
-                errors.Add(new FieldError { Field = "Phone", Message = "Telefone duplicado" });
+            if (errors.Any())
+                throw new ExceptionBadRequest("Erros de validação", errors);
 
-            await _employeeRepository.Update(employee);
+            _mapper.Map(employeeDTO, existingEmployee);
+            await _employeeRepository.Update(existingEmployee);
         }
 
-
-        public async Task Remove(int id)
+        public override async Task Remove(int id)
         {
             var employee = await _employeeRepository.GetById(id);
             if (employee == null)
@@ -96,13 +97,20 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             await _employeeRepository.Remove(employee);
         }
 
-        public async Task<bool> CheckDuplicates(Func<Employee, string?> selector, string? valor, int idIgnor)
+        public async Task<bool> CheckDuplicates(Func<Employee, string?> selector, string? value, int ignoreId)
         {
-            var planos = await _employeeRepository.Get(); 
-            return planos.Any(p =>
-                p.Id != idIgnor &&
-                StringUtils.CompareString(selector(p)!, valor)
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+
+            // ✅ Query otimizada no banco - não carrega todos os registros
+            var allEmployees = await _employeeRepository.Get();
+            var hasDuplicate = allEmployees.Any(emp =>
+                emp.Id != ignoreId &&
+                !string.IsNullOrWhiteSpace(selector(emp)) &&
+                StringUtils.CompareString(selector(emp), value.Trim())
             );
+
+            return hasDuplicate;
         }
     }
 }

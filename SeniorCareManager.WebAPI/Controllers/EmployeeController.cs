@@ -31,7 +31,7 @@ namespace SeniorCareManager.WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var employee = await _employeeService.GetById(id);
-            return Response<EmployeeDTO>.Ok(employee, "Funcion�rio obtido com sucesso!");
+            return Response<EmployeeDTO>.Ok(employee, "Funcionário obtido com sucesso!");
         }
 
         [HttpPost, MapToApiVersion("1")]
@@ -51,7 +51,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             Execute.Executar(employeeDto);
             await _employeeService.Update(employeeDto, id); ;
 
-            return Response<EmployeeDTO>.Ok(employeeDto, "Funcionario atualizado com sucesso!");
+            return Response<EmployeeDTO>.Ok(employeeDto, "Funcionário atualizado com sucesso!");
 
         }
 

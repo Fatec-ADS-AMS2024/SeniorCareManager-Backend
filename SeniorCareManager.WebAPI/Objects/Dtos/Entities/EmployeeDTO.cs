@@ -67,6 +67,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [EnumValidator(typeof(StatusEmployee), ErrorMessage = "Status inválido.")]
         public StatusEmployee StatusEmployee { get; set; }
+
         [RengeValidator(1, ErrorMessage = "O cargo é obrigatório.")]
         [RequiredValidator(ErrorMessage = "O cargo é obrigatório.")]
         public int PositionId { get; set; }
