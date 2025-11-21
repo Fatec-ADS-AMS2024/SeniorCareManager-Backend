@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
+using SeniorCareManager.WebAPI.Data.Repositories;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -43,11 +44,13 @@ public class HealthInsurancePlanService : GenericService<HealthInsurancePlan, He
     public override async Task<HealthInsurancePlanDTO> Create(HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         var errors = new List<FieldError>();
+     
         if (healthInsurancePlanDto is null)
             throw new ExceptionBadRequest("O Plano de Saúde não pode ser nulo.");
 
         if (await CheckDuplicates(p => p.Name, healthInsurancePlanDto.Name, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Nome duplicado.");
+       
 
         if (await CheckDuplicates(p => p.Abbreviation, healthInsurancePlanDto.Abbreviation, healthInsurancePlanDto.Id))
             throw new ExceptionConflict("Abreviação duplicada.");
