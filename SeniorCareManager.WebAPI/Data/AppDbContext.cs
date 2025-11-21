@@ -9,7 +9,8 @@ namespace SeniorCareManager.WebAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-		public DbSet<Product> Product { get; set; }
+        public DbSet<Allergy> Allergy { get; set; }
+        public DbSet<Product> Product { get; set; }
 		public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
@@ -19,13 +20,16 @@ namespace SeniorCareManager.WebAPI.Data
         public DbSet<HealthInsurancePlan> HealthInsurancePlans { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Religion> Religions { get; set; }
+        public DbSet<TechnicalResponsibility> TechnicalResponsibilities { get; set; }
+        public DbSet<ProductBatch> ProductBatches { get; set; }
+        public DbSet<Employee> Employees { get; set; }
         public DbSet<Resident> Residents { get; set; }
         public DbSet<ResidentAllergy> ResidentAllergies { get; set; }  
         public DbSet<ResidentRelative> ResidentRelatives { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            AllergyBuilder.Build(modelBuilder);
             ProductBuilder.Build(modelBuilder);
             ProductGroupBuilder.Build(modelBuilder);
             ProductTypeBuilder.Build(modelBuilder);
@@ -36,10 +40,12 @@ namespace SeniorCareManager.WebAPI.Data
             HealthInsurancePlanBuilder.Build(modelBuilder);
             PositionBuilder.Build(modelBuilder);
             ReligionBuilder.Build(modelBuilder);
+            TechnicalResponsibilityBuilder.Build(modelBuilder);
+            ProductBatchBuilder.Build(modelBuilder);
+            EmployeeBuilder.Build(modelBuilder);
             ResidentBuilder.Build(modelBuilder);
             ResidentAllergyBuilder.Build(modelBuilder);
             ResidentRelativeBuilder.Build(modelBuilder);
- 
 
         }
     }

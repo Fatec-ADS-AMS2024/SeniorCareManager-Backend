@@ -53,14 +53,58 @@ public class SupplierBuilder
             .IsRequired()
             .HasMaxLength(100);
 
-        modelBuilder.Entity<Supplier>().Property(s => s.State)
-            .IsRequired()
-            .HasMaxLength(2);
+            modelBuilder.Entity<Supplier>().Property(s => s.State)
+                .IsRequired()
+                .HasMaxLength(2);
 
-        modelBuilder.Entity<Supplier>()
-           .HasData(new List<Supplier>
-           {
-                new Supplier(1, "COLA COCA","COCA","25940984000111","cocafornecedora@gmail.com","1745458080", "15600088", "Avenida Afonso Cáfaro", "850", "Centro", "Avenida", "Fernandópolis", "SP")
-           });
+            modelBuilder.Entity<Supplier>().HasData(new List<Supplier>
+            {
+                new (
+                    id: 1,
+                    corporateName: "FarmaVida Distribuidora Ltda",
+                    tradeName: "FarmaVida",
+                    cpfCnpj: "12345678000190", // ✅ Sem pontuação
+                    email: "vendas@farmavida.com.br",
+                    phone: "1134567890",
+                    postalCode: "01234567",
+                    street: "Rua das Farmácias",
+                    number: "100",
+                    district: "Centro",
+                    addressComplement: "Sala 201",
+                    city: "São Paulo",
+                    state: "SP"
+                ),
+                new (
+                    id: 2,
+                    corporateName: "MedEquip Comércio de Equipamentos Hospitalares S.A.",
+                    tradeName: "MedEquip",
+                    cpfCnpj: "98765432000110", // ✅ Sem pontuação
+                    email: "compras@medequip.com.br",
+                    phone: "1123456789",
+                    postalCode: "04567890",
+                    street: "Avenida dos Hospitais",
+                    number: "500",
+                    district: "Jardim Paulista",
+                    addressComplement: "Bloco B",
+                    city: "São Paulo",
+                    state: "SP"
+                ),
+                new (
+                    id: 3,
+                    corporateName: "NutriSenior Alimentos Especiais Ltda",
+                    tradeName: "NutriSenior",
+                    cpfCnpj: "55666777000188", // ✅ Sem pontuação
+                    email: "atendimento@nutrisenior.com.br",
+                    phone: "1145678901",
+                    postalCode: "07890123",
+                    street: "Rua da Nutrição",
+                    number: "250",
+                    district: "Vila Mariana",
+                    addressComplement: "Galpão 3",
+                    city: "São Paulo",
+                    state: "SP"
+                )
+            });
+        }
     }
 }

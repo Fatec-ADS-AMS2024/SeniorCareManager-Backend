@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 
 public class Startup
@@ -149,7 +150,11 @@ public class Startup
         services.AddScoped<ICarrierService, CarrierService>();
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
+        services.AddScoped<IAllergyService, AllergyService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ITechnicalResponsibilityService, TechnicalResponsibilityService>();
+        services.AddScoped<IProductBatchService, ProductBatchService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IResidentService, ResidentService>();
         services.AddScoped<IResidentAllergyService, ResidentAllergyService>();
         services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
@@ -165,11 +170,14 @@ public class Startup
         services.AddScoped<ICarrierRepository, CarrierRepository>();
         services.AddScoped<IPositionRepository, PositionRepository>();
         services.AddScoped<IReligionRepository, ReligionRepository>();
+        services.AddScoped<IAllergyRepository, AllergyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ITechnicalResponsibilityRepository, TechnicalResponsibilityRepository>();
+        services.AddScoped<IProductBatchRepository, ProductBatchRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IResidentRepository, ResidentRepository>();
         services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
         services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
-
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

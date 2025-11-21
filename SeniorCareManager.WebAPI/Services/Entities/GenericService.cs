@@ -36,15 +36,16 @@ public class GenericService<T, TDto> : IGenericService<T, TDto> where T : class 
 
     public virtual async Task Update(TDto entityDTO, int id)
     {
-        var entity = _mapper.Map<T>(entityDTO);
         var existingEntity = await _repository.GetById(id);
 
         if (existingEntity == null)
         {
             throw new ExceptionBadRequest($"Entidade com id: {id} n�o encontrado.");
         }
+        _mapper.Map( entityDTO, existingEntity );
 
-        await _repository.Update(entity);
+
+        await _repository.Update(existingEntity);
     }
 
     public virtual async Task Remove(int id)

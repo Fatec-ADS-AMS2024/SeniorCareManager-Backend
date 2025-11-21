@@ -5,11 +5,7 @@ using SeniorCareManager.WebAPI.Services.Utils;
 namespace SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 public class ExtractNumbers : BaseAnnotation
 {
-    public ExtractNumbers(params object[]? parameters) : base(parameters)
-    {
-        if (parameters is null)
-            throw new ArgumentNullException("Essa funcão precisa de parâmetros");
-    }
+
 
     public override FieldError? Execute()
     {
@@ -20,7 +16,7 @@ public class ExtractNumbers : BaseAnnotation
 
         if (string.IsNullOrWhiteSpace(valor))
             return ReturnError(NameProperty, "O campo não pode ser nulo ou vazio.");
-        SetValue(valor);
+        Value = valor;
         return null;
     }
 }

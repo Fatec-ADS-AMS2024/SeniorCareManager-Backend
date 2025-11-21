@@ -7,59 +7,58 @@ public class SupplierDTO
 {
     public int Id { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Nome corporativo obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Nome corporativo obrigatório.")]
     [RemoveSpaces]
     public string CorporateName { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Nome comercial obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Nome comercial obrigatório.")]
     [RemoveSpaces]
     public string TradeName { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "CPF ou CNPJ obrigatório.")]
-    [CpfCnpjFormat]
+    [RequiredValidator(ErrorMessage = "CPF ou CNPJ obrigatório.")]
+    [CpfCnpjValidator]
     [ExtractNumbers]
     [RemoveSpaces]
     public string CpfCnpj { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "E-mail obrigatório.")]
+    [RequiredValidator(ErrorMessage = "E-mail obrigatório.")]
     [EmailValidator(ErrorMessage = "E-mail inválido.")]
     [RemoveSpaces]
     public string Email { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Telefone obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Telefone obrigatório.")]
     [PhoneFormat]
     [ExtractNumbers]
     [RemoveSpaces]
     public string Phone { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "CEP obrigatório.")]
+    [RequiredValidator(ErrorMessage = "CEP obrigatório.")]
     [ExtractNumbers]
     [RemoveSpaces]
     public string PostalCode { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Rua obrigatória.")]
+    [RequiredValidator(ErrorMessage = "Rua obrigatória.")]
     [RemoveSpaces]
     public string Street { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Número obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Número obrigatório.")]
     [RemoveSpaces]
     public string Number { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Bairro obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Bairro obrigatório.")]
     [RemoveSpaces]
     public string District { get; set; }
 
     [RemoveSpaces]
     public string AddressComplement { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Cidade obrigatória.")]
+    [RequiredValidator(ErrorMessage = "Cidade obrigatória.")]
     [RemoveSpaces]
     public string City { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "Estado obrigatório.")]
+    [RequiredValidator(ErrorMessage = "Estado obrigatório.")]
     [RemoveSpaces]
     [UpperCaracters]
     [UfValidator]
     public string State { get; set; }
 }
-
