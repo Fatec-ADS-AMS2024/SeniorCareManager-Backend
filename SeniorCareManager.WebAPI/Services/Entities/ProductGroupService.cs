@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
@@ -13,12 +15,14 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 {
     private readonly IProductGroupRepository _repository;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _context;
     private const int NAME_MAX_LENGTH = 50;
 
-    public ProductGroupService(IProductGroupRepository repository, IMapper mapper) : base(repository, mapper)
+    public ProductGroupService(IProductGroupRepository repository, IMapper mapper, AppDbContext context) : base(repository, mapper)
     {
         _repository = repository;
         _mapper = mapper;
+        _context = context;
     }
 
     public override async Task<ProductGroupDTO> GetById(int id)
@@ -31,7 +35,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
 
         var entity = await _repository.GetById(id);
         if (entity is null)
-            throw new ExceptionBadRequest($"Grupo de produto com id {id} não encontrado.");
+            throw new ExceptionNotFound($"Grupo de produto com id {id} não encontrado.");
 
         return _mapper.Map<ProductGroupDTO>(entity);
     }
@@ -58,8 +62,9 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
         if (!string.IsNullOrEmpty(dto.Name) && dto.Name.Length > NAME_MAX_LENGTH)
             errors.Add(new FieldError { Field = "Name", Message = $"O campo 'Nome' deve ter no máximo {NAME_MAX_LENGTH} caracteres." });
 
-        if (await IsDuplicateNameAsync(dto.Name))
-            throw new ExceptionConflict("Já existe um grupo de produto com este nome.");
+        // Verifica duplicidade de nome (seguindo padrão HealthInsurancePlan)
+        if (await CheckDuplicates(p => p.Name, dto.Name, dto.Id))
+            throw new ExceptionConflict("Nome duplicado.");
 
         if (errors.Count > 0)
             throw new ExceptionBadRequest("Erros na requisição", errors);
@@ -95,7 +100,7 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
         if (!string.IsNullOrEmpty(dto.Name) && dto.Name.Length > NAME_MAX_LENGTH)
             errors.Add(new FieldError { Field = "Name", Message = $"O campo 'Nome' deve ter no máximo {NAME_MAX_LENGTH} caracteres." });
 
-        if (await IsDuplicateNameAsync(dto.Name, id))
+        if (await CheckDuplicates(p => p.Name, dto.Name, dto.Id))
             errors.Add(new FieldError { Field = "Name", Message = "Nome duplicado." });
 
         if (errors.Count > 0)
@@ -114,26 +119,29 @@ public class ProductGroupService : GenericService<ProductGroup, ProductGroupDTO>
          * essa checagem deverá ser adicionada aqui antes de remover.
          */
 
-        var entity = await _repository.GetById(id);
-        if (entity is null)
-            throw new ExceptionConflict($"Grupo de produto com id {id} não encontrado.");
+        var group = await _repository.GetById(id);
+        if (group is null)
+            throw new ExceptionNotFound($"Grupo de produto com id {id} não encontrado.");
+
+        // Validação de vínculo: impede exclusão se existir ProductType vinculado
+        var isInUse = await _context.Set<ProductType>().AnyAsync(pt => pt.ProductGroupId == id);
+        if (isInUse)
+            throw new ExceptionConflict("Esse grupo de produto não pode ser removido pois está vinculado a um ou mais tipos de produto.");
 
         await base.Remove(id);
     }
 
+    public async Task<bool> CheckDuplicates(Func<ProductGroup, string?> selector, string? valor, int idIgnor)
+    {
+        var groups = await _repository.Get();
+        return groups.Any(p =>
+            p.Id != idIgnor &&
+            StringUtils.CompareString(selector(p)!, valor)
+        );
+    }
+
     public async Task<bool> IsDuplicateNameAsync(string name, int id = 0)
     {
-
-        /*
-         * Verifica se já existe outro grupo com o mesmo nome.
-         * Exclui o registro com o id fornecido (quando id != 0) da verificação.
-         * Usa StringUtils.CompareString para comparação normalizada.
-         */
-
-        var allGroups = await _repository.Get();
-        return allGroups.Any(g =>
-            g.Id != id &&
-            StringUtils.CompareString(g.Name.Trim(), name.Trim())
-        );
+        return await CheckDuplicates(p => p.Name, name, id);
     }
 }

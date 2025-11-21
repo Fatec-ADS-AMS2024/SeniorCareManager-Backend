@@ -40,6 +40,7 @@ public class ProductGroupController : Controller
     public async Task<IActionResult> Post(ProductGroupDTO dto)
     {
         Execute.Executar(dto);
+        dto.Id = 0;
         return Response<ProductGroupDTO>.Created(await _service.Create(dto), "Grupo de produto cadastrado com sucesso!");
     }
 
@@ -55,6 +56,6 @@ public class ProductGroupController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         await _service.Remove(id);
-        return Response<object>.Ok(new { Id = id }, "Grupo de produto excluído com sucesso!");
+        return Response<object>.NoContent();
     }
 }
