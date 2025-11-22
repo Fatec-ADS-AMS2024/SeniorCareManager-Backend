@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models;
 
@@ -9,7 +10,7 @@ public class Manufacturer
     public int Id { get; set; }
     [Column("corporate_name")]
     public string CorporateName { get; set; }
-    [Column("tradename")]
+    [Column("trade_name")]
     public string TradeName { get; set; }
     [Column("cpf_cnpj")]
     public string CpfCnpj { get; set; }
@@ -17,6 +18,8 @@ public class Manufacturer
     public string Phone { get; set; }
     [Column("email")]
     public string Email { get; set; }
+    [JsonIgnore]
+    public virtual ICollection<ProductBatch>? ProductBatches { get; set; } = new List<ProductBatch>();
 
     public Manufacturer(int id, string corporateName, string tradeName, string cpfCnpj, string phone, string email)
     {

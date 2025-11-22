@@ -13,6 +13,7 @@ public class HealthInsurancePlanBuilder
         modelBuilder.Entity<HealthInsurancePlan>().Property(hip => hip.Name).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<HealthInsurancePlan>().Property(hip => hip.Type).IsRequired().HasMaxLength(1);
         modelBuilder.Entity<HealthInsurancePlan>().Property(hip => hip.Abbreviation).IsRequired().HasMaxLength(5);
+        modelBuilder.Entity<HealthInsurancePlan>().HasMany(h => h.Residents).WithOne(r => r.HealthInsurancePlan).HasForeignKey(r => r.HealthInsurancePlanId).OnDelete(DeleteBehavior.Restrict);
 
         // Inserção de dados iniciais
         modelBuilder.Entity<HealthInsurancePlan>()
