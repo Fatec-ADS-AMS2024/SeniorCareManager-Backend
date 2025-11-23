@@ -5,5 +5,4 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
 public interface IUserService : IGenericService<User, UserDTO>
 {
-    Task<User?> GetByEmailInternal(string email);
 }

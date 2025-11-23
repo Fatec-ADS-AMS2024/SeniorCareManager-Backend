@@ -7,7 +7,7 @@ using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions.Exceptions;
 
 namespace SeniorCareManager.WebAPI.Services.Entities;
 
-public class UserService : GenericService<User, UserDTO>
+public class UserService : GenericService<User, UserDTO>, IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -28,7 +28,6 @@ public class UserService : GenericService<User, UserDTO>
 
         return await base.Create(entityDTO);
     }
-
     public override async Task Update(UserDTO entityDTO, int id)
     {
         if (entityDTO.Id != id)
