@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SeniorCareManager.WebAPI.Objects.Contracts.Exceptions;
+using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 
 
 public class Startup
@@ -151,6 +152,7 @@ public class Startup
         services.AddScoped<IReligionService,  ReligionService>();
         services.AddScoped<IAllergyService, AllergyService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ITechnicalResponsibilityService, TechnicalResponsibilityService>();
         services.AddScoped<IProductBatchService, ProductBatchService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IResidentService, ResidentService>();
@@ -171,6 +173,7 @@ public class Startup
         services.AddScoped<IReligionRepository, ReligionRepository>();
         services.AddScoped<IAllergyRepository, AllergyRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ITechnicalResponsibilityRepository, TechnicalResponsibilityRepository>();
         services.AddScoped<IProductBatchRepository, ProductBatchRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IResidentRepository, ResidentRepository>();

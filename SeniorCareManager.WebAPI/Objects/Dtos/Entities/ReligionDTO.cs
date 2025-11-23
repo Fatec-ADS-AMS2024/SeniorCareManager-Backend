@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities;

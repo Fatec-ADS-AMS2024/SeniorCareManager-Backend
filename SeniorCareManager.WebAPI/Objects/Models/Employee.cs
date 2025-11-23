@@ -54,6 +54,9 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         [JsonIgnore]
         public virtual Position? Position { get; set; }
 
+        [JsonIgnore]
+        public ICollection<TechnicalResponsibility>? TechnicalResponsibilities { get; set; } = new List<TechnicalResponsibility>();
+
         // [JsonIgnore]
         // public virtual ICollection<PurchaseRequest>? CreatedRequests { get; set; } = new List<PurchaseRequest>();
         // [JsonIgnore]

@@ -3,16 +3,13 @@ using SeniorCareManager.WebAPI.Objects.Models;
 
 namespace SeniorCareManager.WebAPI.Data.Repositories
 {
-    public class PositionRepository : GenericRepository<Position>, IPositionRepository
+    public class TechnicalResponsibilityRepository : GenericRepository<TechnicalResponsibility>, ITechnicalResponsibilityRepository
     {
         private readonly AppDbContext _context;
 
-        public PositionRepository(AppDbContext context) : base(context)
+        public TechnicalResponsibilityRepository(AppDbContext context) : base(context)
         {
             this._context = context;
         }
-
-
-
     }
 }

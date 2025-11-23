@@ -32,6 +32,7 @@ public class MappingProfile : Profile
         CreateMap<Allergy, AllergyDTO>();
         CreateMap<ProductDTO, Product>();
         CreateMap<Product, ProductDTO>();
+        CreateMap<TechnicalResponsibility, TechnicalResponsibilityDTO>().ReverseMap();
         CreateMap<ProductBatchDTO, ProductBatch>().ReverseMap();
         CreateMap<ProductBatch, ProductBatchDTO>();
         CreateMap<ResidentDTO, Resident>().ReverseMap();
