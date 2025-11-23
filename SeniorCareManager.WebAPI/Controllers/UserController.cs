@@ -55,6 +55,6 @@ public class UserController : Controller
     {
         await _userService.Remove(id);
 
-        return Response<object>.NoContent("Usuário apagado com sucesso!");
+        return Response<object>.NoContent();
     }
 }

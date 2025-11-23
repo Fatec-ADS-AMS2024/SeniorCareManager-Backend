@@ -23,8 +23,9 @@ namespace SeniorCareManager.WebAPI.Data
         public DbSet<ProductBatch> ProductBatches { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Resident> Residents { get; set; }
-        public DbSet<ResidentAllergy> ResidentAllergies { get; set; }  
+        public DbSet<ResidentAllergy> ResidentAllergies { get; set; }
         public DbSet<ResidentRelative> ResidentRelatives { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,7 +46,7 @@ namespace SeniorCareManager.WebAPI.Data
             ResidentBuilder.Build(modelBuilder);
             ResidentAllergyBuilder.Build(modelBuilder);
             ResidentRelativeBuilder.Build(modelBuilder);
- 
+            UserBuilder.Build(modelBuilder);
 
         }
     }
