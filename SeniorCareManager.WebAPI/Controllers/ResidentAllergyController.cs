@@ -44,7 +44,7 @@ public class ResidentAllergyController : Controller
     }
 
     [HttpPut, MapToApiVersion("1")]
-    public async Task<IActionResult> Put(ResidentAllergyDTO residentAllergyDto)
+    public async Task<IActionResult> Put(int id, ResidentAllergyDTO residentAllergyDto)
     {
         Execute.Executar(residentAllergyDto);
         await _residentAllergyService.Update(residentAllergyDto, residentAllergyDto.Id);

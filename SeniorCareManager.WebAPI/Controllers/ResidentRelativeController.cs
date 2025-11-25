@@ -5,7 +5,6 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 
-
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
@@ -17,21 +16,21 @@ public class ResidentRelativeController : Controller
     private readonly IResidentRelativeService _residentRelativeService;
     public ResidentRelativeController(IResidentRelativeService service)
     {
-        this._residentRelativeService = service;
+        _residentRelativeService = service;
     }
 
     [HttpGet, MapToApiVersion("1")]
     public async Task<IActionResult> Get()
     {
         var residentRelatives = await _residentRelativeService.GetAll();
-        return Response<IEnumerable<ResidentRelativeDTO>>.Ok(residentRelatives, "Lista de Parentes obtidas com sucesso!");
+        return Response<IEnumerable<ResidentRelativeDTO>>.Ok(residentRelatives, "Lista de parentes obtida com sucesso!");
     }
 
     [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
         var residentRelative = await _residentRelativeService.GetById(id);
-        return Response<ResidentRelativeDTO>.Ok(residentRelative, "Parente do Residente obtido com sucesso!");
+        return Response<ResidentRelativeDTO>.Ok(residentRelative, "Parente obtido com sucesso!");
     }
 
     [HttpPost, MapToApiVersion("1")]
@@ -40,16 +39,15 @@ public class ResidentRelativeController : Controller
         Execute.Executar(residentRelativeDto);
         residentRelativeDto.Id = 0;
         var created = await _residentRelativeService.Create(residentRelativeDto);
-        return Response<ResidentRelativeDTO>.Created(created, "Parentes do Residente cadastrado com sucesso!");
+        return Response<ResidentRelativeDTO>.Created(created, "Parente cadastrado com sucesso!");
     }
 
-    [HttpPut, MapToApiVersion("1")]
-    public async Task<IActionResult> Put(ResidentRelativeDTO residentRelativeDto)
+    [HttpPut("{id}"), MapToApiVersion("1")]
+    public async Task<IActionResult> Put(int id, ResidentRelativeDTO residentRelativeDto)
     {
         Execute.Executar(residentRelativeDto);
-        // Update receberá o id via corpo (residentRelativeDto.Id)
-        await _residentRelativeService.Update(residentRelativeDto, residentRelativeDto.Id);
-        return Response<ResidentRelativeDTO>.Ok(residentRelativeDto, "Parentes do Residente atualizado com sucesso!");
+        await _residentRelativeService.Update(residentRelativeDto, id);
+        return Response<ResidentRelativeDTO>.Ok(residentRelativeDto, "Parente atualizado com sucesso!");
     }
 
     [HttpDelete("{id}"), MapToApiVersion("1")]

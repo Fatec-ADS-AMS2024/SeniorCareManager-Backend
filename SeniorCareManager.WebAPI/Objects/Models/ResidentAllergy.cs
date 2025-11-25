@@ -38,10 +38,10 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         {
             Id = id;
             ResidentId = residentId;
-            Description = description;
             AllergyId = allergyId;
             DetectionDate = detectionDate;
             ReleasedDate = releasedDate;
+            Description = description;
         }
     }
 }
