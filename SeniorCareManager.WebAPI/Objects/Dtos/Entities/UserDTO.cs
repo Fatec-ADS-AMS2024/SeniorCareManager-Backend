@@ -26,4 +26,6 @@ public class UserDTO
     [EnumValidator(typeof(UserStatus), ErrorMessage = "Status do usuário inválido.")]
     public UserStatus UserStatus { get; set; }
 
+    // Relacionamento com Employee (opcional)
+    public int? EmployeeId { get; set; }
 }

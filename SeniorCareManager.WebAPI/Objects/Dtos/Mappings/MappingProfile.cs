@@ -43,5 +43,7 @@ public class MappingProfile : Profile
         CreateMap<ResidentRelative, ResidentRelativeDTO>();
         CreateMap<UserDTO, User>().ReverseMap();
         CreateMap<User, UserDTO>();
+        // Novo mapeamento para listagens sem expor senha
+        CreateMap<User, UserWithoutPasswordDTO>().ReverseMap();
     }
 }
