@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SeniorCareManager.WebAPI.Data;
 using SeniorCareManager.WebAPI.Data.Interfaces;
@@ -31,7 +31,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             var allergy = await _allergyRepository.GetById(id);
 
             if (allergy is null)
-                throw new ExceptionBadRequest($"Alergia com o id {id} não foi encontrada.");
+                throw new ExceptionNotFound($"Alergia com o id {id} não foi encontrada.");
 
             return _mapper.Map<AllergyDTO>(allergy);
         }
@@ -85,7 +85,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             if (isAllergyInUse)
             {
-                throw new InvalidOperationException("Esta alergia não pode ser removida pois está vinculada a um ou mais residentes.");
+                throw new ExceptionConflict("Esta alergia não pode ser removida pois está vinculada a um ou mais residentes.");
             }
 
             await base.Remove(id);
