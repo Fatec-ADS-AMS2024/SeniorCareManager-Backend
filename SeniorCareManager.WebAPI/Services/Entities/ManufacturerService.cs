@@ -34,7 +34,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
                 throw new ExceptionBadRequest("O Fabricante não pode ser nulo.");
 
             if (await CheckDuplicates(manufacturerDto))
-                throw new ExceptionConflict("Dados duplicados (Razão social, Nome comercial ou CPF/CNPJ).");
+                throw new ExceptionNotFound("Dados duplicados (Razão social, Nome comercial ou CPF/CNPJ).");
 
             return _mapper.Map<ManufacturerDTO>(await base.Create(manufacturerDto));
         }
@@ -75,7 +75,7 @@ namespace SeniorCareManager.WebAPI.Services.Entities
         {
             var manufacturer = await _manufacturerRepository.GetById(id);
             if (manufacturer is null)
-                throw new ExceptionConflict("Fabricante com o id " + id + " informado não foi encontrado.");
+                throw new ExceptionNotFound("Fabricante com o id " + id + " informado não foi encontrado.");
 
             await base.Remove(id);
         }

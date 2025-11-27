@@ -13,25 +13,25 @@ namespace SeniorCareManager.WebAPI.Data.Builders
             modelBuilder.Entity<Manufacturer>()
                 .Property(m => m.CorporateName)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Manufacturer>()
                 .Property(m => m.TradeName)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Manufacturer>()
                 .Property(m => m.CpfCnpj)
                 .IsRequired()
-                .HasMaxLength(14);
+                .HasMaxLength(18);
 
             modelBuilder.Entity<Manufacturer>()
                 .Property(m => m.Phone)
-                .HasMaxLength(11);
+                .HasMaxLength(15);
 
             modelBuilder.Entity<Manufacturer>()
                 .Property(m => m.Email)
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             // Inserção de dados iniciais
             modelBuilder.Entity<Manufacturer>()
