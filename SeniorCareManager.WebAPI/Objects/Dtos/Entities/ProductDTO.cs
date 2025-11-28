@@ -8,15 +8,15 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 {
     public class ProductDTO
     {
-        public long Id { get; set; }
+        public long Id { get; set; } 
 
-        [StringLengthValidator(255, ErrorMessage = "A descrição não pode exceder 255 caracteres.")]
+        [StringLengthValidator(100, ErrorMessage = "A descrição não pode exceder 100 caracteres.")]
         [RequiredValidator(ErrorMessage = "Descrição obrigatória.")]
         [RemoveSpaces]
         public string? Description { get; set; }
 
         [UpperCaracters]
-        [StringLengthValidator(150, Minimum = 2, ErrorMessage = "O nome genérico deve ter entre 2 e 150 caracteres.")]
+        [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome genérico deve ter entre 2 e 100 caracteres.")]
         [RequiredValidator(ErrorMessage = "Nome genérico obrigatório.")]
         [RemoveSpaces]
         public string? GenericName { get; set; }
