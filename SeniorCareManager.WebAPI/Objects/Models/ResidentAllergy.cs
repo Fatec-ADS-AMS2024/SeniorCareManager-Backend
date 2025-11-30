@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeniorCareManager.WebAPI.Objects.Models
 {
+    [Table("resident_allergy")]
     public class ResidentAllergy
     {
         [Column("id")]
@@ -37,10 +38,10 @@ namespace SeniorCareManager.WebAPI.Objects.Models
         {
             Id = id;
             ResidentId = residentId;
-            Description = description;
             AllergyId = allergyId;
             DetectionDate = detectionDate;
             ReleasedDate = releasedDate;
+            Description = description;
         }
     }
 }
