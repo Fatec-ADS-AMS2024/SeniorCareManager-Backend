@@ -43,14 +43,29 @@ public class Product
     [Column("expiration_controlled")]
     public YesNo ExpirationControlled { get; set; }
 
-        public ICollection<ProductBatch> ProductBatches { get; set; }
+    [Column("product_type_id")]
+    [ForeignKey("ProductType")]
+    public int ProductTypeId { get; set; }
 
-    public Product()
-    {
-        ProductBatches = new List<ProductBatch>();
-    }
+    [JsonIgnore]
+    public virtual ProductType? ProductType { get; set; }
 
-    public Product(long id, string description, string genericName, decimal minimumStock, decimal currentStock, decimal stockValue, decimal unitPrice, decimal averageCost, decimal lastPurchasePrice, YesNo highCost, YesNo expirationControlled)
+    [Column("unit_of_measure_id")]
+    [ForeignKey("UnitOfMeasure")]
+    public int UnitOfMeasureId { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<Supplier>? ProductSuppliers { get; set; } = new List<Supplier>();
+
+    [JsonIgnore]
+    public virtual UnitOfMeasure? UnitOfMeasure { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<ProductBatch>? ProductBatches { get; set; }
+
+    public Product() { }
+
+    public Product(long id, string description, string genericName, decimal minimumStock, decimal currentStock, decimal stockValue, decimal unitPrice, decimal averageCost, decimal lastPurchasePrice, YesNo highCost, YesNo expirationControlled, int unitOfMeasureId, int productTypeId)
     {
         Id = id;
         Description = description;
@@ -63,5 +78,7 @@ public class Product
         LastPurchasePrice = lastPurchasePrice;
         HighCost = highCost;
         ExpirationControlled = expirationControlled;
+        UnitOfMeasureId = unitOfMeasureId;
+        ProductTypeId = productTypeId;
     }
 }

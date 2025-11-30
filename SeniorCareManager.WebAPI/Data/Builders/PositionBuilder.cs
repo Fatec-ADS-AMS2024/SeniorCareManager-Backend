@@ -15,6 +15,11 @@ namespace SeniorCareManager.WebAPI.Data.Builders
                 .IsRequired()
                 .HasMaxLength(50);
 
+            modelBuilder.Entity<Position>()
+                .HasMany(pg => pg.Employees)
+                .WithOne(pg => pg.Position)
+                .HasForeignKey(pg => pg.PositionId);
+
             // Inserção de dados iniciais (opcional)
             modelBuilder.Entity<Position>()
                 .HasData(new List<Position>

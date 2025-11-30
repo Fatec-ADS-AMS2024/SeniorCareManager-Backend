@@ -7,10 +7,11 @@ public class ProductTypeDTO
 {
     public int Id { get; set; }
 
-    [NullOrEmpty(ErrorMessage = "O campo 'Nome' n„o pode ser nulo ou vazio.")]
+    [StringLengthValidator(50, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 50 caracteres.")]
+    [RequiredValidator(ErrorMessage = "O campo 'Nome' n√£o pode ser nulo ou vazio.")]
     [RemoveSpaces]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    [NumValidator(1, ErrorMessage = "… necess·rio informar um grupo de produto v·lido.")]
+    [RengeValidator(1, ErrorMessage = "√â necess√°rio informar um grupo de produto v√°lido.")]
     public int ProductGroupId { get; set; }
 }

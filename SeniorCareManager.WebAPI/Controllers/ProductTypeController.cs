@@ -1,14 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
+using SeniorCareManager.WebAPI.Services.Utils;
 
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1")]
+[Authorize]
 public class ProductTypeController : ControllerBase
 {
     private readonly IProductTypeService _service;
@@ -37,7 +40,6 @@ public class ProductTypeController : ControllerBase
     {
         Execute.Executar(dto);
         dto.Id = 0;
-        ;
         return Response<ProductTypeDTO>.Created(await _service.Create(dto), "Tipo de produto cadastrado com sucesso!");
     }
 

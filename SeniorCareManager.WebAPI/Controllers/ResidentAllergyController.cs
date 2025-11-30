@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
 using SeniorCareManager.WebAPI.Services.Interfaces;
 using SeniorCareManager.WebAPI.Objects.Contracts;
@@ -7,7 +8,9 @@ using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 namespace SeniorCareManager.WebAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1")]
+[Authorize]
 public class ResidentAllergyController : Controller
 {
     private readonly IResidentAllergyService _residentAllergyService;
@@ -17,38 +20,38 @@ public class ResidentAllergyController : Controller
         _residentAllergyService = service;
     }
 
-    [HttpGet]
+    [HttpGet, MapToApiVersion("1")]
     public async Task<IActionResult> Get()
     {
         var allergies = await _residentAllergyService.GetAll();
         return Response<IEnumerable<ResidentAllergyDTO>>.Ok(allergies, "Lista de alergias de residentes obtida com sucesso!");
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> GetById(int id)
     {
         var allergy = await _residentAllergyService.GetById(id);
         return Response<ResidentAllergyDTO>.Ok(allergy, "Alergia de residente obtida com sucesso!");
     }
 
-    [HttpPost]
+    [HttpPost, MapToApiVersion("1")]
     public async Task<IActionResult> Post(ResidentAllergyDTO residentAllergyDto)
     {
         Execute.Executar(residentAllergyDto);
         residentAllergyDto.Id = 0;
-        await _residentAllergyService.Create(residentAllergyDto);
-        return Response<ResidentAllergyDTO>.Created(residentAllergyDto, "Alergia de residente cadastrada com sucesso!");
+        var created = await _residentAllergyService.Create(residentAllergyDto);
+        return Response<ResidentAllergyDTO>.Created(created, "Alergia de residente cadastrada com sucesso!");
     }
 
-    [HttpPut("{id}")]
+    [HttpPut, MapToApiVersion("1")]
     public async Task<IActionResult> Put(int id, ResidentAllergyDTO residentAllergyDto)
     {
         Execute.Executar(residentAllergyDto);
-        await _residentAllergyService.Update(residentAllergyDto, id);
+        await _residentAllergyService.Update(residentAllergyDto, residentAllergyDto.Id);
         return Response<ResidentAllergyDTO>.Ok(residentAllergyDto, "Alergia de residente atualizada com sucesso!");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), MapToApiVersion("1")]
     public async Task<IActionResult> Delete(int id)
     {
         await _residentAllergyService.Remove(id);
