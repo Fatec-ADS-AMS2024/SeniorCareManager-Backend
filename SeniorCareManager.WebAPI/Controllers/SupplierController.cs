@@ -7,24 +7,23 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1")]
-    public class SupplierController : ControllerBase
+    [Route("api/v1/[controller]")]
+    public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
 
-        public SupplierController(ISupplierService service)
+        public SupplierController(ISupplierService supplierService)
         {
-            this._supplierService = service;
+            _supplierService = supplierService;
         }
 
-        [HttpGet, MapToApiVersion("1")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Response<object>.Ok(await _supplierService.GetAll(), "Fornecedores obtidos com sucesso!");
         }
 
-        [HttpGet("{id}"), MapToApiVersion("1")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             return Response<object>.Ok(await _supplierService.GetById(id), "Fornecedor obtido com sucesso!");
@@ -37,15 +36,15 @@ namespace SeniorCareManager.WebAPI.Controllers
             return Response<object>.Created(await _supplierService.Create(supplier), "Fornecedor cadastrado com sucesso!");
         }
 
-        [HttpPut("{id}"), MapToApiVersion("1")]
-        public async Task<IActionResult> Put(int id, [FromBody] SupplierDTO supplierDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, SupplierDTO supplier)
         {
-            Execute.Executar(supplierDto);
-            await _supplierService.Update(supplierDto, id);
-            return Response<object>.Ok(supplierDto, "Fornecedor atualizado com sucesso!");
+            Execute.Executar(supplier);
+            await _supplierService.Update(supplier, id);
+            return Response<object>.Ok(supplier, "Fornecedor atualizado com sucesso!");
         }
 
-        [HttpDelete("{id}"), MapToApiVersion("1")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _supplierService.Remove(id);
