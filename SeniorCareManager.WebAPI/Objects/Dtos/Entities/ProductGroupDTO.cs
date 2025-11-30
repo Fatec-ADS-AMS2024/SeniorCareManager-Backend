@@ -10,6 +10,5 @@ public class ProductGroupDTO
     [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 100 caracteres.")]
     [RequiredValidator(ErrorMessage = "O nome do grupo de produtos � obrigat�rio.")]
     [RemoveSpaces]
-    [QtdCaractersValidator(1, 50)]
     public string Name { get; set; }
 }
