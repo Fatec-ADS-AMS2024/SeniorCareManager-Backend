@@ -3,6 +3,7 @@ using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 
 namespace SeniorCareManager.WebAPI.Objects.Dtos;
+
 public class SupplierDTO
 {
     public int Id { get; set; }

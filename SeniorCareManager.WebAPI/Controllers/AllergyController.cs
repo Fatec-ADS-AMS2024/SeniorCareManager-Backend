@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -10,7 +11,9 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1")]
+    [Authorize]
     public class AllergyController : Controller
     {
         private readonly IAllergyService _allergyService;
@@ -19,21 +22,21 @@ namespace SeniorCareManager.WebAPI.Controllers
             this._allergyService = allergyService;
         }
 
-        [HttpGet]
+        [HttpGet, MapToApiVersion("1")]
         public async Task<IActionResult> GetAll()
         {
                 var allergies = await _allergyService.GetAll();
                 return Response<IEnumerable<AllergyDTO>>.Ok(allergies, "Alergias obtidas com sucesso!");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> GetById(int id)
         {
                 var allergies = await _allergyService.GetById(id);
                 return Response<AllergyDTO>.Ok(allergies, "Alergia obtida com sucesso!");
         }
 
-        [HttpPost]
+        [HttpPost, MapToApiVersion("1")]
         public async Task<IActionResult> Post(AllergyDTO allergyDTO)
         {
                 Execute.Executar(allergyDTO);
@@ -42,7 +45,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 return Response<AllergyDTO>.Created(allergyDTO, "Alergia criada com sucesso!");
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> Put(int id, AllergyDTO allergyDTO)
         {
                 Execute.Executar(allergyDTO);
@@ -50,7 +53,7 @@ namespace SeniorCareManager.WebAPI.Controllers
                 return Response<AllergyDTO>.Ok(allergyDTO, "Alergia atualizada com sucesso!");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> Delete(int id)
         {
                 await _allergyService.Remove(id);

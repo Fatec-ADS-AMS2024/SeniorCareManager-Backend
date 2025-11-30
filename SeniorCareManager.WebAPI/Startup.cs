@@ -37,7 +37,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        
+
         if (env == "Production")
         {
             services.AddDbContext<AppDbContext>(options =>
@@ -48,7 +48,7 @@ public class Startup
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
-        
+
         //configuração do swagger
         services.AddSwaggerGen(c =>
         {
@@ -146,7 +146,7 @@ public class Startup
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
         services.AddScoped<IHealthInsurancePlanService, HealthInsurancePlanService>();
-        services.AddScoped<IManufacturerService, ManufacturerService>(); 
+        services.AddScoped<IManufacturerService, ManufacturerService>();
         services.AddScoped<ICarrierService, CarrierService>();
         services.AddScoped<IPositionService, PositionService>();
         services.AddScoped<IReligionService,  ReligionService>();
@@ -159,6 +159,7 @@ public class Startup
         services.AddScoped<IResidentAllergyService, ResidentAllergyService>();
         services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
         services.AddScoped<IAdmService, AdmService>();
+        services.AddScoped<IUserService, UserService>();
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
@@ -178,6 +179,7 @@ public class Startup
         services.AddScoped<IResidentRepository, ResidentRepository>();
         services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
         services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

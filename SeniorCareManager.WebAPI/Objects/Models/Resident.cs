@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Enums;
+using SeniorCareManager.WebAPI.Objects.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -95,31 +95,7 @@ namespace SeniorCareManager.WebAPI.Objects.Models
 
         public Resident() { }
 
-        public Resident(
-            int id,
-            string registeredName,
-            string? socialName,
-            DateTime dateOfBirth,
-            string age,
-            string cpf,
-            string rg,
-            string issuingBody,
-            string issuingState,
-            string? pisPasep,
-            Sex sex,
-            MaritalStatus maritalStatus,
-            Ethnicity ethnicity,
-            string? fatherName,
-            string? motherName,
-            string? spouseName,
-            string? nationalHealthCardNumber,
-            string? privateHealthCardNumber,
-            string? mobileNumber,
-            string? homePhoneNumber,
-            decimal? height,
-            decimal? weight,
-            int? healthInsurancePlanId,
-            int? religionId)
+        public Resident(int id, string registeredName, string? socialName, DateTime dateOfBirth, string age, string cpf, string rg, string issuingBody, string issuingState, string? pisPasep, Sex sex, MaritalStatus maritalStatus, Ethnicity ethnicity, string? fatherName, string? motherName, string? spouseName, string? nationalHealthCardNumber, string? privateHealthCardNumber, string? mobileNumber, string? homePhoneNumber, decimal? height, decimal? weight, int? healthInsurancePlanId, int? religionId)
         {
             Id = id;
             RegisteredName = registeredName;

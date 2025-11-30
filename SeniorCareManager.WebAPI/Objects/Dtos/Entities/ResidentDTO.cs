@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
 
@@ -66,9 +66,13 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [StringLengthValidator(15, ErrorMessage = "O número do cartão de saúde privado deve ter 15 caracteres.")]
         public string? PrivateHealthCardNumber { get; set; }
 
+        [PhoneFormat]
+        [ExtractNumbers]
         [RemoveSpaces]
         public string? MobileNumber { get; set; }
 
+        [PhoneFormat]
+        [ExtractNumbers]
         [RemoveSpaces]
         public string? HomePhoneNumber { get; set; }
 

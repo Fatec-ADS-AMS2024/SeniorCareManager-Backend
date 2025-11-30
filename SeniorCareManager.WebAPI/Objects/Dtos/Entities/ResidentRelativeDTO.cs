@@ -1,4 +1,4 @@
-﻿using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
+using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Format;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Valid;
 using SeniorCareManager.WebAPI.Objects.Enums;
 
@@ -19,6 +19,23 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [StringLengthValidator(150, Minimum = 2, ErrorMessage = "O nome deve ter entre 2 e 150 caracteres.")]
         [RemoveSpaces]
         public string Name { get; set; }
+
+        [ExtractNumbers]
+        [RequiredValidator(ErrorMessage = "O CPF é obrigatório.")]
+        [StringLengthValidator(11, Minimum = 11, ErrorMessage = "CPF inválido.")]
+        [RemoveSpaces]
+        public string Cpf { get; set; }
+
+        [RequiredValidator(ErrorMessage = "O RG é obrigatório.")]
+        [StringLengthValidator(20, Minimum = 2, ErrorMessage = "RG inválido.")]
+        [RemoveSpaces]
+        public string Rg { get; set; }
+
+        [UpperCaracters]
+        [UfValidator(ErrorMessage = "UF inválida.")]
+        [RequiredValidator(ErrorMessage = "O estado emissor é obrigatório.")]
+        [RemoveSpaces]
+        public string IssuingState { get; set; }
 
         [RequiredValidator(ErrorMessage = "A nacionalidade é obrigatória.")]
         [UpperCaracters]
@@ -52,6 +69,12 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [StringLengthValidator(10, ErrorMessage = "O número não pode exceder 10 caracteres.")]
         [RemoveSpaces]
         public string Number { get; set; }
+
+        [RequiredValidator(ErrorMessage = "O bairro é obrigatório.")]
+        [UpperCaracters]
+        [StringLengthValidator(100, Minimum = 2, ErrorMessage = "O bairro deve ter entre 2 e 100 caracteres.")]
+        [RemoveSpaces]
+        public string District { get; set; }
 
         [UpperCaracters]
         [StringLengthValidator(100, ErrorMessage = "O complemento não pode exceder 100 caracteres.")]
