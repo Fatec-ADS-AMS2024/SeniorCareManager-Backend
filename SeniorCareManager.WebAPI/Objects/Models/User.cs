@@ -22,7 +22,12 @@ public class User
     [Column("userstatus")]
     public UserStatus UserStatus { get; set; }
 
+    // Relacionamento com Employee
+    [Column("employee_id"), ForeignKey("Employee")]
+    public int? EmployeeId { get; set; }
 
+    [JsonIgnore]
+    public virtual Employee? Employee { get; set; }
 
     public User()
     {

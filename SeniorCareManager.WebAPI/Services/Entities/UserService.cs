@@ -28,6 +28,7 @@ public class UserService : GenericService<User, UserDTO>, IUserService
 
         return await base.Create(entityDTO);
     }
+
     public override async Task Update(UserDTO entityDTO, int id)
     {
         if (entityDTO.Id != id)
@@ -36,7 +37,7 @@ public class UserService : GenericService<User, UserDTO>, IUserService
         var existingEntity = await _userRepository.GetById(id);
         if (existingEntity == null)
         {
-            throw new KeyNotFoundException($"Usuário com id {id} não encontrado.");
+            throw new ExceptionNotFound($"Usuário com id {id} não encontrado.");
         }
 
         var emailOwner = await _userRepository.GetByEmail(entityDTO.Email);
@@ -47,5 +48,29 @@ public class UserService : GenericService<User, UserDTO>, IUserService
 
         _mapper.Map(entityDTO, existingEntity);
         await _userRepository.Update(existingEntity);
+    }
+
+    public async Task ChangePassword(int id, ChangePasswordDTO dto)
+    {
+        var user = await _userRepository.GetById(id);
+        if (user == null)
+            throw new ExceptionNotFound("Usuário não encontrado.");
+
+        // validação básica
+        if (dto.NewPassword != dto.ConfirmPassword)
+            throw new ExceptionBadRequest("A nova senha e a confirmação não coincidem.");
+
+        if (string.IsNullOrWhiteSpace(dto.NewPassword) || dto.NewPassword.Length < 6)
+            throw new ExceptionBadRequest("A nova senha deve ter pelo menos 6 caracteres.");
+
+        // validação da senha atual (projeto armazena senha diretamente)
+        if (user.Password != dto.OldPassword)
+            throw new ExceptionUnauthorized("Senha atual incorreta.");
+
+        if (user.Password == dto.NewPassword)
+            throw new ExceptionBadRequest("A nova senha deve ser diferente da senha atual.");
+
+        user.Password = dto.NewPassword;
+        await _userRepository.Update(user);
     }
 }

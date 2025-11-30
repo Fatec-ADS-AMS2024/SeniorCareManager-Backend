@@ -5,4 +5,5 @@ namespace SeniorCareManager.WebAPI.Services.Interfaces;
 
 public interface IUserService : IGenericService<User, UserDTO>
 {
+    Task ChangePassword(int id, ChangePasswordDTO dto);
 }
