@@ -37,7 +37,7 @@ public class UserService : GenericService<User, UserDTO>, IUserService
         var existingEntity = await _userRepository.GetById(id);
         if (existingEntity == null)
         {
-            throw new KeyNotFoundException($"Usuário com id {id} não encontrado.");
+            throw new ExceptionNotFound($"Usuário com id {id} não encontrado.");
         }
 
         var emailOwner = await _userRepository.GetByEmail(entityDTO.Email);
