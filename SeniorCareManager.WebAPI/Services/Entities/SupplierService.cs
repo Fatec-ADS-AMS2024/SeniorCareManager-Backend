@@ -85,7 +85,6 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
             await base.Remove(id);
         }
-
         public async Task<bool> CheckDuplicates(Expression<Func<Supplier, string?>> selector, string? valor, int idIgnor)
         {
             return await _supplierRepository.ExistsAsync(selector, valor, idIgnor);
