@@ -10,7 +10,7 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1")]
-[Authorize]
+// [Authorize]
 public class HealthInsurancePlanController : Controller
 {
     private readonly IHealthInsurancePlanService _healthInsurancePlanService;
@@ -48,7 +48,7 @@ public class HealthInsurancePlanController : Controller
     public async Task<IActionResult> Put(int id, HealthInsurancePlanDTO healthInsurancePlanDto)
     {
         Execute.Executar(healthInsurancePlanDto);
-        await _healthInsurancePlanService.Update(healthInsurancePlanDto, id); 
+        await _healthInsurancePlanService.Update(healthInsurancePlanDto, id);
 
         return Response<HealthInsurancePlanDTO>.Ok(healthInsurancePlanDto, "Plano de saúde atualizado com sucesso!");
     }

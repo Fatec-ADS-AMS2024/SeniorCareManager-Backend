@@ -10,7 +10,7 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1")]
-[Authorize]
+// [Authorize]
 public class TechnicalResponsibilityController : Controller
 {
     private readonly ITechnicalResponsibilityService _technicalResponsibilityService;
