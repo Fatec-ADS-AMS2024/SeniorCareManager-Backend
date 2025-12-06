@@ -45,5 +45,10 @@ public class MappingProfile : Profile
         CreateMap<User, UserDTO>();
         // Novo mapeamento para listagens sem expor senha
         CreateMap<User, UserWithoutPasswordDTO>().ReverseMap();
+        CreateMap<InvoiceItemDTO, InvoiceItem>().ReverseMap();
+        CreateMap<InvoiceDTO, Invoice>()
+            .ForMember(dest => dest.Items, opt => opt.Ignore());
+        CreateMap<Invoice, InvoiceDTO>()
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
     }
 }
