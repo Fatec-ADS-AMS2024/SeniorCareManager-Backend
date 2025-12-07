@@ -50,7 +50,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
 
         [PhoneFormat]
         [RequiredValidator(ErrorMessage = "O telefone é obrigatório.")]
-        [StringLengthValidator(15, Minimum = 14, ErrorMessage = "Telefone inválido.")]
+        [StringLengthValidator(15, Minimum = 10, ErrorMessage = "Telefone inválido.")]
         public string? Phone { get; set; }
 
         [EmailValidator(ErrorMessage = "Email inválido.")]

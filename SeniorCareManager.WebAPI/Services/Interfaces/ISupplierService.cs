@@ -1,8 +1,9 @@
-using System.Linq.Expressions;
 using SeniorCareManager.WebAPI.Objects.Dtos;
 using SeniorCareManager.WebAPI.Objects.Models;
+using System.Linq.Expressions;
 
 namespace SeniorCareManager.WebAPI.Services.Interfaces;
+
 
 public interface ISupplierService : IGenericService<Supplier, SupplierDTO>
 {
