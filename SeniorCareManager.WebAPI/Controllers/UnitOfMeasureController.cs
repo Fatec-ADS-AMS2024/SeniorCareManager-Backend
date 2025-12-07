@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SeniorCareManager.WebAPI.Objects.Contracts;
 using SeniorCareManager.WebAPI.Objects.Dtos.DataAnnotations.Base;
 using SeniorCareManager.WebAPI.Objects.Dtos.Entities;
@@ -7,7 +8,9 @@ using SeniorCareManager.WebAPI.Services.Interfaces;
 namespace SeniorCareManager.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1")]
+    [Authorize]
     public class UnitOfMeasureController : Controller
     {
         private readonly IUnitOfMeasureService _unitOfMeasureService;
@@ -23,7 +26,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             return Response<IEnumerable<UnitOfMeasureDTO>>.Ok(unitofmeasures, "Lista de unidade de medidas obtidas com sucesso!");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> GetById(int id)
         {
             var unitofmeasure = await _unitOfMeasureService.GetById(id);
@@ -32,7 +35,7 @@ namespace SeniorCareManager.WebAPI.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost, MapToApiVersion("1")]
         public async Task<IActionResult> Post(UnitOfMeasureDTO unitofmeasureDto)
         {
             Execute.Executar(unitofmeasureDto);
@@ -42,7 +45,7 @@ namespace SeniorCareManager.WebAPI.Controllers
 
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> Put(int id, UnitOfMeasureDTO unitofmeasureDto)
         {
             Execute.Executar(unitofmeasureDto);
@@ -51,7 +54,7 @@ namespace SeniorCareManager.WebAPI.Controllers
             return Response<UnitOfMeasureDTO>.Ok(unitofmeasureDto, "Unidade de mediada atualizada com sucesso!");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), MapToApiVersion("1")]
         public async Task<IActionResult> Delete(int id)
         {
 
