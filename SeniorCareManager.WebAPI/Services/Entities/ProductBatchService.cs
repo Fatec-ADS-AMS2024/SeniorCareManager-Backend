@@ -11,12 +11,18 @@ namespace SeniorCareManager.WebAPI.Services.Entities
     {
         private readonly IProductBatchRepository _repository;
         private readonly IProductRepository _productRepository;
+        private readonly IManufacturerRepository _manufacturerRepository;
         private readonly IMapper _mapper;
 
-        public ProductBatchService(IProductBatchRepository repository, IProductRepository productRepository, IMapper mapper) : base(repository, mapper)
+        public ProductBatchService(
+            IProductBatchRepository repository,
+            IProductRepository productRepository,
+            IManufacturerRepository manufacturerRepository,
+            IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _productRepository = productRepository;
+            _manufacturerRepository = manufacturerRepository;
             _mapper = mapper;
         }
 
@@ -32,12 +38,28 @@ namespace SeniorCareManager.WebAPI.Services.Entities
 
         public async Task<IEnumerable<ProductBatchDTO>> GetByProduct(long productId)
         {
+            if (productId <= 0)
+            {
+                throw new ExceptionBadRequest("O identificador do produto deve ser maior que zero.");
+            }
+
+            var product = await _productRepository.GetById(productId);
+            if (product == null)
+            {
+                throw new ExceptionNotFound($"Produto com id {productId} não encontrado.");
+            }
+
             var list = await _repository.GetByProduct(productId);
             return _mapper.Map<IEnumerable<ProductBatchDTO>>(list);
         }
 
         public async Task<IEnumerable<ProductBatchDTO>> GetExpiringBatches(int daysAhead = 30)
         {
+            if (daysAhead <= 0)
+            {
+                throw new ExceptionBadRequest("O parâmetro daysAhead deve ser maior que zero.");
+            }
+
             var cutoffDate = DateTime.UtcNow.AddDays(daysAhead);
             var expiringBatches = await _repository.GetExpiringBatchesAsync(cutoffDate);
             return _mapper.Map<IEnumerable<ProductBatchDTO>>(expiringBatches);
@@ -96,6 +118,12 @@ namespace SeniorCareManager.WebAPI.Services.Entities
             if (product == null)
             {
                 throw new ExceptionBadRequest($"Produto com ID {entityDTO.ProductId} não encontrado.");
+            }
+
+            var manufacturer = await _manufacturerRepository.GetById(entityDTO.ManufacturerId);
+            if (manufacturer == null)
+            {
+                throw new ExceptionBadRequest($"Fabricante com ID {entityDTO.ManufacturerId} não encontrado.");
             }
 
             if (product.ExpirationControlled == Objects.Enums.YesNo.NO && entityDTO.ExpirationDate != default)
