@@ -26,7 +26,7 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [DateRangeValidator("2000-01-01", ErrorMessage = "Data final inválida.")]
         public DateTime EndDate { get; set; }
         public int PositionId { get; set; }
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         //public int CompanyId { get; set; }
     }
 }

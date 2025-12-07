@@ -11,7 +11,7 @@ namespace SeniorCareManager.WebAPI.Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1")]
-[Authorize]
+// [Authorize]
 public class ProductTypeController : ControllerBase
 {
     private readonly IProductTypeService _service;

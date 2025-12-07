@@ -77,9 +77,12 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         public string? HomePhoneNumber { get; set; }
 
         [RengeValidator(0.0, ErrorMessage = "O tamannho não pode ser negativo.")]
-        public decimal Height { get; set; }
+        public decimal? Height { get; set; }
 
         [RengeValidator(0.0, ErrorMessage = "O peso não pode ser negativo.")]
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
+
+        public int? HealthInsurancePlanId { get; set; }
+        public int? ReligionId { get; set; }
     }
 }
