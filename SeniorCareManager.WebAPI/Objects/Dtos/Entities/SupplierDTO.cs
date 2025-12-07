@@ -51,7 +51,7 @@ public class SupplierDTO
     public string District { get; set; }
 
     [RemoveSpaces]
-    public string AddressComplement { get; set; }
+    public string? AddressComplement { get; set; }
 
     [RequiredValidator(ErrorMessage = "Cidade obrigatória.")]
     [RemoveSpaces]
