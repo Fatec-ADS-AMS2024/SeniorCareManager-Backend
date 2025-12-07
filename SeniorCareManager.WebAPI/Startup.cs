@@ -160,6 +160,7 @@ public class Startup
         services.AddScoped<IResidentRelativeService, ResidentRelativeService>();
         services.AddScoped<IAdmService, AdmService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IInvoiceService, InvoiceService>();
 
         //Scoped Repositories and Interfaces repo
         services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
@@ -180,6 +181,8 @@ public class Startup
         services.AddScoped<IResidentAllergyRepository, ResidentAllergyRepository>();
         services.AddScoped<IResidentRelativeRepository, ResidentRelativeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        services.AddScoped<IInvoiceItemRepository, InvoiceItemRepository>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
