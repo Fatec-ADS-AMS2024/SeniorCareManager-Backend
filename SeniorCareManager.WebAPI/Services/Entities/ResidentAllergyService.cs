@@ -40,7 +40,7 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         if (string.IsNullOrWhiteSpace(residentAllergyDto.Description))
             throw new ExceptionBadRequest("Descrição é obrigatória.");
 
-            // verifica existência do residente e da alergia
+        // verifica existência do residente e da alergia
         var residentExists = await _context.Set<Resident>().AnyAsync(r => r.Id == residentAllergyDto.ResidentId);
         if (!residentExists)
             throw new ExceptionBadRequest("Residente com o id " + residentAllergyDto.ResidentId + " informado não foi encontrado.");
@@ -84,9 +84,6 @@ public class ResidentAllergyService : GenericService<ResidentAllergy, ResidentAl
         var allergyExists = await _context.Set<Allergy>().AnyAsync(a => a.Id == residentAllergyDto.AllergyId);
         if (!allergyExists)
             throw new ExceptionBadRequest("Alergia com o id " + residentAllergyDto.AllergyId + " informado não foi encontrada.");
-
-        if (await CheckDuplicates(residentAllergyDto.ResidentId, residentAllergyDto.AllergyId))
-            throw new ExceptionConflict("Alergia já cadastrada para este residente.");
 
         await base.Update(residentAllergyDto, id);
     }

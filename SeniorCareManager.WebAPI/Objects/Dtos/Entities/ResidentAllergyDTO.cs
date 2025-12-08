@@ -11,10 +11,10 @@ namespace SeniorCareManager.WebAPI.Objects.Dtos.Entities
         [RemoveSpaces]
         public string? Description { get; set; }
 
-        [DateRangeValidator(minDate:"17/08/1990")]
+        [DateRangeValidator(minDate: "01/01/1900")]
         public DateTime? DetectionDate { get; set; }
 
-        [DateRangeValidator(minDate:"24/09/2026")]
+        [DateRangeValidator(minDate: "01/01/1900")]
         public DateTime? ReleasedDate { get; set; }
 
         public int ResidentId { get; set; }
